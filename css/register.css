@@ -53,7 +53,7 @@
     background-color: #0007;
 }
 .form-register__input::placeholder {
-    color: #fff;
+    color: #fff5;
 }
 .form-register__input:focus {
     background: linear-gradient(to bottom, #555, #222);
