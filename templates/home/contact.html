@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} contacto {% endblock title %}
+
+{% block css %} {% static 'css/contact.css' %} {% endblock css %}
+
+{% block content %}
+{% include 'includes/header.html' %}
+
+<!--Titulo de la pagina-->
+
+<h1 class="title">Contacto</h1>
+
+<!--Contenedor del Formulario de contacto-->
+
+<div class="box">
+    <div class="form-container">
+        <div class="form__info">
+            <p>Si tienes preguntas acerca del servicio de trading automatico, puedes contactarnos por telegram, haz
+                click en la imagen.</p>
+            <div class="form-img-container">
+                <a href href="#" class="form-link-img">
+                    <img src="{% static 'img/telegram.png' %}" alt="Telegram">
+                </a>
+            </div>
+        </div>
+
+        <!--Formulario de contacto-->
+        <form class="form">
+            <p>Si tienes problemas con tu cuenta, llena el siguiente formulario con los siguientes datos.</p>
+
+            <div class="form__input-container">
+                <input class="form__input--size" type="text" placeholder="Nombre" required>
+
+                <input class="form__input--size" type="text" placeholder="Apellido" required>
+            </div>
+
+            <input class="form__input" type="email" placeholder="Correo Electronico" required>
+
+            <input class="form__input" type="text" placeholder="Asunto" required>
+
+            <textarea class="form__input" placeholder="Mensaje"></textarea>
+
+            <input class="form__input--submit" type="submit">
+        </form>
+    </div>
+</div>
+
+{% include 'includes/footer.html' %}
+{% endblock content %}

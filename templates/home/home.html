@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Inicio {% endblock title %}
+
+{% block content %}
+{% include 'includes/header.html' %}
+
+<!--Titulo de la pagina-->
+
+<h1 class="title">CLub VIP de la Fortuna</h1>
+
+<!--Sección de informacion de los servicios-->
+
+<section class="video">
+    <iframe style="width: 100%; height: 100%;" src="https://www.youtube.com/embed/U5Ze5u5TIEI"
+        title="YouTube video player" frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen></iframe>
+</section>
+
+<section class="content">
+    <article class="content__items">
+        <h2>Trading Automatico</h2>
+        <p>El trading automatico se puede hacer de dos formas, la primera es hacerlo con bots de trading, ya sea con
+            inteligencia artificial o con un flujo de intrucciones predeterminadas. La segunda forma de hacer trading
+            automatico es con el <b>Trading-Espejo</b> el cual es conectar tu cuenta con el de un trader rentable y
+            copiar sus operaciones en tiempo real.</p>
+    </article>
+</section>
+
+<section class="content-2">
+    <article class="content-2__items">
+        <img src=" {% static 'img/imagen-1.jpg' %}" alt="trabajando">
+        <p>Tu puedes seguir estudiando trading o trabajando en tu proyecto mientras alguien mas hace los trades por ti.
+        </p>
+    </article>
+    <article class="content-2__items">
+        <img src="{% static 'img/imagen-2.jpg' %}" alt="equipo">
+        <p>Equipo con experiencia y estrategias para sacarle rentabilidad al mercado y copiar sus operativas.</p>
+    </article>
+    <article class="content-2__items">
+        <img src="{% static 'img/imagen-3.jpg' %}" alt="servidores">
+        <p>Utilizando servidores <b>VPS</b> que trabajan las 24 horas para la conexion de varias cuentas a una sola
+            cuenta madre.</p>
+    </article>
+    <article class="content-2__items">
+        <img src="{% static 'img/imagen-4.jpg' %}" alt="cuenta propia">
+        <p>Y la seguridad de que tu dinero esta en una cuenta propia a tu nombre y no en manos de terceros.</p>
+    </article>
+</section>
+
+<!--Boton de registrarse o iniciar sesion-->
+
+<div class="container-btn">
+    <img src="{% static 'img/arrow-right.svg' %}" alt="arrow-right">
+    <a class="btn-register" href="{% url 'users_app:user_register' %}">Quiero entrar al club</a>
+    <img src="{% static 'img/arrow-left.svg' %}" alt="arrow-left">
+</div>
+
+{% include 'includes/footer.html' %}
+{% endblock content %}

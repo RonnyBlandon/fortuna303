@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Cambiar contraseña {% endblock title %}
+
+{% block css %} {% static 'css/register.css' %} {% endblock css %}
+
+{% block content %}
+{% include 'includes/header.html' %}
+
+<!--Titulo de la pagina-->
+
+<h1 class="title">Cambiar contraseña</h1>
+
+<!--Formulario de registro-->
+    
+<div class="container-form">
+    <form class="form-register" method="post"> {% csrf_token %}
+    
+        <hr>
+        {{ form.non_field_errors }}
+        {{form.validation_code.errors}}
+        <div class="form__container">
+            <p>Ingrese su código de verificación que se le envió a su correo electrónico.</p>
+        </div>
+        
+        <label class="form-register__label"><img src="{% static 'img/icono-contraseña.svg' %}" alt="icono-contraseña">
+            {{form.validation_code}}</label>
+
+
+        <input class="form-register__input-submit" type="submit" value="Verificar">
+    
+        <hr>
+    </form>
+</div class="container-form">
+
+{% include 'includes/footer.html' %}
+{% endblock content %}
