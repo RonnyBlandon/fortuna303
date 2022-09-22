@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} ¿Como funciona? {% endblock title %}
+
+{% block css %} {% static 'css/how-work.css' %} {% endblock css %}
+
+{% block content %}
+{% include 'includes/header.html' %}
+
+ <!--Titulo de la pagina-->
+
+ <h1 class="title">¿Como funciona?</h1>
+
+ <!-- Contenido de la pagina-->
+
+<div class="box-general">
+    <div class="box-content">
+        <h3>Agregar, cambiar o eliminar una cuenta metatrader 5</h3>
+        <p>
+            La cuenta metatrader 5 solo se podra agregar, cambiar o eliminar los fines de semana cuando el mercado este cerrado (viernes 3:00 PM a domingo 11:00 PM hora Chicago).<br>
+            Mientras el mercado de divisas este abierto las cuentas metatrader 5 conectadas no se podran cambiar o eliminar.
+        </p>
+    </div>
+    <div class="box-content">
+        <h3>Agregar una cuenta metatrader 5</h3>
+        <p>
+            Es necesario proporcionar el usuario, contraseña y servidor de su cuenta metatrader 5 para la creación de su vps y conexión con el sistema copytrader. <br>
+            Por ahora solo manejamos la plataforma Metatrader 5 y puede usar cualquier broker que más le convenga.
+        </p>
+    </div>
+    <div class="box-content">
+        <h3>Ganancias y Reparticiones</h3>
+        <p>
+            Las reparticiones de las ganancias se hacen cada semana, 50% sobre las ganancias netas. <br> El primer día de la semana que abre el mercado se registra el balance de la cuenta y al final de la semana cuando cierra el mercado se registra con cuanto finalizo el balance,<br><br>
+            La ganancia bruta se calcula sumando todas las operaciones que se hicieron en la semana. (esto no incluye los depósitos o retiros que haga en la semana)<br>
+            La ganancia neta se calcula restando las comisiones y swap a todas las operaciones hechas en la semana.
+        </p>
+    </div>
+</div>
+
+{% include 'includes/footer.html' %}
+{% endblock content %}

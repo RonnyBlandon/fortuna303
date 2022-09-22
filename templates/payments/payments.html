@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Panel Usuario {% endblock title %}
+
+
+{% block css2 %} {% static 'css/payments.css' %} {% endblock css2 %}
+
+{% block content %}
+{% include 'includes/header.html' %}
+
+<!--Titulo de la pagina-->
+
+<h1 class="title">Pagos</h1>
+
+<!--Contenido del Panel de Usuario-->
+<div class="box-general-accordion">
+
+    <!-- Sección de pago de servicios -->
+    <section class="box-pay">
+        <h2 class="box-title box-title-pay">Vps + Copytrading (Mensual)</h2>
+        
+        <a href="#">Pagar</a>
+    </section>
+
+    <!-- Sección de facturación de Servicio del trader de la cuenta madre para moviles -->
+
+    <section class="box-accordion">
+        <h2 class="box-title">Gestión de Cuentas mt5</h2>
+
+        <details class="primary-details">
+            <summary><span>ID pago</span><span>Estado</span></summary>
+        </details>
+
+        <details class="details">
+            <summary><span>1001</span><button class="no-paid" type="button">No Pagado</button></summary>
+            <ul>
+                <li><span class="title-celdas">Fecha</span><span>2022-08-05</span></li>
+                <li><span class="title-celdas">Total</span><span>$51.29</span></li>
+            </ul>
+        </details>
+        <details class="details">
+            <summary><span>1002</span><button class="paid" type="button">Pagado</button></summary>
+            <ul>
+                <li><span class="title-celdas">Fecha</span><span>2022-08-05</span></li>
+                <li><span class="title-celdas">Total</span><span>$53.00</span></li>
+            </ul>
+        </details>
+        <details class="details">
+            <summary><span>1003</span><button class="pais" type="button">Pagado</button></summary>
+            <ul>
+                <li><span class="title-celdas">Fecha</span><span>2022-07-29</span></li>
+                <li><span class="title-celdas">Total</span><span>$51.77</span></li>
+            </ul>
+        </details>
+    </section>
+
+    <!-- Sección de facturación de sistema copytrading y VPS para Moviles-->
+
+    <section class="box-accordion">
+        <h2 class="box-title">Vps + Copytrading</h2>
+
+        <details class="primary-details-2">
+            <summary><span>ID pago</span><span>Estado</span></summary>
+        </details>
+
+        <details class="details-2">
+            <summary><span>1001</span><button class="no-paid" type="button">No Pagado</button></summary>
+            <ul>
+                <li><span class="title-celdas">Fecha</span><span>2022-08-14</span></li>
+                <li><span class="title-celdas">Vecimiento</span><span>2022-09-13</span></li>
+                <li><span class="title-celdas">Total</span><span>$70.00</span></li>
+            </ul>
+        </details>
+        <details class="details-2">
+            <summary><span>1002</span><button class="paid" type="button">Pagado</button></summary>
+            <ul>
+                <li><span class="title-celdas">Fecha</span><span>2022-07-14</span></li>
+                <li><span class="title-celdas">Vecimiento</span><span>2022-08-13</span></li>
+                <li><span class="title-celdas">Total</span><span>$70.00</span></li>
+            </ul>
+        </details>
+        <details class="details-2">
+            <summary><span>1003</span><button class="paid" type="button">Pagado</button></summary>
+            <ul>
+                <li><span class="title-celdas">Fecha</span><span>2022-06-14</span></li>
+                <li><span class="title-celdas">Vecimiento</span><span>2022-07-13</span></li>
+                <li><span class="title-celdas">Total</span><span>$70.00</span></li>
+            </ul>
+        </details>
+    </section>
+
+    <!-- HTML para mostrar en tablet y pc de escritorio -->
+    <!-- Sección de tabla de facturas de servicio de gestión de cuentas -->
+
+    <section class="box-invoices">
+        <h2 class="box-title">Gestion de Cuentas mt5</h2>
+        <div>
+            <table class="invoice-table">
+                <tr>
+                    <th>ID pago</th>
+                    <th>Fecha</th>
+                    <th>Total</th>
+                    <th>Estado</th>
+                </tr>
+                <tr class="table-datos">
+                    <td>1001</td>
+                    <td>2022-08-12</td>
+                    <td>$51.29</td>
+                    <td>No Pagado</td>
+                </tr>
+                <tr class="table-datos">
+                    <td>1002</td>
+                    <td>2022-08-05</td>
+                    <td>$53.24</td>
+                    <td>Pagado</td>
+                </tr>
+                <tr class="table-datos">
+                    <td>1003</td>
+                    <td>2022-07-29</td>
+                    <td>$51.79</td>
+                    <td>Pagado</td>
+                </tr>
+            </table>
+        </div>
+    </section>
+
+    <!-- Sección de tabla de facturas de vps y copytrading -->
+
+    <section class="box-invoices">
+        <h2 class="box-title">VPS + Copy-trading</h2>
+        <div>
+            <table class="invoice-table">
+                <tr class="table-header">
+                    <th>ID pago</th>
+                    <th>Fecha</th>
+                    <th>Vecimiento</th>
+                    <th>Total</th>
+                    <th>Estado</th>
+                </tr>
+                <tr>
+                    <td>1001</td>
+                    <td>2022-08-14</td>
+                    <td>2022-09-13</td>
+                    <td>$70.00</td>
+                    <td>No Pagado</td>
+                </tr>
+                <tr>
+                    <td>1001</td>
+                    <td>2022-07-14</td>
+                    <td>2022-08-13</td>
+                    <td>$70.00</td>
+                    <td>No Pagado</td>
+                </tr>
+                <tr>
+                    <td>1001</td>
+                    <td>2022-06-14</td>
+                    <td>2022-07-13</td>
+                    <td>$70.00</td>
+                    <td>No Pagado</td>
+                </tr>
+            </table>
+        </div>
+    </section>
+
+</div>
+
+<script src="{% static 'js/accordion.js' %}"></script>
+
+{% include 'includes/footer.html' %}
+{% endblock content %}

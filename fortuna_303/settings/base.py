@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # Local apps
     'applications.users',
+    'applications.payments',
     'applications.vps',
     'applications.home',
 ]
@@ -96,7 +97,7 @@ AUTH_USER_MODEL = 'users.User'
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
-LANGUAGE_CODE = 'es-hn'
+LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
 

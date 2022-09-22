@@ -41,7 +41,7 @@ class UserRegisterView(FormView):
         # Enviamos el codigo al email del usuario
         asunto = 'Confirmacion de Correo Electronico'
         mensaje = 'Codigo de Verificación: ' + codigo
-        email_remitente = 'ronnyblandon2015@gmail.com'
+        email_remitente = 'fortuna303.com@gmail.com'
         send_mail(asunto, mensaje, email_remitente, [form.cleaned_data['email'],])
 
         # Redirigimos a pantalla de verificacion al usuario
@@ -152,7 +152,7 @@ class RecoverAccountView(FormView):
         # Enviamos el codigo al correo
         asunto = 'Recuperación de cuenta'
         mensaje = 'Codigo de Verificación: ' + codigo + '\nNecesita este código para cambiar su contraseña.'
-        email_remitente = 'ronnyblandon2015@gmail.com'
+        email_remitente = 'fortuna303.com@gmail.com'
         send_mail(asunto, mensaje, email_remitente, [email,])
 
         # Redirigimos a pantalla de verificacion al usuario para cambiar contraseña

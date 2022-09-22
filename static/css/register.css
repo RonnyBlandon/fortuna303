@@ -3,7 +3,7 @@
 .container-form {
     display: grid;
     place-content: center;
-    height: 110vh;
+    min-height: 110vh;
     background-image: url("../img/fondo-login-2.jpg");
     background-size: cover;
 }

@@ -12,18 +12,20 @@
     
         <ul class="menu__list">
             <li><a href="{% url 'home_app:home' %}">Inicio</a></li>
+            <li><a href="{% url 'home_app:how_work' %}">¿Cómo funciona?</a></li>
             <li><a href="{% url 'home_app:contact' %}">Contacto</a></li>
         </ul>
     
         <ul class="menu__list-responsive">
             <li><a href="{% url 'home_app:home' %}">Inicio</a></li>
+            <li><a href="{% url 'home_app:how_work' %}">¿Cómo funciona?</a></li>
             <li><a href="{% url 'home_app:contact' %}">Contacto</a></li>
         </ul>
     
         {% if not user.is_anonymous %}
         <ul class="menu__user menu__list ">
             <li><a href="{% url 'vps_app:panel_user' %}">Panel de Usuario</a></li>
-            <li><a href="{% url 'vps_app:billing' %}">Ganancias + Facturación</a></li>
+            <li><a href="{% url 'payments_app:payments' %}">Pagos</a></li>
             <li><a href="{% url 'users_app:update_password' %}">Cambiar Contraseña</a></li>
             <li><a href="{% url 'users_app:user_logout' %}">Cerrar Sesión</a></li>
         </ul>

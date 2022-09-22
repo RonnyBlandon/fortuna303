@@ -1,0 +1,42 @@
+.box-general {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-image: url('../img/fondo-how-work2.jpg');
+    background-size: cover;
+}
+.box-content {
+    width: fit-content;
+    margin: 20px auto 20px auto;
+    padding: 10px;
+    background-color: #333;
+    border-top: 3px solid #00f;
+    border-bottom: 3px solid #00f;
+    border-left: 3px solid #f00;
+    border-right: 3px solid #f00;
+    box-shadow: 2px 2px 2px #f00;
+}
+.box-content h3 {
+    text-align: center;
+    margin: 0px 0px 10px 0px;
+    color: #090;
+    text-shadow: 2px 2px #000;
+}
+.box-content p {
+    text-align: center;
+    color: #fff;
+}
+
+
+/* MEDIA QUERY */
+
+@media screen and (min-width: 1024px){
+    .box-general {
+        background-image: url('../img/fondo-how-work.jpg');
+        background-size: cover;
+    }
+    .box-content {
+        width: 900px;
+    }
+}

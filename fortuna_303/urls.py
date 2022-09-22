@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # Incluimos las urls de las apps user, cuenta_mt5
     path('', include('applications.users.urls')),
+    path('', include('applications.payments.urls')),
     path('', include('applications.vps.urls')),
     path('', include('applications.home.urls')),
 ]

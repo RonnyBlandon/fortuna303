@@ -54,7 +54,13 @@
 
 <div class="container-btn">
     <img src="{% static 'img/arrow-right.svg' %}" alt="arrow-right">
+    
+    {% if user.is_anonymous %}
     <a class="btn-register" href="{% url 'users_app:user_register' %}">Quiero entrar al club</a>
+    {% else %}
+    <a class="btn-register" href="{% url 'vps_app:panel_user' %}">Quiero entra al club</a>
+    {% endif %}
+
     <img src="{% static 'img/arrow-left.svg' %}" alt="arrow-left">
 </div>
 

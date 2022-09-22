@@ -1,0 +1,126 @@
+/* Ocultamos el html para tablets y pc */
+.box-invoices {
+    display: none;
+}
+
+/* Caja que contiene al accordion */
+.box-general-accordion {
+    padding: 40px 0px;
+    background-image: url('../img/fondo-panel.jpg');
+}
+
+/* Caja del accordion */
+.box-accordion {
+    margin: 40px 24px;
+    padding: 0px 24px;
+    background-color: #fff;
+    box-shadow: 0px 0px 10px #044;
+}
+.box-title {
+    padding: 15px 0px;
+    text-align: center;
+    color: #070;
+    text-shadow: 1px 1px #000;
+    }
+
+/* facturas */
+.primary-details, .primary-details-2 {
+    background-color: #f2f2f2;
+}
+.primary-details, .primary-details-2, .details, .details-2 {
+    padding: 0.8em 0.4em;
+    border-top: 1px solid #f2f2f2;
+    border-bottom: 1px solid #f2f2f2;
+}
+.primary-details summary, .details summary, .primary-details-2 summary, .details-2 summary {
+    display: flex;
+    justify-content: space-between;
+}
+.primary-details summary::before, .details summary::before, .primary-details-2 summary::before, .details-2 summary::before {
+    content: "+";
+    font-size: 18px;
+}
+.primary-details[open] summary::before, .details[open] summary::before, .primary-details-2[open] summary::before, .details-2[open] summary::before {
+    content: "-";
+    font-size: 20px;
+}
+.details ul, .details-2 ul {
+    padding: 10px 0px 0px 0px;
+}
+.details li, .details-2 li {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 3px;
+}
+.details li::before, .details-2 li::before {
+    content: " ";
+}
+.title-celdas {
+    color: #a2a2a2;
+}
+
+
+/*All animations of panel-user*/
+@keyframes colores-3 {    /*titulo de la pagina de inicio*/
+    0% {
+        border-left: 4px solid #00e;
+        border-right: 4px solid #00e;
+    }
+}
+
+
+/* Estilos a las clases para resoluciones arriba de 768px */
+
+@media screen and (min-width: 768px) {
+    /* Escondemos el html para moviles */
+    .box-accordion {
+        display: none;
+    }
+
+    /* Mostramos el html para tablets y pc */
+    .box-invoices {
+    display: block;
+    width: fit-content;
+    padding: 7px;
+    margin: 30px auto;
+    background-color: #fff;
+    border-radius: 10px;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    animation: colores-3 1s linear infinite alternate;
+    }
+    .box-title {
+        font-size: 28px;
+    }
+    .invoice-table {
+    margin: 1em auto;
+    border-radius: 10px;
+    border-collapse: collapse;
+    font-size: 16px;
+    }
+    .table-datos:hover, .table-datos:active {
+        background-color: #00e;
+        color: #fff;
+    }
+    .invoice-table th, .invoice-table td{
+        padding: .6em;
+        border-bottom: 1px solid #f2f2f2;
+    }
+    .invoice-table th{
+        background-color: #f0f0f0;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    /* Modificamnos el contenedor general */
+    .box-general-accordion {
+        display: flex;
+        row-gap: 1em;
+    }
+    .invoice-table {
+        font-size: 20px;
+    }
+    .box-title {
+        font-size: 28px;
+    }
+}

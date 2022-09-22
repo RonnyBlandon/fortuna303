@@ -3,123 +3,190 @@
 
 {% block title %} Panel Usuario {% endblock title %}
 
-{% block css %} {% static 'css/panel-user.css' %} {% endblock css %}
+{% block css %} {% static 'css/register.css' %} {% endblock css %}
+{% block css2 %} {% static 'css/panel-user.css' %} {% endblock css2 %}
 
 {% block content %}
-{% include 'includes/header.html' %} 
+{% include 'includes/header.html' %}
 
 <!--Titulo de la pagina-->
 
 <h1 class="title">Panel de usuario</h1>
 
+<!-- Mensajes de exito o de error -->
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
 <!--Contenido del Panel de Usuario-->
 <div class="box-general">
 
-    <!-- seccion con los datos de usuario -->
-    <section class="box-user">
-        <h2 class="box-title">Datos de Usuario</h2>
-        <h4>Nombre: <span>{{ user.name }} {{ user.last_name }}</span></h4>
-        <h4>Correo Electronico: <span>{{ user.email }}</span></h4>
-        <h4>Estado del VPS: <span>Inactivo</span></h4>
-    </section>
+    <div class="container">
+        <!-- sección con los datos de usuario -->
+        <section class="box-user">
+            <h2 class="box-title">Datos de Usuario</h2>
+            <h4>Nombre: <span>{{ user.name }} {{ user.last_name }}</span></h4>
+            <h4>Correo: <span>{{ user.email }}</span></h4>
+            <h4>Gestión de cuentas: <span>Inactivo</span></h4>
+            <h4>VPS: <span>Inactivo</span></h4>
+        </section>
+
+        <!-- Sección de agregar y visualizacion de cuentas mt5 del usuario -->
+        <section class="box-mt5 box-mt5-width">
+            <div class="header-table">
+                <h2 class="box-title">Cuenta Metatrader5</h2>
+                {% if accounts.count == 0 %}
+                <button class="open-modal-add">Agregar</button>
+                {% else %}
+                {% for account in accounts %}
+                <a href="{% url 'vps_app:delete_account_mt5' account.id%}">
+                    <div>
+                        <img class="img-trash" src="{% static 'img/trash-mt5.svg' %}" alt="Eliminar">
+                    </div>
+                <a/>
+                {% endfor %}
+                {% endif %}
+            </div>
+            <table class="accounts-table">
+                <tr class="thead">
+                    <th>Usuario</th>
+                    <th>Servidor</th>
+                    <th>Estado</th>
+                </tr>
+                {% for account in accounts %}
+                <tr>
+                    <td>{{ account.login }}</td>
+                    <td>{{ account.server }}</td>
+                    <td>{{ account.get_status_display }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </section>
+    </div>
     
-    <!-- Sección de cuentas mt5  -->
-    <section class="box-mt5 box-mt5-width">
-        <div class="header-table">
-            <h2 class="box-title">Cuentas Metatrader5</h2>
-            <button class="open-modal-add">Agregar</button>
-        </div>
-        <table class="accounts-table">
-            <tr class="thead">
-                <th>Usuario</th>
-                <th>Servidor</th>
-                <th>Estado</th>
-            </tr>
-            <tr>
-                <td>5004263918</td>
-                <td>ICMarketsSC-Demo</td>
-                <td>Inactivo</td>
-            </tr>
-        </table>
-    </section>
-    
-    <!--Modal para agregar cuenta mt5-->
-    <dialog class="" id="modal-add">
+    <!--Modal para crear y agregar cuenta mt5-->
+
+    <dialog id="modal-add">
         <div class="header-modal">
             <h2>Agregar Cuenta MT5</h2>
             <button class="close-modal-add">X</button>
         </div>
-        
-        <form class="form-add" method="post"> {% csrf_token %}
-            <input type="text" placeholder="Usuario">
-            <input type="password" placeholder="Contraseña">
-            <input type="text" placeholder="Servidor">
-            <p>La conexión puede tardar 24 horas desde el momento en que ingreso los datos. Por favor, asegúrese de colocar los datos correctamente o si no le aparecerá "Error" en el estado en el lapso de las 24 horas.</p>
-            <button type="submit">Agregar</button>
+
+        <form class="form-add" method="post" action="{% url 'vps_app:add_account_mt5' %}"> {% csrf_token %}
+            <label class="form-register__label">
+                <img src="{% static 'img/icono-user.svg' %}" alt="icono-user">
+                {{ form_mt5.login }}
+            </label>
+
+            <label class="form-register__label">
+                <img src="{% static 'img/icono-contraseña.svg' %}" alt="">
+                {{ form_mt5.password }}
+            </label>
+
+            <label class="form-register__label">
+                <img src="{% static 'img/server-solid.svg' %}" alt="icono-user">
+                {{ form_mt5.server }}
+            </label>
+            {{ form_mt5.id_user }}
+            <p>Por favor, asegúrese de colocar correctamente los datos de su cuenta de metatrader 5.<br>
+                La conexión puede demorar unos minutos.<br>
+            </p>
+            <button class="button-send-modal" type="submit">Agregar</button>
         </form>
     </dialog>
 
-    <section class="box-mt5">
-        <h2 class="box-title">Operaciones de cuenta Madre</h2>
-        <div>
-            <table class="accounts-table operations-table">
-                <tr class="thead">
-                    <th>Fecha/Hora</th>
-                    <th>Par</th>
-                    <th>Tipo</th>
-                    <th>Lotaje</th>
-                    <th>Precio</th>
-                    <th>SL</th>
-                    <th>TL</th>
-                    <th>Fecha/Hora</th>
-                    <th>Precio</th>
-                    <th>Beneficio</th>
-                </tr>
-                <tr>
-                    <td>2022-08-03 06:55:45</td>
-                    <td>EURUSD</td>
-                    <td>Venta</td>
-                    <td>0.03</td>
-                    <td>1.21859</td>
-                    <td>1.21909</td>
-                    <td>1.21800</td>
-                    <td>2022-08-03 08:35:20</td>
-                    <td>1.21799</td>
-                    <td>1.59</td>
-                </tr>
-            </table>
-        </div>
-    </section>
-    
-    <!-- bloque de paginacion -->
-    
-    <div class="cell">
-        {% if is_paginated %}
-        <nav aria-label="Pagination">
-            <ul class="pagination">
-                {% if page_obj.has_previous %}
-                <li class="pagination-previous">
-                    <a href="?page={{page_obj.previous_page_number}}">Atras</a>
-                </li>
-                {% endif %}
-    
-                {% for pagina in paginator.page_range %}
-    
-                {% if pagina == page_obj.number %}
-                <li class="current"><span class="show-for-sr">You're on page</span>{{ pagina }}</li>
-                {% else %}
-                <li><a href="?page={{pagina}}">{{ pagina }}</a></li>
-                {% endif %}
-    
-                {% endfor %}
-    
-                {% if page_obj.has_next %}
-                <li class="pagination-next"><a href="?page={{page_obj.next_page_number}}">Siguiente</a></li>
-                {% endif %}
-            </ul>
-        </nav>
-        {% endif %}
+<!-- Sección para ver las ganacias semanales de la cuenta mt5 -->
+
+<section class="box-mt5">
+    <h2 class="box-title">Ganancias Semanales</h2>
+    <div>
+        <table class="accounts-table operations-table profit-table">
+            <tr class="thead">
+                <th>Fecha Inicio</th>
+                <th>Fecha Final</th>
+                <th>Balance Inicial</th>
+                <th>Retiro/Deposito</th>
+                <th>Balance Final</th>
+                <th>Ganancia Bruta</th>
+                <th>Ganancia Neta</th>
+            </tr>
+            <tr>
+                <td>2022-08-08</td>
+                <td>2022-08-12</td>
+                <td>$2000.00</td>
+                <td>0.00</td>
+                <td>$2102.58</td>
+                <td>$102.58</td>
+                <td>$51.29</td>
+            </tr>
+        </table>
     </div>
+</section>
+
+<!--Sección para mostrar las operaciones de la cuenta madre-->
+
+<section class="box-mt5">
+    <h2 class="box-title">Operaciones de cuenta Madre</h2>
+    <div>
+        <table class="accounts-table operations-table">
+            <tr class="thead">
+                <th>ID Position</th>
+                <th>Fecha/Hora</th>
+                <th>Par</th>
+                <th>Tipo</th>
+                <th>Lotaje</th>
+                <th>Precio</th>
+                <th>Beneficio</th>
+            </tr>
+            {% for trade in operations %}
+            <tr>
+                <td>{{ trade.position_id }}</td>
+                <td>{{ trade.time }}</td>
+                <td>{{ trade.symbol }}</td>
+                <td>{{ trade.type }}</td>
+                <td>{{ trade.volume }}</td>
+                <td>{{ trade.price }}</td>
+                <td>{{ trade.profit }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</section>
+
+<!-- bloque de paginacion -->
+
+<div class="cell">
+    {% if is_paginated %}
+    <nav aria-label="Pagination">
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+            <li class="pagination-previous">
+                <a href="?page={{page_obj.previous_page_number}}">Atras</a>
+            </li>
+            {% endif %}
+
+            {% for pagina in paginator.page_range %}
+
+            {% if pagina == page_obj.number %}
+            <li class="current"><span class="show-for-sr">You're on page</span>{{ pagina }}</li>
+            {% else %}
+            <li><a href="?page={{pagina}}">{{ pagina }}</a></li>
+            {% endif %}
+
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+            <li class="pagination-next"><a href="?page={{page_obj.next_page_number}}">Siguiente</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
 </div>
 
 <script src="{% static 'js/modal.js' %}"></script>

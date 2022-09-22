@@ -24,21 +24,31 @@
             <p>Por favor complete el formulario para crear una cuenta.</p>
         </div>
         {{form.error}}
-        <label class="form-register__label"><img src="{% static 'img/icono-user.svg' %}" alt="icono-user">
-            {{form.name}}</label>
+        <label class="form-register__label">
+            <img src="{% static 'img/icono-user.svg' %}" alt="icono-user">
+            {{form.name}}
+        </label>
 
-        <label class="form-register__label"><img src=" {% static 'img/icono-user.svg' %}" alt="icono-user">
-            {{form.last_name}}</label>
+        <label class="form-register__label">
+            <img src=" {% static 'img/icono-user.svg' %}" alt="icono-user">
+            {{form.last_name}}
+        </label>
 
-        <label class="form-register__label"><img src="{% static 'img/icono-correo.svg' %}" alt="icono-correo">
-            {{form.email}}</label>
+        <label class="form-register__label">
+            <img src="{% static 'img/icono-correo.svg' %}" alt="icono-correo">
+            {{form.email}}
+        </label>
         
             {{form.password2.errors}}
-        <label class="form-register__label"><img src="{% static 'img/icono-contraseña.svg' %}" alt="icono-contraseñá">
-            {{form.password1}}</label>
+        <label class="form-register__label">
+            <img src="{% static 'img/icono-contraseña.svg' %}" alt="icono-contraseñá">
+            {{form.password1}}
+        </label>
 
-        <label class="form-register__label"><img src="{% static 'img/icono-contraseña.svg' %}" alt="icono-contraseña">
-            {{form.password2}}</label>
+        <label class="form-register__label">
+            <img src="{% static 'img/icono-contraseña.svg' %}" alt="icono-contraseña">
+            {{form.password2}}
+        </label>
 
         <input class="form-register__input-submit" type="submit" value="Registrar">
 

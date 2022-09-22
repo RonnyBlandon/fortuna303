@@ -1,5 +1,8 @@
-from atexit import register
 from django.contrib import admin
-# importando modelos de la app user
+# importando modelos de la app vps
+from applications.vps.models import AccountMt5, AccountManagement
 
 # Register your models here.
+
+admin.site.register(AccountMt5)
+admin.site.register(AccountManagement)
