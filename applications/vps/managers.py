@@ -37,3 +37,11 @@ class AccountMt5Manager(models.Manager):
    def get_account_mt5(self, id):
       account = self.filter(id_user=id)
       return account
+
+
+class AccountManagementManager(models.Manager):
+   """ Procedimientos para AccountManagement """
+
+   def get_account_management(self, id):
+      management = self.filter(id_account_mt5=id).order_by('-id')
+      return management

@@ -19,7 +19,7 @@
 <ul class="messages">
     {% for message in messages %}
     <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
-    {% endfor %}
+        {% endfor %}
 </ul>
 {% endif %}
 
@@ -48,9 +48,9 @@
                     <div>
                         <img class="img-trash" src="{% static 'img/trash-mt5.svg' %}" alt="Eliminar">
                     </div>
-                <a/>
-                {% endfor %}
-                {% endif %}
+                    <a />
+                    {% endfor %}
+                    {% endif %}
             </div>
             <table class="accounts-table">
                 <tr class="thead">
@@ -68,7 +68,7 @@
             </table>
         </section>
     </div>
-    
+
     <!--Modal para crear y agregar cuenta mt5-->
 
     <dialog id="modal-add">
@@ -100,96 +100,114 @@
         </form>
     </dialog>
 
-<!-- Sección para ver las ganacias semanales de la cuenta mt5 -->
+    <!-- Tabla de ganancias semanales de la cuenta mt5 -->
 
-<section class="box-mt5">
-    <h2 class="box-title">Ganancias Semanales</h2>
-    <div>
-        <table class="accounts-table operations-table profit-table">
-            <tr class="thead">
-                <th>Fecha Inicio</th>
-                <th>Fecha Final</th>
-                <th>Balance Inicial</th>
-                <th>Retiro/Deposito</th>
-                <th>Balance Final</th>
-                <th>Ganancia Bruta</th>
-                <th>Ganancia Neta</th>
-            </tr>
-            <tr>
-                <td>2022-08-08</td>
-                <td>2022-08-12</td>
-                <td>$2000.00</td>
-                <td>0.00</td>
-                <td>$2102.58</td>
-                <td>$102.58</td>
-                <td>$51.29</td>
-            </tr>
-        </table>
-    </div>
-</section>
+    <section class="box-mt5">
+        <h2 class="box-title">Ganancias Semanales</h2>
+        <div>
+            <table class="accounts-table operations-table profit-table">
+                <tr class="thead">
+                    <th>Fecha Inicio</th>
+                    <th>Fecha Final</th>
+                    <th>Balance Inicial</th>
+                    <th>Retiro/Deposito</th>
+                    <th>Balance Final</th>
+                    <th>Beneficio Bruto</th>
+                    <th>Comisiones</th>
+                    <th>Swap</th>
+                    <th>Benefecio Neto</th>
+                </tr>
+                {% for profit in profits %}
+                <tr class="tr-profits">
+                    <td>{{ profit.start_date }}</td>
+                    <td>{{ profit.end_date }}</td>
+                    <td>{{ profit.start_balance }}</td>
+                    <td>{{ profit.withdraw_deposit }}</td>
+                    <td>{{ profit.end_balance }}</td>
+                    <td>{{ profit.gross_profit }}</td>
+                    <td>{{ profit.commission }}</td>
+                    <td>{{ profit.swap }}</td>
+                    <td>{{ profit.net_profit }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
 
-<!--Sección para mostrar las operaciones de la cuenta madre-->
+        <!-- Bloque de paginación para la Tabla de ganacias semanales de la cuenta mt5 -->
+        <div>
+            <nav id="paginator">
+                <button class="link-page link-page-previous" value="1">&laquo;</button>
 
-<section class="box-mt5">
-    <h2 class="box-title">Operaciones de cuenta Madre</h2>
-    <div>
-        <table class="accounts-table operations-table">
-            <tr class="thead">
-                <th>ID Position</th>
-                <th>Fecha/Hora</th>
-                <th>Par</th>
-                <th>Tipo</th>
-                <th>Lotaje</th>
-                <th>Precio</th>
-                <th>Beneficio</th>
-            </tr>
-            {% for trade in operations %}
-            <tr>
-                <td>{{ trade.position_id }}</td>
-                <td>{{ trade.time }}</td>
-                <td>{{ trade.symbol }}</td>
-                <td>{{ trade.type }}</td>
-                <td>{{ trade.volume }}</td>
-                <td>{{ trade.price }}</td>
-                <td>{{ trade.profit }}</td>
-            </tr>
-            {% endfor %}
-        </table>
-    </div>
-</section>
+                {% for pagina in profits.paginator.page_range %}
 
-<!-- bloque de paginacion -->
+                {% if pagina == profits.number %}
+                <button class="link-page link-page-current" value="{{pagina}}">{{ pagina }}</button>
+                {% else %}
+                <button class="link-page" value="{{pagina}}">{{ pagina }}</button>
+                {% endif %}
 
-<div class="cell">
-    {% if is_paginated %}
-    <nav aria-label="Pagination">
-        <ul class="pagination">
-            {% if page_obj.has_previous %}
-            <li class="pagination-previous">
-                <a href="?page={{page_obj.previous_page_number}}">Atras</a>
-            </li>
-            {% endif %}
+                {% endfor %}
+                <button class="link-page link-page-next" value="{{profits.next_page_number}}">&raquo;</button>
+            </nav>
+        </div>
+    </section>
 
-            {% for pagina in paginator.page_range %}
 
-            {% if pagina == page_obj.number %}
-            <li class="current"><span class="show-for-sr">You're on page</span>{{ pagina }}</li>
-            {% else %}
-            <li><a href="?page={{pagina}}">{{ pagina }}</a></li>
-            {% endif %}
+    <!--Sección para mostrar las operaciones de la cuenta madre-->
 
-            {% endfor %}
+    <section class="box-mt5">
+        <h2 class="box-title">Historial de operaciones de la cuenta Madre</h2>
+        <div>
+            <table class="accounts-table operations-table">
+                <tr class="thead">
+                    <th>Fecha Apertura</th>
+                    <th>Precio Apertura</th>
+                    <th>Par</th>
+                    <th>Tipo</th>
+                    <th>Lotaje</th>
+                    <th>Fecha Cierre</th>
+                    <th>Precio Cierre</th>
+                    <th>Beneficio</th>
+                </tr>
+                {% for trade in operations %}
+                <tr class="tr-operation">
+                    <td>{{ trade.open_time }}</td>
+                    <td>{{ trade.open_price }}</td>
+                    <td>{{ trade.symbol }}</td>
+                    <td>{{ trade.type }}</td>
+                    <td>{{ trade.volume }}</td>
+                    <td>{{ trade.time }}</td>
+                    <td>{{ trade.close_price }}</td>
+                    <td>{{ trade.profit }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <!-- bloque de paginacion de la Tabla de historial de operaciones de la cuenta madre-->
+        <div>
+            <nav id="paginator2">
+                <button class="link-page2 link-page-previous" value="1">&laquo;</button>
 
-            {% if page_obj.has_next %}
-            <li class="pagination-next"><a href="?page={{page_obj.next_page_number}}">Siguiente</a></li>
-            {% endif %}
-        </ul>
-    </nav>
-    {% endif %}
+                {% for pagina in operations.paginator.page_range %}
+
+                {% if pagina == operations.number %}
+                <button class="link-page2 link-page-current" value="{{pagina}}">{{ pagina }}</button>
+                {% else %}
+                <button class="link-page2" value="{{pagina}}">{{ pagina }}</button>
+                {% endif %}
+
+                {% endfor %}
+
+                {% if operations.has_next %}
+                <button class="link-page2 link-page-previous" value="{{operations.next_page_number}}">&raquo;</button>
+                {% endif %}
+            </nav>
+        </div>
+    </section>
+
 </div>
-</div>
 
-<script src="{% static 'js/modal.js' %}"></script>
+<script src="{% static 'js/panel-user.js' %}"></script>
 
 {% include 'includes/footer.html' %}
 {% endblock content %}

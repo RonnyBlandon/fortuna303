@@ -1,3 +1,4 @@
+import re
 from cryptography.fernet import Fernet
 from datetime import datetime, timedelta
 import MetaTrader5 as mt5
@@ -49,17 +50,48 @@ def trading_history():
         df['time'] = pd.to_datetime(df['time'], unit='s')
         list_data = df.to_dict('records')
 
-        data = []
+        data = [] #Creamos una lista vacia para agregar los dict con los datos de la orden
         for register in list_data:
             if register['entry'] == 1:
                 # usamos insert() para ordenar la lista de forma desendente
                 data.insert(0, register)
-        return data
+
+        # Agregamos a las ordenes de salida datos extras de las ordenes de entrada
+        for i in range(len(data)):
+            for j in list_data:
+                if j['entry'] == 0:
+                    if data[i]['position_id'] == j['position_id']:
+                        data[i]['open_time'] = j['time']
+                        data[i]['open_price'] = j['price']
+
+        # Reordenamos las claves de los dicts tomando solo las claves que se mostraran en el template
+        
+        ordered_data = []
+        ordered_dicts = {}
+        for i in range(len(data)):
+
+            ordered_dicts['open_time'] = data[i]['open_time']
+            ordered_dicts['open_price'] = data[i]['open_price']
+            ordered_dicts['symbol'] = data[i]['symbol']
+            ordered_dicts['type'] = data[i]['type']
+            ordered_dicts['volume'] = data[i]['volume']
+            ordered_dicts['time'] = data[i]['time']
+            ordered_dicts['close_price'] = data[i]['price']
+            ordered_dicts['profit'] = data[i]['profit']
+            
+            ordered_data.insert(0, ordered_dicts)
+            print(ordered_data[i])
+            print()
+
+
+        print("LOS DATOS QUE TIENE ordered_data DESPUES DEL CICLO FOR:")
+        print(ordered_data)
+        return ordered_data
 
 
 """ Funciones generales de vps """
 
-
+# Funcion para encriptar los password de las cuentas mt5
 def encrypt_password(password):
 
     key = Fernet.generate_key()

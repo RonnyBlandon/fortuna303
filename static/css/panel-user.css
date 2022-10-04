@@ -50,7 +50,7 @@
 /* tablas de cuentas mt5 del usuario y operaciones de la cuenta madre*/
 .box-mt5 {
     padding: 7px;
-    margin: 20px 0px;
+    margin: 20px 0px 40px 0px;
     background-color: #222;
     border-radius: 10px;
     border-left: 4px solid transparent;
@@ -72,7 +72,7 @@
     background-color: #070;
 }
 .accounts-table th, .accounts-table td{
-    padding: .4em;
+    padding: .4em .6em;
     border-bottom: 1px solid #fff;
 }
 .accounts-table th{
@@ -172,7 +172,31 @@
     overflow-x: auto;
 }
 .operations-table {
-    width: 980px;
+    width: max-content;
+}
+
+
+/* Estilos al bloque de paginación */
+#paginator, #paginator2 {
+    display: flex;
+    margin: 5px 0px;
+    list-style: none;
+}
+.link-page, .link-page2 {
+    padding: 0.1em 0.3em;
+    color: #fff;
+    border: none;
+    background-color: transparent;
+}
+.link-page:active, .link-page2:active {
+    background-color: #ff0;
+}
+.link-page-current, .link-page2-current {
+    background-color: #00f;
+    color: #fff;
+}
+.link-page-current:active, .link-page2-current:active {
+    background-color: #ff0;
 }
 
 
@@ -203,15 +227,6 @@
         width: fit-content;
     }
 
-    .accounts-table th, .accounts-table td{
-        padding: .2em .3em;
-    }
-
-
-    .operations-table {
-        width: 1200px;
-    }
-
 }
 
 @media screen and (min-width: 1024px){
@@ -232,9 +247,6 @@
         width: fit-content;
     }
 
-    .accounts-table th, .accounts-table td{
-        padding: .3em;
-    }
     .open-modal-add .open-modal-add-2 {
         border: 3px solid #fff;
     }
@@ -264,8 +276,14 @@
 
     .operations-table {
         width: 980px;
-    }
+    }    
 
+}
+
+@media screen and (min-width: 1366px){
+    .operations-table {
+        width: max-content;
+    }
 }
 
 @media screen and (min-width: 1920px){
@@ -282,11 +300,6 @@
 
     .accounts-table th, .accounts-table td{
         padding: .5em;
-    }
-
-
-    .operations-table {
-        width: 1700px;
     }
 
 }
