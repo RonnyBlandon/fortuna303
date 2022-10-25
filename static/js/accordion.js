@@ -20,18 +20,20 @@ buttonAccordion.addEventListener("click", ()=> {
 
 
 /* Boton para desplegar el accordion todas las facturas vps y copytrading */
-buttonAccordion2.addEventListener("click", ()=> {
-    const listaDetails = document.querySelectorAll(".details-2");
-
-    const open = buttonAccordion2.getAttribute('open');
+if (buttonAccordion2 != null) {
+    buttonAccordion2.addEventListener("click", ()=> {
+        const listaDetails = document.querySelectorAll(".details-2");
     
-    if (open == null) {
-        listaDetails.forEach(function(currentValue, currentIndex, listObj) {
-            currentValue.setAttribute("open", "true");
-        })
-    } else {
-        listaDetails.forEach(function(currentValue) {
-            currentValue.removeAttribute("open");
-        })
-    } 
-});
+        const open = buttonAccordion2.getAttribute('open');
+        
+        if (open == null) {
+            listaDetails.forEach(function(currentValue, currentIndex, listObj) {
+                currentValue.setAttribute("open", "true");
+            })
+        } else {
+            listaDetails.forEach(function(currentValue) {
+                currentValue.removeAttribute("open");
+            })
+        } 
+    });
+}

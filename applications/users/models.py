@@ -1,16 +1,24 @@
 from django.db import models
 # importamos las librerias para el control de usuarios
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
-
+# imporatmos managers
 from .managers import UserManager
 
-# Create your models here.
+class Level(models.Model):
+    account_level = models.CharField('Nivel', max_length=20)
+    max_balance = models.DecimalField('Balance Maximo', max_digits=10, decimal_places=2)
+    price = models.DecimalField('Precio', max_digits=6, decimal_places=2)
+
+    def __str__(self):
+        return str(self.id) + ' - ' + self.account_level + ' ' + str(self.max_balance) + ' - ' + str(self.price)
+
 
 class User(AbstractBaseUser, PermissionsMixin):
     
     name = models.CharField('Nombre', max_length=20)
     last_name = models.CharField('Apellido', max_length=20)
-    email = models.EmailField('Correo Electronico', unique=True)
+    email = models.EmailField('Correo Electronico', max_length=60, unique=True)
+    level = models.ForeignKey(Level, on_delete=models.CASCADE)
     validation_code = models.CharField(max_length=6)
     # creamos la columna staff en modelo para la creacion de superusuarios
     is_staff = models.BooleanField(default=False)
@@ -28,7 +36,3 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def get_full_name(self):
         return self.first_name + " " + self.last_name
-
-    # Para extraerlo en los views
-    def get_id(self):
-        return self.id

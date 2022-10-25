@@ -1,6 +1,6 @@
 from django.contrib import admin
-# Importando modelos de la app user
-from .models import User
+# Importando modelos
+from .models import User, Level
 # Register your models here.
 
 
@@ -16,3 +16,4 @@ class User_Admin(admin.ModelAdmin):
     search_fields = ['name', 'last_name']
 
 admin.site.register(User, User_Admin)
+admin.site.register(Level)

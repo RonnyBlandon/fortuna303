@@ -3,8 +3,7 @@
 
 {% block title %} Panel Usuario {% endblock title %}
 
-
-{% block css2 %} {% static 'css/payments.css' %} {% endblock css2 %}
+{% block css %} {% static 'css/payments.css' %} {% endblock css %}
 
 {% block content %}
 {% include 'includes/header.html' %}
@@ -16,17 +15,10 @@
 <!--Contenido del Panel de Usuario-->
 <div class="box-general-accordion">
 
-    <!-- Sección de pago de servicios -->
-    <section class="box-pay">
-        <h2 class="box-title box-title-pay">Vps + Copytrading (Mensual)</h2>
-        
-        <a href="#">Pagar</a>
-    </section>
-
     <!-- Sección de facturación de Servicio del trader de la cuenta madre para moviles -->
 
     <section class="box-accordion">
-        <h2 class="box-title">Gestión de Cuentas mt5</h2>
+        <h2 class="box-title">Gestión de Cuentas mt5 (semana)</h2>
 
         <details class="primary-details">
             <summary><span>ID pago</span><span>Estado</span></summary>
@@ -35,22 +27,10 @@
         <details class="details">
             <summary><span>1001</span><button class="no-paid" type="button">No Pagado</button></summary>
             <ul>
-                <li><span class="title-celdas">Fecha</span><span>2022-08-05</span></li>
-                <li><span class="title-celdas">Total</span><span>$51.29</span></li>
-            </ul>
-        </details>
-        <details class="details">
-            <summary><span>1002</span><button class="paid" type="button">Pagado</button></summary>
-            <ul>
-                <li><span class="title-celdas">Fecha</span><span>2022-08-05</span></li>
-                <li><span class="title-celdas">Total</span><span>$53.00</span></li>
-            </ul>
-        </details>
-        <details class="details">
-            <summary><span>1003</span><button class="pais" type="button">Pagado</button></summary>
-            <ul>
-                <li><span class="title-celdas">Fecha</span><span>2022-07-29</span></li>
-                <li><span class="title-celdas">Total</span><span>$51.77</span></li>
+                <li><h4 class="title-celdas">Fecha:</h4><span>2022-10-01</span></li>
+                <li><h4 class="title-celdas">Vecimiento</h4><span>2022-10-06</span></li>
+                <li><h4 class="title-celdas">Id. Referencia</h4><span>2</span></li>
+                <li><h4 class="title-celdas">Total:</h4><span>$51.29</span></li>
             </ul>
         </details>
     </section>
@@ -58,68 +38,55 @@
     <!-- Sección de facturación de sistema copytrading y VPS para Moviles-->
 
     <section class="box-accordion">
-        <h2 class="box-title">Vps + Copytrading</h2>
-
+        <h2 class="box-title">Vps + Copytrading (mes)</h2>
+        {% if vps_payments.count > 0 %}
         <details class="primary-details-2">
             <summary><span>ID pago</span><span>Estado</span></summary>
         </details>
-
+        {% for payment in vps_payments %}
         <details class="details-2">
-            <summary><span>1001</span><button class="no-paid" type="button">No Pagado</button></summary>
+            <summary>
+                <span>{{ payment.id }}</span>
+                {% if payment.status == "Pagar" %}
+                <button class="open-modal-payment">{{ payment.status }}</button>
+                {% else %}
+                {{ payment.status }}
+                {% endif %}
+            </summary>
             <ul>
-                <li><span class="title-celdas">Fecha</span><span>2022-08-14</span></li>
-                <li><span class="title-celdas">Vecimiento</span><span>2022-09-13</span></li>
-                <li><span class="title-celdas">Total</span><span>$70.00</span></li>
+                <li><h4 class="title-celdas">Fecha</h4><span>{{ payment.created_date }}</span></li>
+                <li><h4 class="title-celdas">Vecimiento</h4><span>{{ payment.expiration }}</span></li>
+                <li><h4 class="title-celdas">Total</h4><span>{{ payment.total }}</span></li>
             </ul>
         </details>
-        <details class="details-2">
-            <summary><span>1002</span><button class="paid" type="button">Pagado</button></summary>
-            <ul>
-                <li><span class="title-celdas">Fecha</span><span>2022-07-14</span></li>
-                <li><span class="title-celdas">Vecimiento</span><span>2022-08-13</span></li>
-                <li><span class="title-celdas">Total</span><span>$70.00</span></li>
-            </ul>
-        </details>
-        <details class="details-2">
-            <summary><span>1003</span><button class="paid" type="button">Pagado</button></summary>
-            <ul>
-                <li><span class="title-celdas">Fecha</span><span>2022-06-14</span></li>
-                <li><span class="title-celdas">Vecimiento</span><span>2022-07-13</span></li>
-                <li><span class="title-celdas">Total</span><span>$70.00</span></li>
-            </ul>
-        </details>
+        {% endfor %}
+        {% else %}
+        <button class="open-modal-payment">Adquirir vps y sistema copytrading</button>
+        {% endif %}
     </section>
 
     <!-- HTML para mostrar en tablet y pc de escritorio -->
     <!-- Sección de tabla de facturas de servicio de gestión de cuentas -->
 
     <section class="box-invoices">
-        <h2 class="box-title">Gestion de Cuentas mt5</h2>
+        <h2 class="box-title">Gestion de Cuentas mt5 (50% del Benefecio)</h2>
         <div>
             <table class="invoice-table">
                 <tr>
-                    <th>ID pago</th>
+                    <th>ID</th>
                     <th>Fecha</th>
+                    <th>Vencimiento</th>
+                    <th>Id. Referencia</th>
                     <th>Total</th>
                     <th>Estado</th>
                 </tr>
-                <tr class="table-datos">
+                <tr class="rows-trader-payment">
                     <td>1001</td>
                     <td>2022-08-12</td>
+                    <td>2022-09-17</td>
+                    <td>1</td>
                     <td>$51.29</td>
                     <td>No Pagado</td>
-                </tr>
-                <tr class="table-datos">
-                    <td>1002</td>
-                    <td>2022-08-05</td>
-                    <td>$53.24</td>
-                    <td>Pagado</td>
-                </tr>
-                <tr class="table-datos">
-                    <td>1003</td>
-                    <td>2022-07-29</td>
-                    <td>$51.79</td>
-                    <td>Pagado</td>
                 </tr>
             </table>
         </div>
@@ -129,43 +96,70 @@
 
     <section class="box-invoices">
         <h2 class="box-title">VPS + Copy-trading</h2>
+        {% if vps_payments.paginator.count > 0 %}
         <div>
             <table class="invoice-table">
                 <tr class="table-header">
-                    <th>ID pago</th>
+                    <th>ID</th>
                     <th>Fecha</th>
                     <th>Vecimiento</th>
                     <th>Total</th>
                     <th>Estado</th>
                 </tr>
-                <tr>
-                    <td>1001</td>
-                    <td>2022-08-14</td>
-                    <td>2022-09-13</td>
-                    <td>$70.00</td>
-                    <td>No Pagado</td>
-                </tr>
-                <tr>
-                    <td>1001</td>
-                    <td>2022-07-14</td>
-                    <td>2022-08-13</td>
-                    <td>$70.00</td>
-                    <td>No Pagado</td>
-                </tr>
-                <tr>
-                    <td>1001</td>
-                    <td>2022-06-14</td>
-                    <td>2022-07-13</td>
-                    <td>$70.00</td>
-                    <td>No Pagado</td>
-                </tr>
+                {% for payment in vps_payments %}
+                <tr class="rows-vps-payment">
+                    <td>{{ payment.id }}</td>
+                    <td>{{ payment.created_date }}</td>
+                    <td>{{ payment.expiration }}</td>
+                    <td>{{ payment.total }}</td>
+                    <td>
+                        {% if payment.status == "Pagar" %}
+                        <button class="open-modal-payment renewal-payment">{{ payment.status }}</button>
+                        {% else %}
+                        {{ payment.status }}
+                        {% endif %}
+                    </td>
+                </tr>    
+                {% endfor %}
             </table>
+        </div>
+        {% else %}
+        <button class="open-modal-payment first-payment">Adquirir vps + sistema copytrading</button>
+        {% endif %}
+        <!-- Bloque de paginación para la Tabla de pagos de VPS + COPYTRADING  -->
+        <div>
+            {% if vps_payments.paginator.num_pages > 1 %}
+            <nav id="paginator">
+                <button class="link-page link-page-previous" value="1">&laquo;</button>
+
+                {% for pagina in vps_payments.paginator.page_range %}
+
+                {% if pagina == vps_payments.number %}
+                <button class="link-page link-page-current" value="{{pagina}}">{{ pagina }}</button>
+                {% else %}
+                <button class="link-page" value="{{pagina}}">{{ pagina }}</button>
+                {% endif %}
+
+                {% endfor %}
+                <button class="link-page link-page-next" value="2">&raquo;</button>
+            </nav>
+            {% endif %}
         </div>
     </section>
 
+    <!--Modal de metodo de pago-->
+
+    <dialog id="modal-payment">
+        <div class="header-modal">
+            <h2>Elegir metodo de Pago</h2>
+            <button class="close-modal-payment">X</button>
+        </div>
+        <a id="btn-paypal" href="{% url 'payments_app:paypal_payment' %}">Paypal</a>
+    </dialog>
 </div>
 
 <script src="{% static 'js/accordion.js' %}"></script>
+<script src="{% static 'js/payments.js' %}"></script>
 
 {% include 'includes/footer.html' %}
 {% endblock content %}

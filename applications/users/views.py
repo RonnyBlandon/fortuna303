@@ -1,5 +1,3 @@
-from email import message
-from urllib import request
 from django.core.mail import send_mail
 # importamos las vistas genericas
 from django.views.generic import View
@@ -16,7 +14,7 @@ from .forms import (
     EmailPasswordForm, ChangePasswordForm
 )
 # importamos los modelos
-from .models import User
+from .models import User, Level
 # imporatmos function.py
 from .function import code_generator
 
@@ -29,11 +27,14 @@ class UserRegisterView(FormView):
     def form_valid(self, form):
         # Generamos el codigo de verificacion de correo al usuario recien registrado
         codigo = code_generator()
+        # este get devuelve una tupla de instancias
+        level = Level.objects.get(account_level='0'), # Siempre iniciaran como nivel 0
 
         usuario = User.objects.create_user(
             form.cleaned_data['name'],
             form.cleaned_data['last_name'],
             form.cleaned_data['email'],
+            level[0],
             form.cleaned_data['password1'],
             validation_code=codigo
         )

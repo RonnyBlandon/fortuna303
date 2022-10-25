@@ -5,6 +5,10 @@
 
 /* Caja que contiene al accordion */
 .box-general-accordion {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     padding: 40px 0px;
     background-image: url('../img/fondo-panel.jpg');
 }
@@ -45,26 +49,102 @@
     font-size: 20px;
 }
 .details ul, .details-2 ul {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     padding: 10px 0px 0px 0px;
 }
 .details li, .details-2 li {
     display: flex;
     justify-content: space-between;
+    text-align: center;
     padding-top: 3px;
 }
-.details li::before, .details-2 li::before {
-    content: " ";
-}
 .title-celdas {
-    color: #a2a2a2;
+    color: #7e7d7d;
+}
+.open-modal-payment {
+    padding: 6px;
+    background-color: #08f;
+    border: 2px solid #fff;
+    color: #fff;
+    border-radius: 8px;
+}
+.open-modal-payment:hover {
+    cursor: pointer;
+}
+.open-modal-payment:active {
+    background-color: #090;
+}
+
+/* Modal para elegir metodo de pago */
+#modal-payment {
+    margin: auto;
+    width: 320px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px #099;
+    text-align: center;
+}
+#modal-payment::backdrop {
+    background-color: #0007;
+}
+.header-modal {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #ffbd59;
+}
+.header-modal button {
+    font-size: 18px;
+    padding: 0.25em 0.5em;
+    background-color: #f00;
+}
+#btn-paypal {
+    margin: 1.2em 0em;
+    padding: 0.35em 1.4em;
+    background-color: #07f;
+    color: #fff;
+    font-size: 22px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+}
+#btn-paypal:hover {
+    background-color: #07f9;
+}
+#btn-paypal:active {
+    background-color: #07f7;
+}
+
+/* Estilos al bloque de paginación */
+#paginator, #paginator2 {
+    display: flex;
+    margin: 5px 0px;
+    list-style: none;
+}
+.link-page, .link-page2 {
+    padding: 0.1em 0.3em;
+    color: #000;
+    border: none;
+    background-color: transparent;
+}
+.link-page:active, .link-page2:active {
+    background-color: #ff0;
+}
+.link-page-current, .link-page2-current {
+    background-color: #00c;
+    color: #fff;
+}
+.link-page-current:active, .link-page2-current:active {
+    background-color: #ff0;
 }
 
 
 /*All animations of panel-user*/
 @keyframes colores-3 {    /*titulo de la pagina de inicio*/
     0% {
-        border-left: 4px solid #00e;
-        border-right: 4px solid #00e;
+        border-left: 4px solid #00c;
+        border-right: 4px solid #00c;
     }
 }
 
@@ -81,6 +161,7 @@
     .box-invoices {
     display: block;
     width: fit-content;
+    height: fit-content;
     padding: 7px;
     margin: 30px auto;
     background-color: #fff;
@@ -98,8 +179,8 @@
     border-collapse: collapse;
     font-size: 16px;
     }
-    .table-datos:hover, .table-datos:active {
-        background-color: #00e;
+    .rows-vps-payment:hover, .rows-trader-payment:hover {
+        background-color: #00f;
         color: #fff;
     }
     .invoice-table th, .invoice-table td{
@@ -109,18 +190,28 @@
     .invoice-table th{
         background-color: #f0f0f0;
     }
+
+    /* Modal para elegir metodo de pago */
+    .header-modal h2 {
+        padding: 0em 0.3em;
+    }
 }
 
 @media screen and (min-width: 1024px) {
-    /* Modificamnos el contenedor general */
-    .box-general-accordion {
-        display: flex;
-        row-gap: 1em;
-    }
+    /* Modificamos las tablas de facturas */
     .invoice-table {
-        font-size: 20px;
+        font-size: 19px;
     }
     .box-title {
-        font-size: 28px;
+        font-size: 26px;
+    }
+}
+
+@media screen and (min-width: 1360px) {
+    .box-general-accordion {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        row-gap: 1em;
     }
 }

@@ -4,33 +4,31 @@ const modalButtonOpen = document.querySelector('.open-modal-add');
 const modalButtonClose = document.querySelector('.close-modal-add');
 const ButtonSendModal = document.querySelector('.button-send-modal');
 
-if (modalButtonOpen != null) {
+if (modalButtonOpen != null ) {
     modalButtonOpen.addEventListener("click", () => {
         modalAdd.showModal();
     })
+    modalButtonClose.addEventListener("click", () => {
+        modalAdd.close();
+    })
+
+    /* Desactivar el boton de "agregar" cuando le de el primer click */
+    let is_disabled = false;
+    ButtonSendModal.addEventListener("click", () => {
+        if (is_disabled === true) {
+            ButtonSendModal.setAttribute("disabled", "");
+        }
+        else {
+            is_disabled = true;
+        }
+    });
 }
-
-modalButtonClose.addEventListener("click", () => {
-    modalAdd.close();
-})
-
-
-/* Desactivar el boton de "agregar" cuando le de el primer click */
-let is_disabled = false;
-ButtonSendModal.addEventListener("click", () => {
-    if (is_disabled === true) {
-        ButtonSendModal.setAttribute("disabled", "");
-    }
-    else {
-        is_disabled = true;
-    }
-});
 
 
 /*Función para paginar las tablas de la pagina panel de usuario. La función recibe la clase de las filas de
 las tablas a paginar tambien las clases de los botones de pagina siguiente o anterior y la lista de objetos
 con los datos a actualizar en cada fila*/
-function tablesPaginator(data, button_list, button_index, rows) {
+function tablePaginator(data, button_list, button_index, rows) {
     /*ACTUALIZAMOS LAS FILAS DE LA TABLA*/
     /* Verificamos si hay filas sobrantes para ocultarlas y agregar los datos a los no sobrantes */
     if (rows.length > data.length) {
@@ -53,7 +51,7 @@ function tablesPaginator(data, button_list, button_index, rows) {
     }
     else {
         // En caso de que no hay filas sobrantes tomamos las filas que hay y agregamos los datos a cada celda
-        counter_row = 0;
+        let counter_row = 0;
         rows.forEach(function (currentValue) {
             currentValue.removeAttribute('hidden')
             let childs = currentValue.children;
@@ -116,41 +114,78 @@ let PaginatorButtons = document.querySelectorAll('.link-page');
 PaginatorButtons.forEach(function (currentValue, currentIndex) {
 
     currentValue.addEventListener('click', () => {
-
+        const url = window.location.href
         // Hacemos una petición GET al servidor para traer los datos de la tabla "ganancias semanales"
         // La info de url para las peticiones esta la app vps en en la vista PanelUserView en django
-        fetch("http://127.0.0.1:8000/panel-user/?page=" + currentValue.value)
+        fetch(url + "?page=" + currentValue.value)
             .then(response => response.json())
             .then(function (data) {
                 // Tomamos los datos para actualizar la tabla
-                profits = data.profits;
+                const profits = data.profits;
                 //Tomamos las filas a modificar
                 const row_list = document.querySelectorAll('.tr-profits');
                 // Hacemos la paginación a la tabla de ganancias semanales con una funcion
-                tablesPaginator(profits, PaginatorButtons, currentIndex, row_list)
+                tablePaginator(profits, PaginatorButtons, currentIndex, row_list)
             });
     });
 });
 
 
-// recogemos los botones del paginador de la tabla "Ganancias Semanales"
+// recogemos los botones del paginador de la tabla "Historial de operaciones de la cuenta madre"
 let PaginatorButtons2 = document.querySelectorAll('.link-page2');
 PaginatorButtons2.forEach(function (currentValue, currentIndex) {
 
     currentValue.addEventListener('click', () => {
-
-        // Hacemos una petición GET al servidor para traer los datos de la tabla "ganancias semanales"
+        const url = window.location.href
+        // Hacemos una petición GET al servidor para traer los datos de la tabla "Historial de operaciones de la cuenta madre"
         // La info de url para las peticiones esta la app vps en en la vista PanelUserView en django
-        fetch("http://127.0.0.1:8000/panel-user/?page2=" + currentValue.value)
+        fetch(url + "?page2=" + currentValue.value)
             .then(response => response.json())
             .then(function (data) {
                 // Tomamos los datos para actualizar la tabla
-                operations = data.operations;
-                console.log(operations)
+                const operations = data.operations;
+                // Corrigiendo el formato de las fechas en las filas
+                operations.forEach(function (currentValue) {
+                    open_time = currentValue['open_time']
+                    currentValue['open_time'] = open_time.replace('T', ' ')
+                    time = currentValue['time']
+                    currentValue['time'] = open_time.replace('T', ' ')
+                })
                 //Tomamos las filas a modificar
                 const row_list2 = document.querySelectorAll('.tr-operation');
-                // Hacemos la paginación a la tabla de ganancias semanales con una funcion
-                tablesPaginator(operations, PaginatorButtons2, currentIndex, row_list2)
+                // Hacemos la paginación a la tabla de Historial de cuenta madre con una funcion
+                tablePaginator(operations, PaginatorButtons2, currentIndex, row_list2)
+            });
+    });
+});
+
+
+// recogemos los botones del paginador de la tabla "Operaciones de la cuenta mt5 del usuario"
+let PaginatorButtons3 = document.querySelectorAll('.link-page3');
+PaginatorButtons3.forEach(function (currentValue, currentIndex) {
+
+    currentValue.addEventListener('click', () => {
+        const url = window.location.href
+        // Hacemos una petición GET al servidor para traer los datos de la tabla "Operaciones en la semana actual"
+        // La info de url para las peticiones esta la app vps en en la vista PanelUserView en django
+        fetch(url + "?page3=" + currentValue.value)
+            .then(response => response.json())
+            .then(function (data) {
+                // Tomamos los datos para actualizar la tabla
+                const operations = data.operations2;
+                // Corrigiendo el formato de las fechas en las filas
+                operations.forEach(function (currentValue) {
+                    open_time = currentValue['open_time']
+                    open_time = open_time.replace('T', ' ')
+                    currentValue['open_time'] = open_time.replace('Z', '')
+                    close_time = currentValue['close_time']
+                    close_time = close_time.replace('T', ' ')
+                    currentValue['close_time'] = close_time.replace('Z', ' ')
+                })
+                //Tomamos las filas a modificar
+                const row_list3 = document.querySelectorAll('.tr-operation2');
+                // Hacemos la paginación a la tabla de Historial de operaciones de la cuenta mt5 del usuario con una funcion.
+                tablePaginator(operations, PaginatorButtons3, currentIndex, row_list3)
             });
     });
 });

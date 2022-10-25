@@ -69,7 +69,7 @@
     border-collapse: collapse;
 }
 .accounts-table tr:hover, .accounts-table tr:active {
-    background-color: #070;
+    background-color: #00d;
 }
 .accounts-table th, .accounts-table td{
     padding: .4em .6em;
@@ -104,7 +104,6 @@
 .img-trash:active {
     background-color: #f009;
 }
-
 
 /*Modal para Agregar cuenta mt5*/
 #modal-add {
@@ -182,21 +181,22 @@
     margin: 5px 0px;
     list-style: none;
 }
-.link-page, .link-page2 {
+.link-page, .link-page2, .link-page3 {
     padding: 0.1em 0.3em;
     color: #fff;
     border: none;
     background-color: transparent;
 }
-.link-page:active, .link-page2:active {
+.link-page:active, .link-page2:active, .link-page3:active {
     background-color: #ff0;
 }
-.link-page-current, .link-page2-current {
+.link-page-current, .link-page2-current, .link-page3-current {
     background-color: #00f;
     color: #fff;
 }
-.link-page-current:active, .link-page2-current:active {
+.link-page-current:active, .link-page2-current:active, .link-page3-current:active {
     background-color: #ff0;
+    color: #000;
 }
 
 
@@ -219,7 +219,7 @@
     
 
     .box-mt5 {
-        width: 768px;
+        width: 720px;
         margin: 20px auto;
         font-size: 18px;
     }
@@ -244,7 +244,7 @@
     }
 
     .box-mt5 {
-        width: fit-content;
+        width: 900px;
     }
 
     .open-modal-add .open-modal-add-2 {
@@ -274,13 +274,17 @@
         font-size: 24px;
     }
 
-    .operations-table {
-        width: 980px;
-    }    
+    .box-mt5-width {
+        width: fit-content;
+    }
 
 }
 
 @media screen and (min-width: 1366px){
+    .box-mt5 {
+        width: fit-content;
+    }
+
     .operations-table {
         width: max-content;
     }

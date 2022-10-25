@@ -29,7 +29,7 @@ def trading_history():
 
         # obtenemos el número de órdenes en la historia en un periodo de 4 semanas
         time = datetime.now()
-        from_date = time - timedelta(weeks=4)
+        from_date = time - timedelta(weeks=40)
         to_date = time + timedelta(days=1)
         history_orders = mt5.history_deals_get(from_date, to_date)
 
@@ -65,27 +65,20 @@ def trading_history():
                         data[i]['open_price'] = j['price']
 
         # Reordenamos las claves de los dicts tomando solo las claves que se mostraran en el template
-        
         ordered_data = []
-        ordered_dicts = {}
         for i in range(len(data)):
-
+            ordered_dicts = {}
             ordered_dicts['open_time'] = data[i]['open_time']
-            ordered_dicts['open_price'] = data[i]['open_price']
+            ordered_dicts['open_price'] = round(data[i]['open_price'], 5)
             ordered_dicts['symbol'] = data[i]['symbol']
             ordered_dicts['type'] = data[i]['type']
             ordered_dicts['volume'] = data[i]['volume']
             ordered_dicts['time'] = data[i]['time']
-            ordered_dicts['close_price'] = data[i]['price']
-            ordered_dicts['profit'] = data[i]['profit']
+            ordered_dicts['close_price'] = round(data[i]['price'], 5)
+            ordered_dicts['profit'] = round(data[i]['profit'], 2)
             
-            ordered_data.insert(0, ordered_dicts)
-            print(ordered_data[i])
-            print()
+            ordered_data.append(ordered_dicts)
 
-
-        print("LOS DATOS QUE TIENE ordered_data DESPUES DEL CICLO FOR:")
-        print(ordered_data)
         return ordered_data
 
 

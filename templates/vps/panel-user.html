@@ -100,6 +100,66 @@
         </form>
     </dialog>
 
+
+    <!-- Tabla de historial de operaciones de la cuenta mt5 -->
+
+    <section class="box-mt5">
+        <h2 class="box-title">Historial de Operaciones en la semana actual</h2>
+        <div>
+            <table class="accounts-table operations-table">
+                <tr class="thead">
+                    <th>Fecha Apertura</th>
+                    <th>Precio Apertura</th>
+                    <th>Par</th>
+                    <th>Tipo</th>
+                    <th>Lotaje</th>
+                    <th>Fecha Cierre</th>
+                    <th>Precio Cierre</th>
+                    <th>Comisión</th>
+                    <th>Swap</th>
+                    <th>Beneficio</th>
+                </tr>
+                {% for trade in operations2 %}
+                <tr class="tr-operation2">
+                    <td>{{ trade.open_time|date:"Y-m-d H:i:s" }}</td>
+                    <td>{{ trade.open_price }}</td>
+                    <td>{{ trade.symbol }}</td>
+                    <td>{{ trade.type }}</td>
+                    <td>{{ trade.volume }}</td>
+                    <td>{{ trade.close_time|date:"Y-m-d H:i:s" }}</td>
+                    <td>{{ trade.close_price }}</td>
+                    <td>{{ trade.commission }}</td>
+                    <td>{{ trade.swap }}</td>
+                    <td>{{ trade.profit }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <!-- Bloque de paginación para la tabla historial de operaciones de la cuenta mt5 -->
+        <div>
+            {% if operations2.paginator.num_pages > 1 %}
+            <nav id="paginator2">
+                <button class="link-page3 link-page-previous" value="1">&laquo;</button>
+
+                {% for pagina in operations2.paginator.page_range %}
+
+                {% if pagina == operations2.number %}
+                <button class="link-page3 link-page-current" value="{{pagina}}">{{ pagina }}</button>
+                {% else %}
+                <button class="link-page3" value="{{pagina}}">{{ pagina }}</button>
+                {% endif %}
+
+                {% endfor %}
+
+                <button class="link-page3 link-page-next" value="2">&raquo;</button>
+                {% endif %}
+            </nav>
+        </div>
+    </section>
+
+
+
     <!-- Tabla de ganancias semanales de la cuenta mt5 -->
 
     <section class="box-mt5">
@@ -107,6 +167,7 @@
         <div>
             <table class="accounts-table operations-table profit-table">
                 <tr class="thead">
+                    <th>Id</th>
                     <th>Fecha Inicio</th>
                     <th>Fecha Final</th>
                     <th>Balance Inicial</th>
@@ -119,8 +180,9 @@
                 </tr>
                 {% for profit in profits %}
                 <tr class="tr-profits">
-                    <td>{{ profit.start_date }}</td>
-                    <td>{{ profit.end_date }}</td>
+                    <td>{{ profit.id }}</td>
+                    <td>{{ profit.start_date|date:"Y-m-d" }}</td>
+                    <td>{{ profit.end_date|date:"Y-m-d" }}</td>
                     <td>{{ profit.start_balance }}</td>
                     <td>{{ profit.withdraw_deposit }}</td>
                     <td>{{ profit.end_balance }}</td>
@@ -135,6 +197,7 @@
 
         <!-- Bloque de paginación para la Tabla de ganacias semanales de la cuenta mt5 -->
         <div>
+            {% if profits.paginator.num_pages > 1 %}
             <nav id="paginator">
                 <button class="link-page link-page-previous" value="1">&laquo;</button>
 
@@ -147,8 +210,9 @@
                 {% endif %}
 
                 {% endfor %}
-                <button class="link-page link-page-next" value="{{profits.next_page_number}}">&raquo;</button>
+                <button class="link-page link-page-next" value="2">&raquo;</button>
             </nav>
+            {% endif %}
         </div>
     </section>
 
@@ -171,12 +235,12 @@
                 </tr>
                 {% for trade in operations %}
                 <tr class="tr-operation">
-                    <td>{{ trade.open_time }}</td>
+                    <td>{{ trade.open_time|date:"Y-m-d H:i:s" }}</td>
                     <td>{{ trade.open_price }}</td>
                     <td>{{ trade.symbol }}</td>
                     <td>{{ trade.type }}</td>
                     <td>{{ trade.volume }}</td>
-                    <td>{{ trade.time }}</td>
+                    <td>{{ trade.time|date:"Y-m-d H:i:s" }}</td>
                     <td>{{ trade.close_price }}</td>
                     <td>{{ trade.profit }}</td>
                 </tr>
@@ -185,6 +249,7 @@
         </div>
         <!-- bloque de paginacion de la Tabla de historial de operaciones de la cuenta madre-->
         <div>
+            {% if operations.paginator.num_pages > 1 %}
             <nav id="paginator2">
                 <button class="link-page2 link-page-previous" value="1">&laquo;</button>
 
@@ -198,8 +263,7 @@
 
                 {% endfor %}
 
-                {% if operations.has_next %}
-                <button class="link-page2 link-page-previous" value="{{operations.next_page_number}}">&raquo;</button>
+                <button class="link-page2 link-page-next" value="2">&raquo;</button>
                 {% endif %}
             </nav>
         </div>

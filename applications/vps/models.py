@@ -1,10 +1,15 @@
+from pyexpat import model
+from statistics import mode
 from django.db import models
 from applications.users.models import User
 # Managers
-from .managers import AccountMt5Manager, AccountManagementManager
+from .managers import AccountMt5Manager, AccountManagementManager, AccountOperationManager
 # Create your models here.
 
 Status = (('0', 'Desconectado'), ('1', 'Conectado'), ('2', 'Error'))
+
+# Create your models here.
+
 class AccountMt5(models.Model):
     login = models.CharField('Usuario', max_length=20)
     password = models.CharField('Password', max_length=128)
@@ -29,9 +34,28 @@ class AccountManagement(models.Model):
     commission = models.DecimalField('Comisiones', max_digits=6, decimal_places=2, default=0.00)
     swap = models.DecimalField('Swap', max_digits=6, decimal_places=2, default=0.00)
     net_profit = models.DecimalField('Ganancia Neta', max_digits=9, decimal_places=2, default=0.00)
-    id_account_mt5 = models.ForeignKey(AccountMt5, on_delete=models.CASCADE)
+    id_user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     objects = AccountManagementManager()
 
     def __str__(self):
-        return  str(self.id) + ' - ' + str(self.start_date) +' - ' + str(self.end_date) + ' - ' + str(self.id_account_mt5)
+        return  str(self.id) + ' - ' + str(self.start_date) +' - ' + str(self.end_date) + ' - ' + str(self.id_user)
+
+
+class AccountOperation(models.Model):
+    open_time = models.DateTimeField('Fecha Apertura', max_length=20)
+    open_price = models.DecimalField('Precio Apertura', max_digits=7, decimal_places=5)
+    symbol = models.CharField('Par', max_length=10)
+    type = models.CharField('Tipo', max_length=6)
+    volume = models.DecimalField('Lotaje', max_digits=5, decimal_places=2)
+    close_time = models.DateTimeField('Fecha Cierre', max_length=20)
+    close_price = models.DecimalField('Precio Cierre', max_digits=7, decimal_places=5)
+    commission = models.DecimalField('Comisiones', max_digits=6, decimal_places=2)
+    swap = models.DecimalField('Swap', max_digits=6, decimal_places=2)
+    profit = models.DecimalField('Beneficio', max_digits=8, decimal_places=2)
+    id_account_mt5 = models.ForeignKey(AccountMt5, on_delete=models.CASCADE)
+
+    objects = AccountOperationManager()
+
+    def __str__(self):
+        return  str(self.id) + ' - ' + str(self.close_time) +' - ' + str(self.profit) + ' - ' + str(self.id_account_mt5)
