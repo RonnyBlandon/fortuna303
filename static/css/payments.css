@@ -1,11 +1,12 @@
 /* Ocultamos el html para tablets y pc */
 .box-invoices {
     display: none;
+    font-size: 18px;
 }
 
 /* Caja que contiene al accordion */
 .box-general-accordion {
-    min-height: 100vh;
+    min-height: 80vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -14,7 +15,9 @@
 }
 
 /* Caja del accordion */
-.box-accordion {
+.box-accordion, .box-accordion-2 {
+    display: flex;
+    flex-direction: column;
     margin: 40px 24px;
     padding: 0px 24px;
     background-color: #fff;
@@ -39,6 +42,7 @@
 .primary-details summary, .details summary, .primary-details-2 summary, .details-2 summary {
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 .primary-details summary::before, .details summary::before, .primary-details-2 summary::before, .details-2 summary::before {
     content: "+";
@@ -63,79 +67,59 @@
 .title-celdas {
     color: #7e7d7d;
 }
-.open-modal-payment {
-    padding: 6px;
+.link-first-payment {
+    display: block;
+    margin: 0em 20%;
+    text-align: center;
+    padding: 0.4em 0.6em;
     background-color: #08f;
-    border: 2px solid #fff;
+    border: 2px solid #00f;
+    text-decoration: none;
     color: #fff;
     border-radius: 8px;
 }
-.open-modal-payment:hover {
+.link-first-payment:hover {
     cursor: pointer;
+    background-color: #08f9;
 }
-.open-modal-payment:active {
-    background-color: #090;
+.link-first-payment:active {
+    text-decoration: underline;
 }
-
-/* Modal para elegir metodo de pago */
-#modal-payment {
-    margin: auto;
-    width: 320px;
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px #099;
+.btn-pay {
     text-align: center;
-}
-#modal-payment::backdrop {
-    background-color: #0007;
-}
-.header-modal {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color: #ffbd59;
-}
-.header-modal button {
-    font-size: 18px;
-    padding: 0.25em 0.5em;
-    background-color: #f00;
-}
-#btn-paypal {
-    margin: 1.2em 0em;
-    padding: 0.35em 1.4em;
-    background-color: #07f;
+    padding: 0.4em 0.6em;
+    background-color: #08f;
+    border: 0.15em solid #fff;
+    text-decoration: none;
     color: #fff;
-    font-size: 22px;
-    border: none;
-    border-radius: 20px;
+    border-radius: 8px;
     cursor: pointer;
 }
-#btn-paypal:hover {
-    background-color: #07f9;
-}
-#btn-paypal:active {
-    background-color: #07f7;
+.btn-pay:active {
+    text-decoration: underline;
 }
 
 /* Estilos al bloque de paginación */
 #paginator, #paginator2 {
     display: flex;
-    margin: 5px 0px;
+    justify-content: center;
+    margin: 0.1em 0em;
     list-style: none;
 }
-.link-page, .link-page2 {
+.link-page, .link-page2, .link-page3, .link-page4 {
     padding: 0.1em 0.3em;
     color: #000;
     border: none;
     background-color: transparent;
 }
-.link-page:active, .link-page2:active {
+.link-page:active, .link-page2:active, .link-page3:active, .link-page4:active {
     background-color: #ff0;
 }
-.link-page-current, .link-page2-current {
+.link-page-current {
     background-color: #00c;
     color: #fff;
 }
-.link-page-current:active, .link-page2-current:active {
+.link-page-current:active {
     background-color: #ff0;
 }
 
@@ -153,7 +137,7 @@
 
 @media screen and (min-width: 768px) {
     /* Escondemos el html para moviles */
-    .box-accordion {
+    .box-accordion, .box-accordion-2 {
         display: none;
     }
 
@@ -178,6 +162,9 @@
     border-radius: 10px;
     border-collapse: collapse;
     font-size: 16px;
+    }
+    .rows-trader-payment, .rows-vps-payment {
+        text-align: center;
     }
     .rows-vps-payment:hover, .rows-trader-payment:hover {
         background-color: #00f;

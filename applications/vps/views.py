@@ -1,5 +1,7 @@
 import asyncio
-from django.views.generic import TemplateView, DeleteView, FormView
+from datetime import datetime, date
+from email.policy import default
+from django.views.generic import View, TemplateView, DeleteView, FormView
 # importar formularios
 from .forms import CreateAccountMt5Form
 #
@@ -11,8 +13,10 @@ from django.core.paginator import Paginator
 from django.contrib import messages
 #  importar modelos
 from applications.vps.models import AccountMt5, AccountManagement, AccountOperation
+from applications.users.models import User
+from applications.payments.models import VpsPayment, TraderPayment
 # imortar funciones
-from .functions import trading_history
+from .functions import trading_history, active_buttons_time
 from .metaapi import create_server_mt5, configure_copyfactory, delete_server_mt5
 
 # Create your views here.
@@ -25,6 +29,10 @@ class PanelUserView(LoginRequiredMixin, TemplateView):
         context = super(PanelUserView, self).get_context_data(**kwargs)
         context['form_mt5'] = CreateAccountMt5Form
         context['accounts'] = AccountMt5.objects.get_account_mt5(self.request.user.id)
+
+        # Verificando la fecha y hora que deben estar habilitados los botones de agregar y borrar cuenta mt5
+        context['active'] = active_buttons_time()
+
         # Paginando los registros de la tabla ganancias semanales
         list_manamegent = AccountManagement.objects.get_account_management(self.request.user.id)
         paginator1 = Paginator(list_manamegent, 10)
@@ -133,3 +141,36 @@ class DeleteAccountMt5View(LoginRequiredMixin, DeleteView):
         messages.add_message(request=self.request, level=messages.SUCCESS, message='La cuenta se ha eliminado con éxito.')
 
         return super(DeleteAccountMt5View, self).post(request, *args, **kwargs)
+
+
+class ConfirmationUnsubscribeView(LoginRequiredMixin, TemplateView):
+    template_name = 'vps/confirmation-unsubscribe.html'
+
+
+class UnsubscriberView(LoginRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        # actualizamos el campo subscriber del usuario a False
+        User.objects.filter(id=request.user.id).update(subscriber=False)
+
+        # Borramos la cuenta en metaapi 
+        accounts_mt5 = AccountMt5.objects.get_account_mt5(request.user.id)
+        if accounts_mt5:
+            account_mt5 = accounts_mt5[0]
+            id_client_metaapi = account_mt5.id_client_metaapi
+
+            #asyncio.run(delete_server_mt5(id_client_metaapi))
+
+            # Borramos la cuenta mt5 en la base de datos local
+            account_mt5.delete()
+        
+        # Actualizamos los pagos que estan en estado de "Pagar" a Cancelado
+        vps_payments = VpsPayment.objects.vps_payments_by_status('Pagar')
+
+        if vps_payments:
+            vps_payments.update(status="Cancelado")
+
+        # Redirigimos a la misma pagina de perfil de usuario
+        return HttpResponseRedirect(
+            reverse('vps_app:panel_user')
+        )

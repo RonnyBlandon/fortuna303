@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Panel Usuario {% endblock title %}
+
+{% block css %} {% static 'css/confirmation.css' %} {% endblock css %}
+
+{% block content %}
+{% include 'includes/header.html' %}
+
+<!--Titulo de la pagina-->
+
+<h1 class="title">Confirmación de baja del servicio Copytrading + Vps</h1>
+
+<div class="box-content">
+    <h2>¿Usted está seguro de darse de baja del servicio Copytrading + Vps?</h2>
+    <p>Al darse de baja, automáticamente se desconectará y borrará su cuenta metatrader5</p>
+    <form method="post"> {% csrf_token %}
+        <div class="box-buttons">
+            <a class="button-delete" href="{% url 'vps_app:unsubscribe' %}">Sí, quiero hacerlo</a>
+            <a class="button-back" href="{% url 'vps_app:panel_user' %}">No, no quiero hacerlo</a>
+        </div>
+    </form>
+</div>
+
+{% include 'includes/footer.html' %}
+{% endblock content %}

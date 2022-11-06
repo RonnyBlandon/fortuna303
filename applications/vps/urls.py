@@ -8,4 +8,6 @@ urlpatterns = [
     path('panel-user/', views.PanelUserView.as_view(), name='panel_user'),
     path('add-account-mt5/', views.CreateAccounMt5View.as_view(), name='add_account_mt5'),
     path('delete-account-mt5/<pk>', views.DeleteAccountMt5View.as_view(), name='delete_account_mt5'),
+    path('confirmation-unsubscribe/', views.ConfirmationUnsubscribeView.as_view(), name='confirmation_unsubscribe'),
+    path('unsubscribe/', views.UnsubscriberView.as_view(), name='unsubscribe'),
 ]

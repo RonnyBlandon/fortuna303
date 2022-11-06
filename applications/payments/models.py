@@ -25,12 +25,13 @@ class VpsPayment(models.Model):
 
 
 class TraderPayment(models.Model):
-    created_date = models.DateField('Fecha de creación', max_length=20)
-    expiration = models.DateField('Fecha de creación', max_length=20)
+    created_date = models.DateField('Fecha de creación')
+    expiration = models.DateField('Fecha de creación')
+    id_management = models.ForeignKey(AccountManagement, on_delete=models.CASCADE)
     total = models.DecimalField('Total', max_digits=9, decimal_places=2)
     status = models.CharField('Estado', max_length=12, choices=payment_status)
-    id_management = models.ForeignKey(AccountManagement, on_delete=models.CASCADE)
-    payment_method = models.CharField('Metodo de Pago', max_length=20, blank=True)
+    id_user = models.ForeignKey(User, on_delete=models.CASCADE)
+    payment_method = models.CharField('Metodo de Pago', max_length=20, blank=True, choices=payment_methods)
     transaction_id = models.CharField('ID Transacción', max_length=30, blank=True)
 
     objects = TraderPaymentManager()

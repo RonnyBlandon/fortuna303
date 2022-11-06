@@ -8,6 +8,7 @@ from fortuna_303.settings.base import get_secret
 
 """ Funciones con la api de Metatrader 5 """
 
+
 def connect_terminal():
     # establecemos la conexión con el terminal MetaTrader 5
     if not mt5.initialize(path="C:\\Program Files\\Traders Way MetaTrader 5\\terminal64.exe"):
@@ -50,7 +51,7 @@ def trading_history():
         df['time'] = pd.to_datetime(df['time'], unit='s')
         list_data = df.to_dict('records')
 
-        data = [] #Creamos una lista vacia para agregar los dict con los datos de la orden
+        data = []  # Creamos una lista vacia para agregar los dict con los datos de la orden
         for register in list_data:
             if register['entry'] == 1:
                 # usamos insert() para ordenar la lista de forma desendente
@@ -76,7 +77,7 @@ def trading_history():
             ordered_dicts['time'] = data[i]['time']
             ordered_dicts['close_price'] = round(data[i]['price'], 5)
             ordered_dicts['profit'] = round(data[i]['profit'], 2)
-            
+
             ordered_data.append(ordered_dicts)
 
         return ordered_data
@@ -85,10 +86,28 @@ def trading_history():
 """ Funciones generales de vps """
 
 # Funcion para encriptar los password de las cuentas mt5
+
+
 def encrypt_password(password):
 
     key = Fernet.generate_key()
     object_cifrado = Fernet(key)
     password_encrypt = object_cifrado.encrypt(str.encode(password))
-    
+
     return password_encrypt
+
+
+#  Verificando la fecha y hora que deben estar habilitados los botones de agregar y borrar cuenta mt5
+def active_buttons_time():
+    today = datetime.now()
+    match today.weekday():
+        case 4:
+            if today.hour >= 15:
+                return True
+        case 5:
+            return True
+        case 6:
+            if today.hour < 20:
+                return True
+        case _:
+            return False

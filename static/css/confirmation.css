@@ -12,11 +12,16 @@
     border-right: 4px solid transparent;
     animation: colores-3 1s linear infinite alternate;
 }
+.box-buttons {
+    display: flex;
+}
 .button-delete, .button-back{
+    width: fit-content;
     margin: 0px 15px 0px 0px;
     padding: 7px;
     background-color: #e00;
     color: #fff;
+    text-decoration: none;
     border: 2px solid #000;
     border-radius: 8px;
 }
@@ -27,7 +32,6 @@
     cursor: pointer;
 }
 .button-back {
-    text-decoration: none;
     margin: 0px 0px 0px 15px;
     background-color: #07f;
 }

@@ -3,21 +3,20 @@
 
 {% block title %} Panel Usuario {% endblock title %}
 
-{% block css %} {% static 'css/register.css' %} {% endblock css %}
 {% block css2 %} {% static 'css/confirmation.css' %} {% endblock css2 %}
 
 {% block content %}
 {% include 'includes/header.html' %}
 
-    <div class="box-content">
-        <h2>¿Esta seguro que quiere eliminar esta cuenta mt5?</h2>
-        <form method="post"> {% csrf_token %}
-            <div class="callout secondary">
-                <button type="submit" class="button-delete">Sí, elimínalo</button>
-                <a class="button-back" href="{% url 'vps_app:panel_user' %}">No, quiero volver</a>
-            </div>
-        </form>
-    </div>
+<div class="box-content">
+    <h2>¿Esta seguro que quiere eliminar esta cuenta mt5?</h2>
+    <form method="post"> {% csrf_token %}
+        <div class="box-buttons">
+            <button type="submit" class="button-delete">Sí, elimínalo</button>
+            <a class="button-back" href="{% url 'vps_app:panel_user' %}">No, quiero volver</a>
+        </div>
+    </form>
+</div>
 
 {% include 'includes/footer.html' %}
 {% endblock content %}

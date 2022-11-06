@@ -9,6 +9,7 @@ class UserManager(BaseUserManager, models.Manager):
             last_name=last_name,
             email=email,
             level=account_level,
+            subscriber=False,
             is_staff=is_staff,
             is_superuser=is_superuser,
             is_active=is_active,
@@ -40,5 +41,9 @@ class UserManager(BaseUserManager, models.Manager):
         else:
             return False
 
-    # Devido a que no funciona el authenticate de django en el forms.py creamos una funcion que lo
-    # haga aqui en el managers
+
+    def get_level_user(self, id):
+        user = self.get(id=id)
+        level = user.level
+        return level
+

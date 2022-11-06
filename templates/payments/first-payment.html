@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Panel Usuario {% endblock title %}
+
+{% block css %} {% static 'css/details-payment.css' %} {% endblock css %}
+
+{% block content %}
+{% include 'includes/header.html' %}
+
+<!--Titulo de la pagina-->
+
+<h1 class="title">Detalles de pago</h1>
+
+<div class="box-general">
+    <div class="details-payment">
+        <div class="details-payment-child">
+            <h3>Fecha: </h3>
+            <p>{{ detail_payment.now|date:"d-M-Y" }}</p>
+        </div>
+        <div class="details-payment-child">
+            <h3>Expiración:</h3>
+            <p>{{ detail_payment.expiration|date:"d-M-Y" }}</p>
+        </div>
+        <div class="details-payment-child">
+            <h3>Precio:</h3>
+            <p>${{ detail_payment.price }}</p>
+        </div class="details-payment-child">
+        <div class="details-payment-description">
+            <h3>Descripción:</h3> 
+            <p>Servicio mensual de vps para metarader 5 y uso del sistema copytrading.</p>
+        </div>
+    </div>
+
+    <div class="method-payment">
+        <h2>Metodos de pago</h2>
+
+        <div class="container-methods">
+            <a class="link-paypal" href="{{ detail_payment.link_payment }}">Paypal</a>
+            <!--
+            <div class="credit-card">
+                <h3>Tarjeta de Credito/Debito</h3>
+                <form class="form-stripe" method="post" action=""> {% csrf_token %}
+                    <label>Numero de tarjeta *</label>
+                    <input type="number" placeholder="1234 1234 1234 1234">
+                    <label>Fecha de caducidad *</label>
+                    <input type="text" placeholder="Mes/Año">
+                    <label>Codigo de tarjeta (CVC) *</label>
+                    <input type="number" placeholder="CVC">
+                    <input class="button-send" type="submit" value="Adquirir servicio">
+                </form>
+            </div>
+            -->
+        </div class="box-secondary">
+    </div>
+</div>
+
+{% include 'includes/footer.html' %}
+{% endblock content %}

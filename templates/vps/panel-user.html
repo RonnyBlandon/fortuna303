@@ -34,23 +34,42 @@
             <h4>Correo: <span>{{ user.email }}</span></h4>
             <h4>Gestión de cuentas: <span>Inactivo</span></h4>
             <h4>VPS: <span>Inactivo</span></h4>
+            <h4>Nivel: <span>1</span></h4>
+            {% if user.subscriber %}
+            <a class="unsubscribe" href="{% url 'vps_app:confirmation_unsubscribe' %}">Darse de Baja del servicio de Copytrading + Vps</a>
+            {% else %}
+            <a class="link-fisrt-payment" href="{% url 'payments_app:first_payment' %}">Adquirir Copytrading + Vps</a>
+            {% endif %}
         </section>
 
         <!-- Sección de agregar y visualizacion de cuentas mt5 del usuario -->
         <section class="box-mt5 box-mt5-width">
             <div class="header-table">
                 <h2 class="box-title">Cuenta Metatrader5</h2>
-                {% if accounts.count == 0 %}
-                <button class="open-modal-add">Agregar</button>
-                {% else %}
-                {% for account in accounts %}
-                <a href="{% url 'vps_app:delete_account_mt5' account.id%}">
-                    <div>
-                        <img class="img-trash" src="{% static 'img/trash-mt5.svg' %}" alt="Eliminar">
+                {% if active == False %}
+                    {% if accounts.count == 0 %}
+                    <button class="open-modal-message button-modal-message">Agregar</button>
+                    {% else %}
+                    {% for account in accounts %}
+                    <div class="open-modal-message">
+                        <img class="img-trash img-trash-modal" src="{% static 'img/trash-mt5.svg' %}" alt="Eliminar">
                     </div>
+                    {% endfor %}
+                    {% endif %}
+
+                {% else %}
+                    {% if accounts.count == 0 %}
+                    <button class="open-modal-add">Agregar</button>
+                    {% else %}
+                    {% for account in accounts %}
+                    <a href="{% url 'vps_app:delete_account_mt5' account.id%}">
+                        <div>
+                            <img class="img-trash" src="{% static 'img/trash-mt5.svg' %}" alt="Eliminar">
+                        </div>
                     <a />
                     {% endfor %}
                     {% endif %}
+                {% endif %}
             </div>
             <table class="accounts-table">
                 <tr class="thead">
@@ -68,6 +87,21 @@
             </table>
         </section>
     </div>
+
+    <!-- Modal para avisar que los botones de agregar y borrar cuenta mt5 solo estan habilitados en tiempo determinado -->
+
+    <dialog id="modal-message">
+        <div>
+            <p>Solo se puede "Agregar" o "Eliminar" cuentas metatrader5 los viernes de 3:00 pm 
+            hasta el domingo 8:00 pm (horario UTC-6).
+            </p>
+            <p>
+            Visita la página de <a href="{% url 'home_app:how_work' %}"> ¿Cómo funciona?</a> 
+            Para más información.
+            </p>
+        </div>
+        <button class="close-modal-message">Cerrar</button>
+    </dialog>   
 
     <!--Modal para crear y agregar cuenta mt5-->
 
@@ -140,24 +174,23 @@
         <div>
             {% if operations2.paginator.num_pages > 1 %}
             <nav id="paginator2">
-                <button class="link-page3 link-page-previous" value="1">&laquo;</button>
+                <button class="page3 link-page-previous" value="1">&laquo;</button>
 
                 {% for pagina in operations2.paginator.page_range %}
 
                 {% if pagina == operations2.number %}
-                <button class="link-page3 link-page-current" value="{{pagina}}">{{ pagina }}</button>
+                <button class="page3 link-page-current" value="{{pagina}}">{{ pagina }}</button>
                 {% else %}
-                <button class="link-page3" value="{{pagina}}">{{ pagina }}</button>
+                <button class="page3" value="{{pagina}}">{{ pagina }}</button>
                 {% endif %}
 
                 {% endfor %}
 
-                <button class="link-page3 link-page-next" value="2">&raquo;</button>
+                <button class="page3 link-page-next" value="2">&raquo;</button>
                 {% endif %}
             </nav>
         </div>
     </section>
-
 
 
     <!-- Tabla de ganancias semanales de la cuenta mt5 -->
@@ -199,18 +232,18 @@
         <div>
             {% if profits.paginator.num_pages > 1 %}
             <nav id="paginator">
-                <button class="link-page link-page-previous" value="1">&laquo;</button>
+                <button class="page link-page-previous" value="1">&laquo;</button>
 
                 {% for pagina in profits.paginator.page_range %}
 
                 {% if pagina == profits.number %}
-                <button class="link-page link-page-current" value="{{pagina}}">{{ pagina }}</button>
+                <button class="page link-page-current" value="{{pagina}}">{{ pagina }}</button>
                 {% else %}
-                <button class="link-page" value="{{pagina}}">{{ pagina }}</button>
+                <button class="page" value="{{pagina}}">{{ pagina }}</button>
                 {% endif %}
 
                 {% endfor %}
-                <button class="link-page link-page-next" value="2">&raquo;</button>
+                <button class="page link-page-next" value="2">&raquo;</button>
             </nav>
             {% endif %}
         </div>
@@ -251,19 +284,19 @@
         <div>
             {% if operations.paginator.num_pages > 1 %}
             <nav id="paginator2">
-                <button class="link-page2 link-page-previous" value="1">&laquo;</button>
+                <button class="page2 link-page-previous" value="1">&laquo;</button>
 
                 {% for pagina in operations.paginator.page_range %}
 
                 {% if pagina == operations.number %}
-                <button class="link-page2 link-page-current" value="{{pagina}}">{{ pagina }}</button>
+                <button class="page2 link-page-current" value="{{pagina}}">{{ pagina }}</button>
                 {% else %}
-                <button class="link-page2" value="{{pagina}}">{{ pagina }}</button>
+                <button class="page2" value="{{pagina}}">{{ pagina }}</button>
                 {% endif %}
 
                 {% endfor %}
 
-                <button class="link-page2 link-page-next" value="2">&raquo;</button>
+                <button class="page2 link-page-next" value="2">&raquo;</button>
                 {% endif %}
             </nav>
         </div>
@@ -271,7 +304,7 @@
 
 </div>
 
-<script src="{% static 'js/panel-user.js' %}"></script>
+<script src="{% static 'js/panel-user.js' %}" type="module"></script>
 
 {% include 'includes/footer.html' %}
 {% endblock content %}

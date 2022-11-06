@@ -29,6 +29,7 @@
 /* primera Sección caja de datos de usuario */
 .box-user {
     min-width: 320px;
+    min-height: fit-content;
     margin: 20px auto 20px auto;
     padding: 7px;
     font-size: 18px;
@@ -45,12 +46,31 @@
     color: #ffbd59;
     text-shadow: 2px 2px #f00;
 }
+.link-fisrt-payment, .unsubscribe {
+    display: inline-block;
+    margin: 0.4em 0em;
+    padding: 0.3em 0.5em;
+    text-decoration: none;
+    text-align: center;
+    background-color: #08f;
+    font-size: 0.7em;
+    border: 2px solid #fff;
+    color: #fff;
+    border-radius: 8px;
+    cursor: pointer;
+}
+.unsubscribe {
+    background-color: #f00;
+}
+.link-fisrt-payment:active, .unsubscribe:active {
+    text-decoration: underline;
+}
 
 
 /* tablas de cuentas mt5 del usuario y operaciones de la cuenta madre*/
 .box-mt5 {
     padding: 7px;
-    margin: 20px 0px 40px 0px;
+    margin: 1.2em 0px 40px 0px;
     background-color: #222;
     border-radius: 10px;
     border-left: 4px solid transparent;
@@ -83,7 +103,7 @@
     color: #fff;
     text-align: center;
 }
-.open-modal-add, .img-trash{
+.open-modal-add, .img-trash, .button-modal-message{
     display: block;
     padding: 5px 5px;
     color: #fff;
@@ -91,10 +111,10 @@
     border-radius: 10px;
     border: 2px solid #fff;
 }
-.open-modal-add:active {
+.open-modal-add:active, .button-modal-message:active {
     background-color: #0709;
 }
-.open-modal-add:hover {
+.open-modal-add:hover, .button-modal-message:hover {
     cursor: pointer;
 }
 .img-trash {
@@ -103,6 +123,40 @@
 }
 .img-trash:active {
     background-color: #f009;
+}
+
+/* Modal para avisar que los botones de agregar y borrar cuenta mt5 solo estan habilitados en tiempo 
+determinado */
+#modal-message {
+    margin: auto;
+    width: 320px;
+    border-radius: 10px;
+}
+#modal-message::backdrop {
+    background-color: #0004;
+}
+#modal-message p {
+    padding: 0.7em;
+    font-weight: 600;
+}
+.button-modal-message {
+    background-color: #A0A0A0;
+}
+.img-trash-modal {
+    background-color: #A0A0A0;
+}
+.close-modal-message {
+    display: block;
+    margin: 0.4em auto;
+    padding: 0.5em 0.8em;
+    background-color: #f00;
+    color: #fff;
+    border: none;
+    border-radius: 0.6em;
+    cursor: pointer;
+}
+.close-modal-message:active {
+    text-decoration: underline;
 }
 
 /*Modal para Agregar cuenta mt5*/
@@ -178,23 +232,24 @@
 /* Estilos al bloque de paginación */
 #paginator, #paginator2 {
     display: flex;
+    justify-content: center;
     margin: 5px 0px;
     list-style: none;
 }
-.link-page, .link-page2, .link-page3 {
+.page, .page2, .page3 {
     padding: 0.1em 0.3em;
     color: #fff;
     border: none;
     background-color: transparent;
 }
-.link-page:active, .link-page2:active, .link-page3:active {
+.page:active, .page2:active, .page3:active {
     background-color: #ff0;
 }
-.link-page-current, .link-page2-current, .link-page3-current {
+.link-page-current, .page2-current, .page3-current {
     background-color: #00f;
     color: #fff;
 }
-.link-page-current:active, .link-page2-current:active, .link-page3-current:active {
+.link-page-current:active, .page2-current:active, .page3-current:active {
     background-color: #ff0;
     color: #000;
 }
@@ -225,6 +280,11 @@
     }
     .box-mt5-width {
         width: fit-content;
+    }
+
+    #modal-message {
+        width: 500px;
+        font-size: 18px;
     }
 
 }
@@ -287,6 +347,13 @@
 
     .operations-table {
         width: max-content;
+    }
+}
+
+@media screen and (min-width: 1440px) {
+    #modal-message {
+        width: 700px;
+        font-size: 24px;
     }
 }
 

@@ -25,10 +25,27 @@ if (modalButtonOpen != null ) {
 }
 
 
+/* Logica de botones de modal para avisar que los botones de agregar y borrar cuenta mt5 solo estan habilitados en tiempo 
+        determinado */
+const modalMessage = document.getElementById("modal-message");
+const modalOpen = document.querySelector('.open-modal-message');
+const modalClose = document.querySelector('.close-modal-message');
+
+
+if (modalOpen != null ) {
+    modalOpen.addEventListener("click", () => {
+        modalMessage.showModal();
+    })
+    modalClose.addEventListener("click", () => {
+        modalMessage.close();
+    })
+}
+
+
 /*Función para paginar las tablas de la pagina panel de usuario. La función recibe la clase de las filas de
 las tablas a paginar tambien las clases de los botones de pagina siguiente o anterior y la lista de objetos
 con los datos a actualizar en cada fila*/
-function tablePaginator(data, button_list, button_index, rows) {
+export function tablePaginator(data, rows, url=null) {
     /*ACTUALIZAMOS LAS FILAS DE LA TABLA*/
     /* Verificamos si hay filas sobrantes para ocultarlas y agregar los datos a los no sobrantes */
     if (rows.length > data.length) {
@@ -56,10 +73,20 @@ function tablePaginator(data, button_list, button_index, rows) {
             currentValue.removeAttribute('hidden')
             let childs = currentValue.children;
             let keys = Object.keys(data[counter_row]);//Tomamos las claves del objeto (dict en python)
-
+            
             for (let i = 0; i < keys.length; i++) {
                 let key = keys[i];
-                childs[i].innerHTML = data[counter_row][key];
+                if (data[counter_row][key] === 'Pagar') {
+                    console.log(data[counter_row][key]);
+                    let enlace = document.createElement('A');
+                    enlace.setAttribute('class', 'btn-pay');
+                    enlace.setAttribute('href', url + data[counter_row]['id'] + '/');
+                    enlace.innerHTML = 'Pagar';
+                    childs[i].innerHTML = '';
+                    childs[i].appendChild(enlace);
+                } else {
+                    childs[i].innerHTML = data[counter_row][key];
+                }
             };
 
             if (counter_row < data.length) {
@@ -67,7 +94,10 @@ function tablePaginator(data, button_list, button_index, rows) {
             };
         })
     };
+}
 
+
+export function buttonsPaginator (button_list, button_index) {
     /*YA QUE ACTUALIZAMOS LOS DATOS DE LA TABLA ACTUALIZAMOS LOS BOTONES DEL PAGINADOR*/
     //Limpiamos los botones del paginador quitando la clase de la pagina actual
     for (let button=0; button<button_list.length; button++) {
@@ -76,9 +106,7 @@ function tablePaginator(data, button_list, button_index, rows) {
     // Agregamos la clase al boton con la pagina actual en el paginador
     let button_value = button_list[button_index].value; // Guardamos en una variable el value del boton seleccionado
     if (button_value == button_list[button_index].innerHTML) {
-        if (button_list[button_index].classList.contains('link-page-current')) {
-            //PASS
-        } else {
+        if (button_list[button_index].classList.contains('link-page-current') === false) {
             button_list[button_index].classList.add('link-page-current');
         }
     } else {
@@ -110,7 +138,7 @@ function tablePaginator(data, button_list, button_index, rows) {
 
 
 // recogemos los botones del paginador de la tabla "Ganancias Semanales"
-let PaginatorButtons = document.querySelectorAll('.link-page');
+let PaginatorButtons = document.querySelectorAll('.page');
 PaginatorButtons.forEach(function (currentValue, currentIndex) {
 
     currentValue.addEventListener('click', () => {
@@ -125,14 +153,15 @@ PaginatorButtons.forEach(function (currentValue, currentIndex) {
                 //Tomamos las filas a modificar
                 const row_list = document.querySelectorAll('.tr-profits');
                 // Hacemos la paginación a la tabla de ganancias semanales con una funcion
-                tablePaginator(profits, PaginatorButtons, currentIndex, row_list)
+                tablePaginator(profits, row_list);
+                buttonsPaginator(PaginatorButtons, currentIndex);
             });
     });
 });
 
 
 // recogemos los botones del paginador de la tabla "Historial de operaciones de la cuenta madre"
-let PaginatorButtons2 = document.querySelectorAll('.link-page2');
+let PaginatorButtons2 = document.querySelectorAll('.page2');
 PaginatorButtons2.forEach(function (currentValue, currentIndex) {
 
     currentValue.addEventListener('click', () => {
@@ -146,26 +175,28 @@ PaginatorButtons2.forEach(function (currentValue, currentIndex) {
                 const operations = data.operations;
                 // Corrigiendo el formato de las fechas en las filas
                 operations.forEach(function (currentValue) {
-                    open_time = currentValue['open_time']
+                    const open_time = currentValue['open_time']
                     currentValue['open_time'] = open_time.replace('T', ' ')
-                    time = currentValue['time']
-                    currentValue['time'] = open_time.replace('T', ' ')
+                    const time = currentValue['time']
+                    currentValue['time'] = time.replace('T', ' ')
                 })
                 //Tomamos las filas a modificar
                 const row_list2 = document.querySelectorAll('.tr-operation');
                 // Hacemos la paginación a la tabla de Historial de cuenta madre con una funcion
-                tablePaginator(operations, PaginatorButtons2, currentIndex, row_list2)
+                tablePaginator(operations, row_list2);
+                buttonsPaginator(PaginatorButtons2, currentIndex);
             });
     });
 });
 
 
 // recogemos los botones del paginador de la tabla "Operaciones de la cuenta mt5 del usuario"
-let PaginatorButtons3 = document.querySelectorAll('.link-page3');
+let PaginatorButtons3 = document.querySelectorAll('.page3');
 PaginatorButtons3.forEach(function (currentValue, currentIndex) {
 
     currentValue.addEventListener('click', () => {
         const url = window.location.href
+        console.log(url+"?page3=1")
         // Hacemos una petición GET al servidor para traer los datos de la tabla "Operaciones en la semana actual"
         // La info de url para las peticiones esta la app vps en en la vista PanelUserView en django
         fetch(url + "?page3=" + currentValue.value)
@@ -185,7 +216,8 @@ PaginatorButtons3.forEach(function (currentValue, currentIndex) {
                 //Tomamos las filas a modificar
                 const row_list3 = document.querySelectorAll('.tr-operation2');
                 // Hacemos la paginación a la tabla de Historial de operaciones de la cuenta mt5 del usuario con una funcion.
-                tablePaginator(operations, PaginatorButtons3, currentIndex, row_list3)
+                tablePaginator(operations, row_list3);
+                buttonsPaginator(PaginatorButtons3, currentIndex);
             });
     });
 });
