@@ -17,7 +17,11 @@ class AccountMt5Manager(models.Manager):
       )
       account.save(using=self.db)
       return account
-     
+
+   def update_status_account_mt5(self, id: int, status: str, id_client_metaapi: str):
+      account = self.filter(id=id)
+      account.update(status=status, id_client_metaapi=id_client_metaapi)
+      return account
 
    def get_account_mt5(self, id):
       account = self.filter(id_user=id)

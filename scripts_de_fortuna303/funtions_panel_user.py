@@ -39,7 +39,6 @@ def get_accounts_mt5_database():
     except Exception as err:
         print("Error al consultar en la base de datos: ", err)
     connection.commit()
-
     connection.close()
 
 
@@ -286,5 +285,4 @@ async def operations_database(data: dict):
     else:
         print("Datos Insertados correctamente.")
     connection.commit()
-
     connection.close()

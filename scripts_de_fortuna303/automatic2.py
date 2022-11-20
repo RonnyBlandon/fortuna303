@@ -1,4 +1,4 @@
-from funtions import history_and_profit, operations_database
+from funtions_panel_user import history_and_profit, operations_database
 import asyncio
 
 data = asyncio.run(history_and_profit())

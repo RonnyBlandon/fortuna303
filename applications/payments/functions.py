@@ -4,10 +4,41 @@
 import requests
 from datetime import datetime, timedelta
 from calendar import isleap, monthrange
-
+import asyncio
+# functions of django
+from django.contrib import messages
+# functions of applications
+from applications.vps.metaapi import create_server_mt5, configure_copyfactory
+from applications.vps.functions import decrypt_password
+# import models
+from applications.users.models import User
+from applications.vps.models import AccountMt5
 """Funciones de la app Payment"""
 
-def expiration_date(date: datetime):
+
+def reconnect_mt5_account(id_user: int, request):
+    user = User.objects.get(id=id_user)
+    account_mt5 = AccountMt5.objects.get(id_user=id_user)
+    full_name = user.name + ' ' + user.last_name
+    password_encoded = account_mt5.password
+    #password = decrypt_password(password_encoded)
+    try:
+        account = asyncio.run(create_server_mt5(full_name, account_mt5.login, password_encoded, account_mt5.server))
+        if account:
+            try:
+                suscriber = asyncio.run(configure_copyfactory(account['id']))
+                if suscriber.status_code == 204:
+                    AccountMt5.objects.update_status_account_mt5(id=account_mt5.id, status='1', id_client_metaapi=account['id'])
+                    messages.add_message(request=request, level=messages.SUCCESS, message='La cuenta se ha reconectado con éxito.')
+            except Exception as err:
+                messages.add_message(request=request, level=messages.ERROR, message='Ha habido un error en la reconexión, por favor mande un mensaje en la página de contacto.')
+                print("Error al suscribir la cuenta mt5 a la cuenta madre en metaapi")
+    except Exception as err:
+        messages.add_message(request=request, level=messages.ERROR, message='Ha habido un error en la reconexión, por favor mande un mensaje en la página de contacto.')
+        print("Error al crear la cuenta mt5 en metaapi")
+
+
+def expiration_vps(date: datetime):
     days_of_month = monthrange(date.year, date.month)[1]  # calculamos cuantos dias tiene el mes
     # Agregamos la fecha de vencimiento
     match days_of_month:

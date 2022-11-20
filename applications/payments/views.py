@@ -1,4 +1,5 @@
 from datetime import datetime
+import asyncio
 from django.views.generic import TemplateView, DetailView
 from django.http import JsonResponse
 #
@@ -8,9 +9,10 @@ from django.core.paginator import Paginator
 # importamos los modelos
 from .models import TraderPayment, VpsPayment
 from applications.users.models import User
+from applications.vps.models import AccountMt5
 #importamos funciones 
-from applications.payments.functions import (create_order, create_renewal_order, capture_order, expiration_date)
-
+from applications.payments.functions import (create_order, create_renewal_order, capture_order, 
+expiration_vps, reconnect_mt5_account)
 # Create your views here.
 
 class PaymentsView(LoginRequiredMixin, TemplateView):
@@ -37,9 +39,29 @@ class PaymentsView(LoginRequiredMixin, TemplateView):
                     if 'vps' in dictionary:
                         id_payment = dictionary['vps']
                         VpsPayment.objects.update_payment_vps(id_payment, 'Paypal', details['id'])
+                        # Verificamos si la cuenta esta desconectada
+                        account_mt5 = AccountMt5.objects.get(id_user=user.id)
+                        if account_mt5.status == '0':
+                            trader_payment = TraderPayment.objects.unpaid_trader_payments(user.id)
+                            vps_payment = VpsPayment.objects.unpaid_vps_payments(user.id)
+                            print(trader_payment)
+                            print(vps_payment)
+                            # Conectamos la cuenta mt5 de nuevo a metaapi en caso de que este desconectado y este al dia con los pagos
+                            if trader_payment == False and vps_payment == False:
+                                reconnect_mt5_account(user.id, self.request)
                     elif 'trader' in dictionary:
                         id_payment = dictionary['trader']
                         TraderPayment.objects.update_payment_trader(id_payment, 'Paypal', details['id'])
+                        # Verificamos si la cuenta esta desconectada
+                        account_mt5 = AccountMt5.objects.get(id_user=user.id)
+                        if account_mt5.status == '0':
+                            trader_payment = TraderPayment.objects.unpaid_trader_payments(user.id)
+                            vps_payment = VpsPayment.objects.unpaid_vps_payments(user.id)
+                            print(trader_payment)
+                            print(vps_payment)
+                            # Conectamos la cuenta mt5 de nuevo a metaapi en caso de que este desconectado y este al dia con los pagos
+                            if trader_payment == False and vps_payment == False:
+                                reconnect_mt5_account(user.id, self.request)
 
         context = self.get_context_data(**kwargs)
         return self.render_to_response(context)
@@ -51,14 +73,19 @@ class PaymentsView(LoginRequiredMixin, TemplateView):
         id_user = self.request.user.id # sacamos el id del usuario
 
         vps_payment = VpsPayment.objects.vps_payments_by_user(id_user)
-        paginator1 = Paginator(vps_payment, 4)
+        paginator1 = Paginator(vps_payment, 10)
         page = self.request.GET.get('page')
         context['vps_payments'] = paginator1.get_page(page)
+        context['vps_payments_pages'] = paginator1.num_pages
 
         trader_payment = TraderPayment.objects.trader_payments_by_user(id_user)
-        paginator2 = Paginator(trader_payment, 3)
+        paginator2 = Paginator(trader_payment, 10)
         page2 = self.request.GET.get('page2')
         context['trader_payments'] = paginator2.get_page(page2)
+        context['trader_payments_pages'] = paginator2.num_pages
+
+        # Agregamos un range para que se muestre una cantidad especifica de botones en el paginador en html.
+        context['range'] = range(1, 9)
 
         return context
 
@@ -70,7 +97,7 @@ class PaymentsView(LoginRequiredMixin, TemplateView):
                 register.pop('id_user_id') # borrando dato innecesario
                 register.pop('transaction_id') # borrando dato innecesario
                 register.pop('payment_method') # borrando dato innecesario
-            return JsonResponse({'vps_payments': data})
+            return JsonResponse({'vps_payments': data, 'total_pages': context['vps_payments_pages']})
 
         elif self.request.GET.get('page2'):
             data = list(context['trader_payments'].object_list.values())
@@ -78,7 +105,7 @@ class PaymentsView(LoginRequiredMixin, TemplateView):
                 register.pop('id_user_id') # borrando dato innecesario
                 register.pop('transaction_id') # borrando dato innecesario
                 register.pop('payment_method') # borrando dato innecesario
-            return JsonResponse({'trader_payments': data})
+            return JsonResponse({'trader_payments': data, 'total_pages': context['trader_payments_pages']})
         
         else:
             response_kwargs.setdefault('content_type', self.content_type)
@@ -97,7 +124,7 @@ class FirstPaymentView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super(FirstPaymentView, self).get_context_data(**kwargs)
         now = datetime.now()
-        expiration = expiration_date(now)
+        expiration = expiration_vps(now)
         level = User.objects.get(id=self.request.user.id).level
         price = level.price
 

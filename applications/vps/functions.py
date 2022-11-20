@@ -97,6 +97,14 @@ def encrypt_password(password):
     return password_encrypt
 
 
+def decrypt_password(password):
+    key = Fernet.generate_key()
+    object_cifrado = Fernet(key)
+    decrypted_text_bytes = object_cifrado.decrypt(password)
+    decrypted_text = decrypted_text_bytes.decode()
+    return decrypted_text
+
+
 #  Verificando la fecha y hora que deben estar habilitados los botones de agregar y borrar cuenta mt5
 def active_buttons_time():
     today = datetime.now()

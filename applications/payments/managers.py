@@ -1,13 +1,13 @@
 from datetime import date
 from django.db import models
-from applications.payments.functions import expiration_date
+from applications.payments.functions import expiration_vps
 
 class VpsPaymentManager(models.Manager):
     """ Procedimientos para VpsPayment """
 
     def save_payment_vps(self, total: float, id_user, payment_method: str, transaction_id: str):
         date_now = date.today() # Sacamos la fecha que se genero el pago
-        expiration = expiration_date(date_now)
+        expiration = expiration_vps(date_now)
 
         # guardamos en la base de datos
         payment = self.model(
@@ -34,6 +34,13 @@ class VpsPaymentManager(models.Manager):
         payments = self.filter(id_user=id_user).order_by('-id')
         return payments
 
+    def unpaid_vps_payments(self, id_user: int):
+        payments = self.filter(id_user=id_user, status='Pagar')
+        if payments:
+            return True
+        else:
+            return False
+
     def vps_payments_by_status(self, status: str):
         payments = self.filter(status=status).order_by('-id')
         return payments
@@ -57,6 +64,13 @@ class TraderPaymentManager(models.Manager):
     def trader_payments_by_user(self, id_user: int):
         payments = self.filter(id_user=id_user).order_by('-id')
         return payments
+
+    def unpaid_trader_payments(self, id_user: int):
+        payments = self.filter(id_user=id_user, status='Pagar')
+        if payments:
+            return True
+        else:
+            return False
 
     def trader_payments_by_status(self, status: str):
         payments = self.filter(status=status).order_by('-id')

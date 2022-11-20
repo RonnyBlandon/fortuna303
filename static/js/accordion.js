@@ -1,4 +1,4 @@
-import {buttonsPaginator} from './panel-user.js';
+import {buttonsPaginator} from './paginator.js';
 
 const buttonAccordion = document.querySelector(".primary-details");
 const buttonAccordion2 = document.querySelector(".primary-details-2");
@@ -130,12 +130,13 @@ PaginatorButtons3.forEach(function (currentValue, currentIndex) {
             .then(function (data) {
                 // Tomamos los datos para actualizar la tabla
                 const payments = data.vps_payments;
+                const total_pages = data.total_pages;
                 //Tomamos las filas a modificar
                 const bloque = document.querySelector('.box-detail-2');
                 const details_list = document.querySelectorAll('.details-2');
                 // Hacemos la paginación a la tabla de ganancias semanales con una funcion
                 detailPaginator(payments, details_list, bloque, url_payment);
-                buttonsPaginator(PaginatorButtons3, currentIndex);
+                buttonsPaginator(PaginatorButtons3, currentIndex, total_pages);
             });
     });
 });
@@ -156,12 +157,13 @@ PaginatorButtons4.forEach(function (currentValue, currentIndex) {
             .then(function (data) {
                 // Tomamos los datos para actualizar la tabla
                 const payments = data.trader_payments;
+                const total_pages = data.total_pages;
                 //Tomamos las filas a modificar
                 const bloque = document.querySelector('.box-detail');
                 const details_list = document.querySelectorAll('.details');
                 // Hacemos la paginación a la tabla de ganancias semanales con una funcion
                 detailPaginator(payments, details_list, bloque, url_payment);
-                buttonsPaginator(PaginatorButtons4, currentIndex);
+                buttonsPaginator(PaginatorButtons4, currentIndex, total_pages);
             });
     });
 });

@@ -38,6 +38,7 @@ class PanelUserView(LoginRequiredMixin, TemplateView):
         paginator1 = Paginator(list_manamegent, 10)
         page = self.request.GET.get('page')
         context['profits'] = paginator1.get_page(page)
+        context['profits_pages'] = paginator1.num_pages
         
         # Paginando los trades de la cuenta madre
         data = trading_history()
@@ -48,6 +49,7 @@ class PanelUserView(LoginRequiredMixin, TemplateView):
             paginator2 = Paginator(list_trades, 10)
             page2 = self.request.GET.get('page2')
             context['operations'] = paginator2.get_page(page2)
+            context['operations_pages'] = paginator2.num_pages
 
         # Paginando los registros de la tabla de historial de operaciones de la cuenta mt5 del usuario
         if context['accounts'].exists():
@@ -55,7 +57,10 @@ class PanelUserView(LoginRequiredMixin, TemplateView):
             paginator3 = Paginator(list_operations, 10)
             page3 = self.request.GET.get('page3')
             context['operations2'] = paginator3.get_page(page3)
-        
+            context['operations2_pages'] = paginator3.num_pages
+
+        # Agregamos un range para que se muestre una cantidad especifica de botones en el paginador en html.
+        context['range'] = range(1, 9)
         return context
 
     # Enviamos los datos a cambiar con fecth
@@ -64,18 +69,18 @@ class PanelUserView(LoginRequiredMixin, TemplateView):
             data = list(context['profits'].object_list.values())
             for register in data:
                 register.pop('id_user_id') # borrando dato innecesario
-            return JsonResponse({'profits': data})
+            return JsonResponse({'profits': data, 'total_pages': context['profits_pages']})
 
         elif self.request.GET.get('page2'):
             data = list(context['operations'])
-            return JsonResponse({'operations': data})
+            return JsonResponse({'operations': data, 'total_pages': context['operations_pages']})
 
         elif self.request.GET.get('page3'):
             data = list(context['operations2'].object_list.values())
             for register in data:
                 register.pop('id_account_mt5_id') # borrando dato innecesario
                 register.pop('id') # borrando dato innecesario
-            return JsonResponse({'operations2': data})
+            return JsonResponse({'operations2': data, 'total_pages': context['operations2_pages']})
         
         else:
             response_kwargs.setdefault('content_type', self.content_type)
@@ -105,7 +110,7 @@ class CreateAccounMt5View(LoginRequiredMixin, FormView):
         # Guardar en la base de datos local luego de confirmar la creacion y suscripcion de la nueva cuenta.
         if account:
             suscriber = asyncio.run(configure_copyfactory(account['id']))
-
+            # Verificamos si se conecto con exito como suscritor de la cuenta madre en metaapi.
             if suscriber.status_code == 204:
                 status = '1'
                 AccountMt5.objects.create_account_mt5(

@@ -49,18 +49,29 @@
         <div>
             {% if trader_payments.paginator.num_pages > 1 %}
             <nav id="paginator">
-                <button class="link-page4 link-page-previous" value="1">&laquo;</button>
-
-                {% for pagina in trader_payments.paginator.page_range %}
-
-                {% if pagina == trader_payments.number %}
+                <button class="link-page4 link-page-first" value="1">&laquo;</button>
+                <button class="link-page4 link-page-previous" value="1">&lsaquo;</button>
+                <!--Limitamos la cantidad de botones en el paginador hasta 12 botones incluyendo los 
+                botones de retroceder y avanzar para que no se deforme en los dispositivos moviles-->
+                {% if trader_payments.paginator.num_pages >= 8 %}
+                    {% for pagina in range %}
+                    {% if pagina == trader_payments.number %}
                 <button class="link-page4 link-page-current" value="{{pagina}}">{{ pagina }}</button>
-                {% else %}
+                    {% else %}
                 <button class="link-page4" value="{{pagina}}">{{ pagina }}</button>
+                    {% endif %}
+                    {% endfor %}
+                {% else %}
+                    {% for pagina in trader_payments.paginator.page_range %}
+                    {% if pagina == trader_payments.number %}
+                <button class="link-page4 link-page-current" value="{{pagina}}">{{ pagina }}</button>
+                    {% else %}
+                <button class="link-page4" value="{{pagina}}">{{ pagina }}</button>
+                    {% endif %}
+                    {% endfor %}
                 {% endif %}
-
-                {% endfor %}
-                <button class="link-page4 link-page-next" value="2">&raquo;</button>
+                <button class="link-page4 link-page-next" value="2">&rsaquo;</button>
+                <button class="link-page4 link-page-last" value="9">&raquo;</button>
             </nav>
             {% endif %}
         </div>
@@ -100,18 +111,29 @@
         <div>
             {% if vps_payments.paginator.num_pages > 1 %}
             <nav id="paginator">
-                <button class="link-page3 link-page-previous" value="1">&laquo;</button>
-
-                {% for pagina in vps_payments.paginator.page_range %}
-
-                {% if pagina == vps_payments.number %}
+                <button class="link-page3 link-page-first" value="1">&laquo;</button>
+                <button class="link-page3 link-page-previous" value="1">&lsaquo;</button>
+                <!--Limitamos la cantidad de botones en el paginador hasta 12 botones incluyendo los 
+                botones de retroceder y avanzar para que no se deforme en los dispositivos moviles-->
+                {% if vps_payments.paginator.num_pages >= 8 %}
+                    {% for pagina in range %}
+                    {% if pagina == vps_payments.number %}
                 <button class="link-page3 link-page-current" value="{{pagina}}">{{ pagina }}</button>
-                {% else %}
+                    {% else %}
                 <button class="link-page3" value="{{pagina}}">{{ pagina }}</button>
+                    {% endif %}
+                    {% endfor %}
+                {% else %}
+                    {% for pagina in vps_payments.paginator.page_range %}
+                    {% if pagina == vps_payments.number %}
+                <button class="link-page3 link-page-current" value="{{pagina}}">{{ pagina }}</button>
+                    {% else %}
+                <button class="link-page3" value="{{pagina}}">{{ pagina }}</button>
+                    {% endif %}
+                    {% endfor %}
                 {% endif %}
-
-                {% endfor %}
-                <button class="link-page3 link-page-next" value="2">&raquo;</button>
+                <button class="link-page3 link-page-next" value="2">&rsaquo;</button>
+                <button class="link-page3 link-page-last" value="9">&raquo;</button>
             </nav>
             {% endif %}
         </div>
@@ -157,18 +179,31 @@
         <div>
             {% if trader_payments.paginator.num_pages > 1 %}
             <nav id="paginator">
-                <button class="link-page2 link-page-previous" value="1">&laquo;</button>
-
-                {% for pagina in trader_payments.paginator.page_range %}
-
-                {% if pagina == trader_payments.number %}
+                <button class="link-page2 link-page-first" value="1">&laquo;</button>
+                <button class="link-page2 link-page-previous" value="1">&lsaquo;</button>
+                <!--Limitamos la cantidad de botones en el paginador hasta 12 botones incluyendo los 
+                botones de retroceder y avanzar para que no se deforme en los dispositivos moviles-->
+                {% if trader_payments.paginator.num_pages >= 8 %}
+                    {% for pagina in range %}
+                    {% if pagina == trader_payments.number %}
                 <button class="link-page2 link-page-current" value="{{pagina}}">{{ pagina }}</button>
-                {% else %}
+                    {% else %}
                 <button class="link-page2" value="{{pagina}}">{{ pagina }}</button>
+                    {% endif %}
+                    {% endfor %}
+                {% else %}
+                    {% for pagina in trader_payments.paginator.page_range %}
+                    {% if pagina == trader_payments.number %}
+                <button class="link-page2 link-page-current" value="{{pagina}}">{{ pagina }}</button>
+                    {% else %}
+                <button class="link-page2" value="{{pagina}}">{{ pagina }}</button>
+                    {% endif %}
+                    {% endfor %}
+                
                 {% endif %}
 
-                {% endfor %}
-                <button class="link-page2 link-page-next" value="2">&raquo;</button>
+                <button class="link-page2 link-page-next" value="2">&rsaquo;</button>
+                <button class="link-page2 link-page-last" value="9">&raquo;</button>
             </nav>
             {% endif %}
         </div>
@@ -212,18 +247,29 @@
         <div>
             {% if vps_payments.paginator.num_pages > 1 %}
             <nav id="paginator">
-                <button class="link-page link-page-previous" value="1">&laquo;</button>
-
-                {% for pagina in vps_payments.paginator.page_range %}
-
-                {% if pagina == vps_payments.number %}
+                <button class="link-page link-page-first" value="1">&laquo;</button>
+                <button class="link-page link-page-previous" value="1">&lsaquo;</button>
+                <!--Limitamos la cantidad de botones en el paginador hasta 12 botones incluyendo los 
+                botones de retroceder y avanzar para que no se deforme en los dispositivos moviles-->
+                {% if vps_payments.paginator.num_pages >= 8 %}
+                {% for pagina in range %}
+                    {% if pagina == vps_payments.number %}
                 <button class="link-page link-page-current" value="{{pagina}}">{{ pagina }}</button>
+                    {% else %}
+                <button class="link-page" value='{{pagina}}'>{{ pagina }}</button>
+                    {% endif %}
+                    {% endfor %}
                 {% else %}
-                <button class="link-page" value="{{pagina}}">{{ pagina }}</button>
+                    {% for pagina in vps_payments.paginator.page_range %}
+                    {% if pagina == vps_payments.number %}
+                <button class="link-page link-page-current" value="{{pagina}}">{{ pagina }}</button>
+                    {% else %}
+                <button class="link-page" value='{{pagina}}'>{{ pagina }}</button>
+                    {% endif %}
+                    {% endfor %}
                 {% endif %}
-
-                {% endfor %}
-                <button class="link-page link-page-next" value="2">&raquo;</button>
+                <button class="link-page link-page-next" value="2">&rsaquo;</button>
+                <button class="link-page link-page-last" value="9">&raquo;</button>
             </nav>
             {% endif %}
         </div>

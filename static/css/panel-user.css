@@ -120,6 +120,7 @@
 .img-trash {
     height: 1.96em;
     background-color: #f00;
+    cursor: pointer;
 }
 .img-trash:active {
     background-color: #f009;

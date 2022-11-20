@@ -46,29 +46,31 @@
         <section class="box-mt5 box-mt5-width">
             <div class="header-table">
                 <h2 class="box-title">Cuenta Metatrader5</h2>
+                {% if user.subscriber %}
                 {% if active == False %}
                     {% if accounts.count == 0 %}
                     <button class="open-modal-message button-modal-message">Agregar</button>
-                    {% else %}
-                    {% for account in accounts %}
+                        {% else %}
+                        {% for account in accounts %}
                     <div class="open-modal-message">
                         <img class="img-trash img-trash-modal" src="{% static 'img/trash-mt5.svg' %}" alt="Eliminar">
                     </div>
-                    {% endfor %}
-                    {% endif %}
+                        {% endfor %}
+                        {% endif %}
 
-                {% else %}
-                    {% if accounts.count == 0 %}
-                    <button class="open-modal-add">Agregar</button>
                     {% else %}
-                    {% for account in accounts %}
+                        {% if accounts.count == 0 %}
+                    <button class="open-modal-add">Agregar</button>
+                        {% else %}
+                        {% for account in accounts %}
                     <a href="{% url 'vps_app:delete_account_mt5' account.id%}">
                         <div>
                             <img class="img-trash" src="{% static 'img/trash-mt5.svg' %}" alt="Eliminar">
                         </div>
                     <a />
-                    {% endfor %}
-                    {% endif %}
+                        {% endfor %}
+                        {% endif %}
+                {% endif %}
                 {% endif %}
             </div>
             <table class="accounts-table">
@@ -172,21 +174,31 @@
 
         <!-- Bloque de paginación para la tabla historial de operaciones de la cuenta mt5 -->
         <div>
-            {% if operations2.paginator.num_pages > 1 %}
+            {% if operations2 %}
             <nav id="paginator2">
-                <button class="page3 link-page-previous" value="1">&laquo;</button>
-
-                {% for pagina in operations2.paginator.page_range %}
-
-                {% if pagina == operations2.number %}
+                <button class="page3 link-page-first" value="1">&laquo;</button>
+                <button class="page3 link-page-previous" value="1">&lsaquo;</button>
+                <!--Limitamos la cantidad de botones en el paginador hasta 12 botones incluyendo los 
+                botones de retroceder y avanzar para que no se deforme en los dispositivos moviles-->
+                {% if operations2.paginator.num_pages >= 8 %}
+                    {% for pagina in range %}
+                    {% if pagina == operations2.number %}
                 <button class="page3 link-page-current" value="{{pagina}}">{{ pagina }}</button>
-                {% else %}
+                    {% else %}
                 <button class="page3" value="{{pagina}}">{{ pagina }}</button>
+                    {% endif %}
+                    {% endfor %}
+                {% else %}
+                    {% for pagina in operations2.paginator.page_range %}
+                    {% if pagina == operations2.number %}
+                <button class="page3 link-page-current" value="{{pagina}}">{{ pagina }}</button>
+                    {% else %}
+                <button class="page3" value="{{pagina}}">{{ pagina }}</button>
+                    {% endif %}
+                    {% endfor %}
                 {% endif %}
-
-                {% endfor %}
-
-                <button class="page3 link-page-next" value="2">&raquo;</button>
+                <button class="page3 link-page-next" value="2">&rsaquo;</button>
+                <button class="page3 link-page-last" value="9">&raquo;</button>
                 {% endif %}
             </nav>
         </div>
@@ -230,20 +242,31 @@
 
         <!-- Bloque de paginación para la Tabla de ganacias semanales de la cuenta mt5 -->
         <div>
-            {% if profits.paginator.num_pages > 1 %}
+            {% if profits %}
             <nav id="paginator">
-                <button class="page link-page-previous" value="1">&laquo;</button>
-
-                {% for pagina in profits.paginator.page_range %}
-
-                {% if pagina == profits.number %}
+                <button class="page link-page-first" value="1">&laquo;</button>
+                <button class="page link-page-previous" value="1">&lsaquo;</button>
+                <!--Limitamos la cantidad de botones en el paginador hasta 12 botones incluyendo los 
+                botones de retroceder y avanzar para que no se deforme en los dispositivos moviles-->
+                {% if profits.paginator.num_pages >= 8 %}
+                    {% for pagina in range %}
+                    {% if pagina == profits.number %}
                 <button class="page link-page-current" value="{{pagina}}">{{ pagina }}</button>
-                {% else %}
+                    {% else %}
                 <button class="page" value="{{pagina}}">{{ pagina }}</button>
+                    {% endif %}
+                    {% endfor %}
+                {% else %}
+                    {% for pagina in profits.paginator.page_range %}
+                    {% if pagina == profits.number %}
+                <button class="page link-page-current" value="{{pagina}}">{{ pagina }}</button>
+                    {% else %}
+                <button class="page" value="{{pagina}}">{{ pagina }}</button>
+                    {% endif %}
+                    {% endfor %}
                 {% endif %}
-
-                {% endfor %}
-                <button class="page link-page-next" value="2">&raquo;</button>
+                <button class="page link-page-next" value="2">&rsaquo;</button>
+                <button class="page link-page-last" value="9">&raquo;</button>
             </nav>
             {% endif %}
         </div>
@@ -282,21 +305,31 @@
         </div>
         <!-- bloque de paginacion de la Tabla de historial de operaciones de la cuenta madre-->
         <div>
-            {% if operations.paginator.num_pages > 1 %}
+            {% if operations %}
             <nav id="paginator2">
-                <button class="page2 link-page-previous" value="1">&laquo;</button>
-
-                {% for pagina in operations.paginator.page_range %}
-
-                {% if pagina == operations.number %}
+                <button class="page2 link-page-first" value="1">&laquo;</button>
+                <button class="page2 link-page-previous" value="1">&lsaquo;</button>
+                <!--Limitamos la cantidad de botones en el paginador hasta 12 botones incluyendo los 
+                botones de retroceder y avanzar para que no se deforme en los dispositivos moviles-->
+                {% if operations.paginator.num_pages >= 8 %}
+                    {% for pagina in range %}
+                    {% if pagina == operations.number %}
                 <button class="page2 link-page-current" value="{{pagina}}">{{ pagina }}</button>
-                {% else %}
+                    {% else %}
                 <button class="page2" value="{{pagina}}">{{ pagina }}</button>
+                    {% endif %}
+                    {% endfor %}
+                {% else %}
+                    {% for pagina in operations.paginator.page_range %}
+                    {% if pagina == operations.number %}
+                <button class="page2 link-page-current" value="{{pagina}}">{{ pagina }}</button>
+                    {% else %}
+                <button class="page2" value="{{pagina}}">{{ pagina }}</button>
+                    {% endif %}
+                    {% endfor %}
                 {% endif %}
-
-                {% endfor %}
-
-                <button class="page2 link-page-next" value="2">&raquo;</button>
+                <button class="page2 link-page-next" value="2">&rsaquo;</button>
+                <button class="page2 link-page-last" value="9">&raquo;</button>
                 {% endif %}
             </nav>
         </div>
@@ -305,6 +338,7 @@
 </div>
 
 <script src="{% static 'js/panel-user.js' %}" type="module"></script>
+
 
 {% include 'includes/footer.html' %}
 {% endblock content %}
