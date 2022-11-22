@@ -1,16 +1,13 @@
 import asyncio
-
 from numpy import rint
 from fortuna_303.settings.local import get_secret
 from metaapi_cloud_sdk import MetaApi, CopyFactory
 from metaapi_cloud_sdk.clients.metaApi.tradeException import TradeException
 from datetime import datetime, timedelta, date
 import psycopg2
+from applications.vps.models import AccountMt5
 
-app_token = "eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI3ZTYwMGI2ZDljYmM4ZTkwOTU0YzI2MGE2MjUzOThhMiIsInBlcm1pc3Npb25zIjpbXSwidG9rZW5JZCI6IjIwMjEwMjEzIiwiaWF0IjoxNjYyNzcwNjIyLCJyZWFsVXNlcklkIjoiN2U2MDBiNmQ5Y2JjOGU5MDk1NGMyNjBhNjI1Mzk4YTIifQ.UTYs5SZ5_UDLBnA_bQdlXtLtk1dTcQA0MVJ2O0mdsu2KYIaVOzT19Vm5XDsGfQYO856lNJPu9RkztRABRpJW1cbw8zkWU9-IAh-L-5MFuC-mVkNkSCLDj3ziAbx5w7niN1wEOaCozg_y-MXrXCa972LwWaq4yxJ8IjxxhHGZSFs2DYQm9F7ehRCdjqEh-y9zQHKozVBTYwnFvIxoN5WwUqqyhCmWa_lpT5GE-YWrjO3VaHW0CbIm3PCzlL5b4qMTPuifoECpeJ5aBX17qevsagJ2TrS_NDet9i2dEBqKGGPGRaB84wIOruR1C7e5AnQ8haef8gqChWOBseKfo0dwnd_KntDwvMkWsxMq1rpvpGBia9WELyNz_jDvApB6kOJfmHO0p6ue9tilEJZJ4iZ9KDEGzqzy-44yweJtkq_hAFGt5HKFXrD2loPnjtpZ0EaMieNEDrn8YRM3bRnlixtlGm67iuqnrKq9KHqR7QZyA5I3SvkO-g4PvA0Cyi_QmyZ3yijlREzbvkOF15kJ2ncWl_Mm6SJjtksVKDK3u2QUlnj2ZYtOTCLgsQw9wP2tc9o5gTgLDU3CVQdoM6sc5BQpQzaQ0Bo-XHmozyCe3D-_q5JMe-rUt_vk05qqVwly33S2RO4j_2iqEGX5xH3Gm0NrzPWDIfCSxnncYXb7V_lmNA4"
-master_account_id = "7bfe546b-1a05-4d2d-8f7d-744206ccab1c"
-slave_account_id = "5ad1bbc5-0eae-4f1b-a2d7-198a1d334284"
-
+app_token = get_secret("METAAPI_TOKEN")
 
 async def create_server_mt5(name, login, password, server):
     api = MetaApi(app_token)
@@ -59,11 +56,9 @@ async def configure_copyfactory(slave_account_id):
     copy_factory = CopyFactory(app_token)
 
     try:
-        master_metaapi_account = await api.metatrader_account_api.get_account(master_account_id)
-        if (master_metaapi_account is None) or master_metaapi_account.copy_factory_roles is None or 'PROVIDER' not \
-                in master_metaapi_account.copy_factory_roles:
-            raise Exception('Please specify PROVIDER copyFactoryRoles value in your MetaApi '
-                            'account in order to use it in CopyFactory API')
+        provider_accounts = await api.metatrader_account_api.get_accounts(accounts_filter={'copyFactoryRoles': ['PROVIDER']})
+        if provider_accounts:
+            master_metaapi_account = provider_accounts[0]
 
         slave_metaapi_account = await api.metatrader_account_api.get_account(slave_account_id)
         if (slave_metaapi_account is None) or slave_metaapi_account.copy_factory_roles is None or 'SUBSCRIBER' not \

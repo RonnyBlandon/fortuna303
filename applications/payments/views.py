@@ -35,6 +35,7 @@ class PaymentsView(LoginRequiredMixin, TemplateView):
                 else:
                     # Convertimos el string del valor de custom_id a un dict
                     dictionary = eval((details['custom_id']))
+                    
                     # Verificamos si es una renovacion del servicio VPS o un pago para el trader
                     if 'vps' in dictionary:
                         id_payment = dictionary['vps']
@@ -44,11 +45,10 @@ class PaymentsView(LoginRequiredMixin, TemplateView):
                         if account_mt5.status == '0':
                             trader_payment = TraderPayment.objects.unpaid_trader_payments(user.id)
                             vps_payment = VpsPayment.objects.unpaid_vps_payments(user.id)
-                            print(trader_payment)
-                            print(vps_payment)
                             # Conectamos la cuenta mt5 de nuevo a metaapi en caso de que este desconectado y este al dia con los pagos
                             if trader_payment == False and vps_payment == False:
                                 reconnect_mt5_account(user.id, self.request)
+
                     elif 'trader' in dictionary:
                         id_payment = dictionary['trader']
                         TraderPayment.objects.update_payment_trader(id_payment, 'Paypal', details['id'])
@@ -57,8 +57,6 @@ class PaymentsView(LoginRequiredMixin, TemplateView):
                         if account_mt5.status == '0':
                             trader_payment = TraderPayment.objects.unpaid_trader_payments(user.id)
                             vps_payment = VpsPayment.objects.unpaid_vps_payments(user.id)
-                            print(trader_payment)
-                            print(vps_payment)
                             # Conectamos la cuenta mt5 de nuevo a metaapi en caso de que este desconectado y este al dia con los pagos
                             if trader_payment == False and vps_payment == False:
                                 reconnect_mt5_account(user.id, self.request)
@@ -167,7 +165,7 @@ class TraderPaymentRenewalView(LoginRequiredMixin, DetailView):
         id_payment = self.kwargs['pk']
         register = TraderPayment.objects.filter(id=id_payment)
         amount = register[0].total
-        description = "Renovación del servicio mensual de vps para metarader 5 y uso del sistema copytrading."
+        description = f"Gestión de cuenta de metatrader5 del {register[0].created_date} al {register[0].expiration}"
         
         link = create_renewal_order(case="trader", payment_id=id_payment, amount=amount, description=description)
         context['link_payment'] = link

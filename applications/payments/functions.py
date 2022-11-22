@@ -21,9 +21,12 @@ def reconnect_mt5_account(id_user: int, request):
     account_mt5 = AccountMt5.objects.get(id_user=id_user)
     full_name = user.name + ' ' + user.last_name
     password_encoded = account_mt5.password
+    print(password_encoded)
+    print(type(password_encoded))
+    password = decrypt_password(password_encoded)
     #password = decrypt_password(password_encoded)
     try:
-        account = asyncio.run(create_server_mt5(full_name, account_mt5.login, password_encoded, account_mt5.server))
+        account = asyncio.run(create_server_mt5(full_name, account_mt5.login, password, account_mt5.server))
         if account:
             try:
                 suscriber = asyncio.run(configure_copyfactory(account['id']))
@@ -32,10 +35,10 @@ def reconnect_mt5_account(id_user: int, request):
                     messages.add_message(request=request, level=messages.SUCCESS, message='La cuenta se ha reconectado con éxito.')
             except Exception as err:
                 messages.add_message(request=request, level=messages.ERROR, message='Ha habido un error en la reconexión, por favor mande un mensaje en la página de contacto.')
-                print("Error al suscribir la cuenta mt5 a la cuenta madre en metaapi")
+                print("Error al suscribir la cuenta mt5 a la cuenta madre en metaapi. El error es: ", err)
     except Exception as err:
         messages.add_message(request=request, level=messages.ERROR, message='Ha habido un error en la reconexión, por favor mande un mensaje en la página de contacto.')
-        print("Error al crear la cuenta mt5 en metaapi")
+        print("Error al crear la cuenta mt5 en metaapi. El error es: ", err)
 
 
 def expiration_vps(date: datetime):

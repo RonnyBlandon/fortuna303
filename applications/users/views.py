@@ -40,8 +40,8 @@ class UserRegisterView(FormView):
         )
 
         # Enviamos el codigo al email del usuario
-        asunto = 'Confirmacion de Correo Electronico'
-        mensaje = 'Codigo de Verificación: ' + codigo
+        asunto = 'Confirmación de Correo Electrónico.'
+        mensaje = 'Código de Verificación: ' + codigo
         email_remitente = 'fortuna303.com@gmail.com'
         send_mail(asunto, mensaje, email_remitente, [form.cleaned_data['email'],])
 
