@@ -14,15 +14,9 @@ if (modalButtonOpen != null ) {
         modalAdd.close();
     })
 
-    /* Desactivar el boton de "agregar" cuando le de el primer click */
-    let is_disabled = false;
+    /* Desactivar el boton de "agregar" cuando le de el primer click para no enviar mas solicitudes. */
     ButtonSendModal.addEventListener("click", () => {
-        if (is_disabled === true) {
             ButtonSendModal.setAttribute("disabled", "");
-        }
-        else {
-            is_disabled = true;
-        }
     });
 }
 

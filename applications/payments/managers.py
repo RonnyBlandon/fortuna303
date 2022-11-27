@@ -41,8 +41,8 @@ class VpsPaymentManager(models.Manager):
         else:
             return False
 
-    def vps_payments_by_status(self, status: str):
-        payments = self.filter(status=status).order_by('-id')
+    def vps_payments_by_status(self, status: str, id_user: int):
+        payments = self.filter(status=status, id_user=id_user).order_by('-id')
         return payments
 
 

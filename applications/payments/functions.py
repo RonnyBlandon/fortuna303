@@ -20,11 +20,11 @@ def reconnect_mt5_account(id_user: int, request):
     user = User.objects.get(id=id_user)
     account_mt5 = AccountMt5.objects.get(id_user=id_user)
     full_name = user.name + ' ' + user.last_name
-    password_encoded = account_mt5.password
-    print(password_encoded)
-    print(type(password_encoded))
-    password = decrypt_password(password_encoded)
-    #password = decrypt_password(password_encoded)
+    password_string = account_mt5.password
+    # Convertimos el password_string de string a bytes para desencriptar con la función decrypt_password()
+    password_bytes = eval(password_string)
+    password = decrypt_password(password_bytes)
+
     try:
         account = asyncio.run(create_server_mt5(full_name, account_mt5.login, password, account_mt5.server))
         if account:

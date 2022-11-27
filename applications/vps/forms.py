@@ -11,7 +11,7 @@ class CreateAccountMt5Form(forms.ModelForm):
             'login': forms.NumberInput(
                 attrs={'class': 'form-register__input', 'placeholder': 'Usuario'}
             ),
-            'password': forms.TextInput(
+            'password': forms.PasswordInput(
                 attrs={'class': 'form-register__input', 'placeholder': 'Contraseña'}
             ),
             'server': forms.TextInput(

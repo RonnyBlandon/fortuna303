@@ -46,11 +46,11 @@
 }
 .primary-details summary::before, .details summary::before, .primary-details-2 summary::before, .details-2 summary::before {
     content: "+";
-    font-size: 18px;
+    font-size: 1.12em;
 }
 .primary-details[open] summary::before, .details[open] summary::before, .primary-details-2[open] summary::before, .details-2[open] summary::before {
     content: "-";
-    font-size: 20px;
+    font-size: 1.25em;
 }
 .details ul, .details-2 ul {
     display: flex;

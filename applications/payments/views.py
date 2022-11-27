@@ -10,9 +10,10 @@ from django.core.paginator import Paginator
 from .models import TraderPayment, VpsPayment
 from applications.users.models import User
 from applications.vps.models import AccountMt5
-#importamos funciones 
-from applications.payments.functions import (create_order, create_renewal_order, capture_order, 
+#importamos funciones
+from .functions import (create_order, create_renewal_order, capture_order, 
 expiration_vps, reconnect_mt5_account)
+from applications.vps.functions import active_buttons_time
 # Create your views here.
 
 class PaymentsView(LoginRequiredMixin, TemplateView):
@@ -132,6 +133,9 @@ class FirstPaymentView(LoginRequiredMixin, TemplateView):
 
         detail_payment = {'now': now, 'expiration': expiration, 'price': price, 'link_payment': link}
         context['detail_payment'] = detail_payment
+
+        # Verificando la fecha y hora que deben estar habilitados los botones de agregar y borrar cuenta mt5
+        context['active'] = active_buttons_time()
         return context 
 
 

@@ -1,4 +1,3 @@
-import re
 from cryptography.fernet import Fernet
 from datetime import datetime, timedelta
 import MetaTrader5 as mt5
@@ -86,19 +85,18 @@ def trading_history():
 """ Funciones generales de vps """
 
 # Funcion para encriptar los password de las cuentas mt5
-
-
 def encrypt_password(password):
 
-    key = Fernet.generate_key()
+    key = get_secret("KEY_TO_ENCRYPT_AND_DECRYPT")
     object_cifrado = Fernet(key)
     password_encrypt = object_cifrado.encrypt(str.encode(password))
 
     return password_encrypt
 
 
-def decrypt_password(password):
-    key = Fernet.generate_key()
+# Funcion para desencriptar los password de las cuentas mt5
+def decrypt_password(password: bytes):
+    key = get_secret("KEY_TO_ENCRYPT_AND_DECRYPT")
     object_cifrado = Fernet(key)
     decrypted_text_bytes = object_cifrado.decrypt(password)
     decrypted_text = decrypted_text_bytes.decode()
@@ -112,10 +110,14 @@ def active_buttons_time():
         case 4:
             if today.hour >= 15:
                 return True
+            else:
+                return False
         case 5:
             return True
         case 6:
-            if today.hour < 20:
+            if today.hour < 19:
                 return True
+            else:
+                return False
         case _:
             return False

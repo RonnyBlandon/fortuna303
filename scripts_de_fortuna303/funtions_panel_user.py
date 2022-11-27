@@ -135,6 +135,8 @@ async def list_orders_deals(account_id: str, id_account_mt5: int, history_days: 
         orders_deals = orders_deals['deals']
         await connection.close()
 
+        print(orders_deals)
+
         list_orders = []
         trades = []
         balance_change = 0.00
@@ -147,6 +149,7 @@ async def list_orders_deals(account_id: str, id_account_mt5: int, history_days: 
                 list_orders.append(order)
 
             if order['entryType'] == "DEAL_ENTRY_OUT":
+                # La solucion al problema se coloca aqui
                 trades.append(order)
 
         for i in range(len(trades)):

@@ -241,18 +241,23 @@ body {
 }
 
 
-/* Clases de django */
+/* Clases de messages en django */
 .messages {
     text-align: center;
 }
-.success, .error {
+.success, .error, .warning {
     padding: 10px;
     background-color: #090;
     color: #fff;
-    font-size: 20px;
+    font-size: 1.25em;
+    font-weight: 600;
 }
 .error {
     background-color: #f00;
+}
+.warning {
+    background-color: #ff0;
+    color: #f00;
 }
 
 

@@ -380,7 +380,6 @@ async def disable_mt5_without_paying_vps():
                 cursor.execute(f"UPDATE vps_accountmt5 SET status='0' WHERE id={account['id']};")
                 cursor.execute(f"SELECT name, last_name, email FROM users_user WHERE id={account['id_user']};")
                 user = cursor.fetchone()
-                print(user)
             except Exception as err:
                 print("Error en disable_mt5_without_paying_trader() al actualizar o consultar en la base de datos: ", err)
             connection.commit()
@@ -390,6 +389,3 @@ async def disable_mt5_without_paying_vps():
             message = f'<div style:margin: 0em auto; border: 0.15em solid #000; border-radius: 0.3em;"><a href="http://127.0.0.1:8000/" target="_blank"><img src="/static/img/logo.png" alt="logo"></a><h1>Hola {user[0]} {user[1]}</h1><p style="font-size: 1.2em;">Su cuenta de metatrader 5 a sido desconectada por falta de pago en su mensualidad del <b>VPS + COPYTRADING</b>. Para reconectarla debe estar al día con todo los pagos, esto incluye los pagos de <b>GESTION DE CUENTAS DE MT5</b> y automáticamente se reconectará en unos minutos. Si su cuenta no se ha conectado al cabo de 15 minutos, mandar un mensaje en la página de contacto.</p><a style="padding:0.5em 1em;background:#00f; border: 0.2em solid #D4FF00;color: #fff;text-decoration: none;cursor: pointer;" href="http://127.0.0.1:8000/payments/" target="_blank">Ir a la pagina de pago</a></div>'
             send_email(user[2], message=message, affair=affair)
         connection.close()
-
-
-asyncio.run(disable_mt5_without_paying_trader())

@@ -1,5 +1,5 @@
 import asyncio
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 from email.policy import default
 from django.views.generic import View, TemplateView, DeleteView, FormView
 # importar formularios
@@ -26,15 +26,38 @@ class PanelUserView(LoginRequiredMixin, TemplateView):
     login_url = reverse_lazy('users_app:user_login')
 
     def get_context_data(self, **kwargs):
+        id_user = self.request.user.id
+
         context = super(PanelUserView, self).get_context_data(**kwargs)
         context['form_mt5'] = CreateAccountMt5Form
-        context['accounts'] = AccountMt5.objects.get_account_mt5(self.request.user.id)
+        context['accounts'] = AccountMt5.objects.get_account_mt5(id_user)
+
+        # Agregamos el estado de copytrading a la pagina de panel de control
+        context['copytrading'] = False
+        context['vps'] = False
+        if context['accounts']:
+            status = context['accounts'][0].status
+            if status == '1':
+                context['copytrading'] = True
+        # Agregamos el estado de vps a la pagina de panel de control
+        unpaid_payment_vps = VpsPayment.objects.vps_payments_by_status(status="Pagado", id_user=id_user).order_by('-id')
+        if unpaid_payment_vps:
+            disconnection_date = unpaid_payment_vps[0].expiration + timedelta(days=5)
+            today = date.today()
+            if today <= disconnection_date:
+                context['vps'] = True
+
+        # Mostramos mensajes avisando de nuevos importes en el panel de usuario
+        trader_payment = TraderPayment.objects.unpaid_trader_payments(id_user)
+        vps_payment = VpsPayment.objects.unpaid_vps_payments(id_user)
+        if vps_payment or trader_payment:
+            messages.add_message(request=self.request, level=messages.WARNING, message='Tienes importes que pagar en la página de pagos.')
 
         # Verificando la fecha y hora que deben estar habilitados los botones de agregar y borrar cuenta mt5
         context['active'] = active_buttons_time()
 
         # Paginando los registros de la tabla ganancias semanales
-        list_manamegent = AccountManagement.objects.get_account_management(self.request.user.id)
+        list_manamegent = AccountManagement.objects.get_account_management(id_user)
         paginator1 = Paginator(list_manamegent, 10)
         page = self.request.GET.get('page')
         context['profits'] = paginator1.get_page(page)
@@ -141,7 +164,10 @@ class DeleteAccountMt5View(LoginRequiredMixin, DeleteView):
         account_mt5 = accounts_mt5[0]
         id_client_metaapi = account_mt5.id_client_metaapi
 
-        asyncio.run(delete_server_mt5(id_client_metaapi))
+        try:
+            asyncio.run(delete_server_mt5(id_client_metaapi))
+        except:
+            print(f"La cuenta con el id_client_metaapi {id_client_metaapi} no fue encontrada o no existe.")
 
         messages.add_message(request=self.request, level=messages.SUCCESS, message='La cuenta se ha eliminado con éxito.')
 
@@ -164,7 +190,10 @@ class UnsubscriberView(LoginRequiredMixin, View):
             account_mt5 = accounts_mt5[0]
             id_client_metaapi = account_mt5.id_client_metaapi
 
-            #asyncio.run(delete_server_mt5(id_client_metaapi))
+            try:
+                asyncio.run(delete_server_mt5(id_client_metaapi))
+            except Exception as err:
+                print(f"La cuenta con el id_client_metaapi {id_client_metaapi} no fue encontrada o no existe.")
 
             # Borramos la cuenta mt5 en la base de datos local
             account_mt5.delete()
