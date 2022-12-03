@@ -3,13 +3,13 @@ from numpy import rint
 from fortuna_303.settings.local import get_secret
 from metaapi_cloud_sdk import MetaApi, CopyFactory
 from metaapi_cloud_sdk.clients.metaApi.tradeException import TradeException
-from datetime import datetime, timedelta, date
-import psycopg2
-from applications.vps.models import AccountMt5
+from datetime import datetime, date, timedelta
+from django.contrib import messages
+from applications.vps.models import AccountManagement
 
 app_token = get_secret("METAAPI_TOKEN")
 
-async def create_server_mt5(name, login, password, server):
+async def create_server_mt5(name: str, login: int, password: str, server: str, level: int, request):
     api = MetaApi(app_token)
 
     try:
@@ -29,7 +29,25 @@ async def create_server_mt5(name, login, password, server):
             # set this field to 'high' value if you want to increase uptime of your account (recommended for production environments)
             'reliability': 'high'
         })
-        return {'id': account.id, 'access_token': account.access_token}
+        # Despues de crear la cuenta se verifica si la cuenta esta entre los limites del nivel de usuario
+        if account:
+            connection = account.get_rpc_connection()
+            await connection.connect()
+            await connection.wait_synchronized()
+
+            account_info = await connection.get_account_information()
+            balance = account_info['balance']
+
+            if balance < level.min_balance or balance > level.max_balance:
+                try:
+                    asyncio.run(delete_server_mt5(account.id))
+                except Exception as err:
+                    messages.add_message(request=request, level=messages.ERROR, message=f'Fallo en la creación y conexión de la cuenta. El balance de la cuenta debe estar entre {level.min_balance} y {level.max_balance} dolares.')
+                    print(f"La cuenta con el id_client_metaapi {account.id} no fue encontrada o no existe.")
+        else:
+            messages.add_message(request=request, level=messages.ERROR, message='Fallo en la creación y conexión de la cuenta. Los datos de la cuenta son incorrectos.')
+
+        return {'id': account.id, 'balance': balance}
 
     except Exception as err:
         # errores de proceso
@@ -51,7 +69,7 @@ async def create_server_mt5(name, login, password, server):
         print(err.details)
 
 
-async def configure_copyfactory(slave_account_id):
+async def configure_copyfactory(slave_account_id, balance, id_user):
     api = MetaApi(app_token)
     copy_factory = CopyFactory(app_token)
 
@@ -86,6 +104,7 @@ async def configure_copyfactory(slave_account_id):
                 }
             ]
         })
+
         return suscriber
     except Exception as err:
         print(api.format_error(err))

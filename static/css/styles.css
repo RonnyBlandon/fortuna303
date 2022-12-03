@@ -16,24 +16,24 @@ body {
 
 .menu {
     display: flex;
-    height: 60px;
+    height: 3.75em;
     justify-content: space-between;
     align-items: center;
     background-color: var(--color-principal);
-    border-top: 1px solid #000;
-    border-bottom: 1px solid #000;
+    border-top: 0.06em solid #000;
+    border-bottom: 0.06em solid #000;
 }
 .menu__link-logo {
-    width: 200px;
+    width: 12.5em;
 }
 .menu__img-logo {
-    width: 180px;
+    width: 11.25em;
     animation: desplazarse 2s linear infinite alternate;
 }
 .menu__btn-bars, .menu__btn-profile {
-    height: 58px;
-    width: 60px;
-    padding: 10px;
+    height: 3.625em;
+    width: 3.75em;
+    padding: 0.625em;
     background-color: var(--color-principal);
     border: 1px solid #000;
 }
@@ -45,7 +45,7 @@ body {
 
 .menu__list {
     position: absolute;
-    top: -600px;
+    top: -37.5em;
     width: 100%;
     display: flex;
     flex-wrap: wrap;
@@ -54,7 +54,7 @@ body {
 }
 .menu__list-toggle{
     position: absolute;
-    top: 60px;
+    top: 3.75em;
     width: 100%;
     display: flex;
     flex-wrap: wrap;
@@ -63,15 +63,15 @@ body {
 }
 .menu__list li {
     display: flex;
-    height: 60px;
+    height: 3.75em;
     width: 100%;
-    padding: 10px;
+    padding: 0.625em;
     list-style: none;
 }
 .menu__list a {
     width: 100%;
-    padding: 8px 5px;
-    font-size: 20px;
+    padding: 0.5em 0.312em;
+    font-size: 1.25em;
     font-weight: 600;
     border: 4px solid transparent;
     text-decoration: none;
@@ -94,11 +94,11 @@ body {
 
 .title {
     margin: 0;
-    padding: 5px 0px;
+    padding: 0.312em 0em;
     background: var(--color-secondary);
     color: var(--color-principal);
     text-align: center;
-    text-shadow: 2px 2px #000;
+    text-shadow: 0.0625em 0.0625em #000;
     border-top: 4px solid transparent;
     border-bottom: 4px solid transparent;
     animation: colores 1s linear infinite alternate;
@@ -107,8 +107,8 @@ body {
 /*Sección de informacion del servicio de trading automatico*/
 
 .video {
-    margin: 20px 0px 40px;
-    height: 315px;
+    margin: 1.25em 0px 2.5em;
+    height: 19.68em;
 }
 .content {
     display: flex;
@@ -118,22 +118,22 @@ body {
 .content__items, .content-2__items {
     width: 95%;
     border: 4px solid transparent;
-    border-radius: 15px;
+    border-radius: 0.9375em;
     animation: colores-2 3s linear infinite;
 }
 .content__items h2 {
-    padding: 5px 0px 5px 0px;
+    padding: 0.3125em 0em 0.3125em 0em;
     text-align: center;
-    text-shadow: 2px 2px #000;
+    text-shadow: 0.125em 0.125em #000;
     color: var(--color-secondary);
     background-color: var(--color-principal);
-    border-radius: 10px;
+    border-radius: 0.625em;
 }
 .content__items p {
-    margin: 5px 0px;
+    margin: 0.3125em 0em;
     color: #fff;
     text-align: center;
-    font-size: 20px;
+    font-size: 1.25em;
     font-family: var(--font-p);
 }
 
@@ -143,27 +143,27 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 30px 0px;
+    margin: 1.875em 0em;
 }
 .content-2__items {
-    margin: 20px 0px;
+    margin: 1.25em 0em;
     display: flex;
     flex-direction: column;
-    row-gap: 15px;
+    row-gap: 0.9375em;
     justify-content: space-around;
     align-items: center;
     background-color: var(--color-principal);
 }
 .content-2__items img {
-    border-radius: 10px;
+    border-radius: 0.625em;
 }
 .content-2__items p {
     width: 95%;
-    margin: 5px 0px;
-    padding: 5px 0px;
+    margin: 0.3125em 0em;
+    padding: 0.3125em 0em;
     color: #070;
     font-weight: 600;
-    font-size: 20px;
+    font-size: 1.25em;
     text-align: center;
     background-color: var(--color-secondary);
     border-radius: 15% 0% 15% 0%;
@@ -172,20 +172,20 @@ body {
 /*Boton de registrarse*/
 
 .container-btn {
-    margin: 10px 0px 20px 0px;
+    margin: 0.625em 0em 1.25em 0em;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 5px;
+    gap: 0.3125em;
 }
 .btn-register {
     display: flex;
-    padding: 10px 5px;
+    padding: 0.625em 0.3125em;
     background-color: var(--color-button);
-    font-size: 20px;
+    font-size: 1.25em;
     color: #fff;
     border: 4px solid transparent;
-    border-radius: 10px;
+    border-radius: 0.625em;
     animation: colores-2 3s linear infinite;
 }
 .btn-register:hover {
@@ -193,28 +193,28 @@ body {
     text-decoration: underline;
 }
 .container-btn img {
-    height: 40px;
+    height: 2.5em;
 }
 
 /*Footer de la pagina*/
 
 .footer {
     display: flex;
-    padding-top: 10px;
+    padding-top: 0.625em;
     flex-direction: column;
     background-color: #111;
     align-items: center;
-    gap: 10px;
+    gap: 0.625em;
 }
 .footer__link {
     width: 70%;
-    padding: 10px;
+    padding: 0.625em;
     color: #fff;
     background-color: #333;
     text-align: center;
 }
 .footer__link:hover {
-    text-decoration: underline 2px;
+    text-decoration: underline 0.125em;
     opacity: 0.8;
 }
 .footer h5 {
@@ -222,8 +222,8 @@ body {
 }
 .footer__container {
     width: 100%;
-    padding: 10px 0px;
-    border-top: 1px solid #777;
+    padding: 0.625em 0em;
+    border-top: 0.062em solid #777;
     background-color: #222;
     text-align: center;
 }
@@ -233,7 +233,7 @@ body {
     font-family: Cambria;
 }
 .linkedin img {
-    width: 25px;
+    width: 1.562em;
 }
 .linkedin a {
     color: #fff;
@@ -246,7 +246,7 @@ body {
     text-align: center;
 }
 .success, .error, .warning {
-    padding: 10px;
+    padding: 0.625em;
     background-color: #090;
     color: #fff;
     font-size: 1.25em;
@@ -329,11 +329,11 @@ body {
         display: none;
     }
     .menu__list {
-        width: 300px;
+        width: 18.75em;
         right: 0;
     }
     .menu__link-logo {
-        margin-left: 30px;
+        margin-left: 1.875em;
     }
     .menu__list-responsive {
         width: 70%;
@@ -345,9 +345,9 @@ body {
         list-style: none;
     }
     .menu__list-responsive a {
-        padding: 10px 15px;
+        padding: 0.625em 0.937em;
         text-decoration: none;
-        text-shadow: 2px 2px #000;
+        text-shadow: 0.125em 0.125em #000;
         font-size: 1.3em;
         font-weight: 600;
         color: var(--color-secondary);
@@ -363,8 +363,8 @@ body {
 
     /*Sección de informacion de los servicio (media query min-width: 1024px)*/
     .video {
-        width: 768px;
-        margin: 30px auto;
+        width: 48em;
+        margin: 1.875em auto;
     }
 
     /*Sección de informacion de los servicio (media query min-width: 1024px)*/
@@ -379,12 +379,12 @@ body {
         background-color: transparent;
     }
     .content-2__items img{
-        width: 500px;
-        border-radius: 10px 0px 0px 10px;
+        width: 31.25em;
+        border-radius: 0.625em 0em 0em 0.625em;
     }
     .content-2__items p {
-        padding: 10px;
-        font-size: 24px;
+        padding: 0.625em;
+        font-size: 1.5em;
         border-radius: 50% 20% / 10% 40%;
     }
 
@@ -406,32 +406,123 @@ body {
         opacity: 0.8;
     }
     .footer__link:active {
-        text-decoration: underline 2px;
+        text-decoration: underline 0.125em;
     }
 }
 
 @media screen and (min-width: 1440px){
 
-    /*Sección de informacion de los servicio (media query min-width: 1024px)*/
-    .content__items h2 {
-        font-size: 32px;
-    }
-    .content__items p {
-        font-size: 24px;
+    /*menu responsive desktop (media query min-width: 1440px)*/
+    .box-menu {
+        font-size: 17px;
     }
 
-    /*Sección de privilegios de usar el servicio (media query min-width: 1440px)*/
-    .content-2__items {
-        width: 80%;
-        flex-direction: row;
+    .title {
+        font-size: 34px;
     }
-    .content-2__items img{
-        width: 700px;
-        border-radius: 10px 0px;
+
+    .box-content {
+        font-size: 17px;
     }
-    .content-2__items p {
-        padding: 10px;
-        font-size: 28px;
+
+    /*Footer de la pagina*/
+    .box-footer {
+        font-size: 17px;
+    }
+
+    /* Clases de messages en django */
+    .messages {
+        font-size: 17px;
+    }
+
+}
+
+
+@media screen and (min-width: 1920px){
+    body {
+        font-size: 80px;
+    }
+    /*menu responsive desktop (media query min-width: 1024px)*/
+    .box-menu {
+        font-size: 22px;
+    }
+    
+    .title {
+        font-size: 45px;
+    }
+
+    .box-content {
+        font-size: 22px;
+    }
+
+    /*Footer de la pagina*/
+    .box-footer {
+        font-size: 22px;
+    }
+
+    /* Clases de messages en django */
+    .messages {
+        font-size: 22px;
+    }
+
+}
+
+
+@media screen and (min-width: 2560px){
+
+    body {
+        font-size: 30px;
+    }
+
+    /*menu responsive desktop (media query min-width: 1024px)*/
+    .box-menu {
+        font-size: 30px;
+    }
+
+    .title {
+        font-size: 60px;
+    }
+
+    .box-content {
+        font-size: 30px;
+    }
+
+    /*Footer de la pagina*/
+    .box-footer {
+        font-size: 30px;
+    }
+
+    /* Clases de messages en django */
+    .messages {
+        font-size: 30px;
+    }
+
+}
+
+
+@media screen and (min-width: 3840px){
+
+    /*menu responsive desktop (media query min-width: 1024px)*/
+    .box-menu {
+        font-size: 45px;
+    }
+
+    .title {
+        font-size: 90px;
+    }
+
+    .box-content {
+        font-size: 45px;
+    }
+
+    /*Footer de la pagina*/
+    .box-footer {
+        font-size: 45px;
+    }
+
+    /* Clases de messages en django */
+    .messages {
+        font-size: 45px;
     }
 
 }

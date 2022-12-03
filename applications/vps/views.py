@@ -13,7 +13,7 @@ from django.core.paginator import Paginator
 from django.contrib import messages
 #  importar modelos
 from applications.vps.models import AccountMt5, AccountManagement, AccountOperation
-from applications.users.models import User
+from applications.users.models import User, Level
 from applications.payments.models import VpsPayment, TraderPayment
 # imortar funciones
 from .functions import trading_history, active_buttons_time
@@ -103,6 +103,7 @@ class PanelUserView(LoginRequiredMixin, TemplateView):
             for register in data:
                 register.pop('id_account_mt5_id') # borrando dato innecesario
                 register.pop('id') # borrando dato innecesario
+            print(register)
             return JsonResponse({'operations2': data, 'total_pages': context['operations2_pages']})
         
         else:
@@ -121,6 +122,7 @@ class CreateAccounMt5View(LoginRequiredMixin, FormView):
     success_url = reverse_lazy('vps_app:panel_user')
 
     def form_valid(self, form):
+        # Tomamos los datos necesarios para la creación y conexión de la cuenta mt5 en metaapi
         id_user = self.request.user
         name = self.request.user.name
         last_name = self.request.user.last_name
@@ -128,11 +130,13 @@ class CreateAccounMt5View(LoginRequiredMixin, FormView):
         password = form.cleaned_data['password']
         server = form.cleaned_data['server']
         full_name = name + ' ' + last_name
+        id_level = self.request.user.level
+        level = Level.objects.get(id=id_level)
         # creamos el servidor y suscribimos la nueva cuenta en MetaApi
-        account = asyncio.run(create_server_mt5(full_name, login, password, server))
+        account = asyncio.run(create_server_mt5(full_name, login, password, server, level, self.request))
         # Guardar en la base de datos local luego de confirmar la creacion y suscripcion de la nueva cuenta.
         if account:
-            suscriber = asyncio.run(configure_copyfactory(account['id']))
+            suscriber = asyncio.run(configure_copyfactory(account['id'], account['balance'], id_user))
             # Verificamos si se conecto con exito como suscritor de la cuenta madre en metaapi.
             if suscriber.status_code == 204:
                 status = '1'
@@ -146,7 +150,6 @@ class CreateAccounMt5View(LoginRequiredMixin, FormView):
                 )
             messages.add_message(request=self.request, level=messages.SUCCESS, message='La cuenta ha sido creada y conectada con éxito.')
         else:
-            messages.add_message(request=self.request, level=messages.ERROR, message='Fallo en la creación y conexión de la cuenta, los datos ingresados son incorrectos.')
             HttpResponseRedirect(
                 reverse('vps_app:panel_user')
             )

@@ -99,7 +99,6 @@ PaginatorButtons3.forEach(function (currentValue, currentIndex) {
 
     currentValue.addEventListener('click', () => {
         const url = window.location.href
-        console.log(url+"?page3=1")
         // Hacemos una petición GET al servidor para traer los datos de la tabla "Operaciones en la semana actual"
         // La info de url para las peticiones esta la app vps en en la vista PanelUserView en django
         fetch(url + "?page3=" + currentValue.value)
@@ -108,12 +107,13 @@ PaginatorButtons3.forEach(function (currentValue, currentIndex) {
                 // Tomamos los datos para actualizar la tabla
                 const operations = data.operations2;
                 const total_pages = data.total_pages;
+                console.log(operations);
                 // Corrigiendo el formato de las fechas en las filas
                 operations.forEach(function (currentValue) {
-                    open_time = currentValue['open_time']
+                    let open_time = currentValue['open_time']
                     open_time = open_time.replace('T', ' ')
                     currentValue['open_time'] = open_time.replace('Z', '')
-                    close_time = currentValue['close_time']
+                    let close_time = currentValue['close_time']
                     close_time = close_time.replace('T', ' ')
                     currentValue['close_time'] = close_time.replace('Z', ' ')
                 })

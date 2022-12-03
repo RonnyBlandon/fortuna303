@@ -6,6 +6,7 @@ from .managers import UserManager
 
 class Level(models.Model):
     account_level = models.CharField('Nivel', max_length=20)
+    min_balance = models.DecimalField('Balance Minimo', max_digits=10, decimal_places=2)
     max_balance = models.DecimalField('Balance Maximo', max_digits=10, decimal_places=2)
     price = models.DecimalField('Precio', max_digits=6, decimal_places=2)
 

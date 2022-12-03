@@ -12,7 +12,7 @@ from applications.vps.metaapi import create_server_mt5, configure_copyfactory
 from applications.vps.functions import decrypt_password
 # import models
 from applications.users.models import User
-from applications.vps.models import AccountMt5
+from applications.vps.models import AccountMt5, AccountManagement
 """Funciones de la app Payment"""
 
 

@@ -85,7 +85,7 @@ async def balance_initial():
             await connection.close()  # cerrando conexión
 
             start_date = date.today()
-            end_date = start_date + timedelta(days=4)
+            end_date = start_date + timedelta(days=5)
 
             # Insertamos los datos a la base de datos local
             try:
@@ -135,7 +135,7 @@ async def list_orders_deals(account_id: str, id_account_mt5: int, history_days: 
         orders_deals = orders_deals['deals']
         await connection.close()
 
-        print(orders_deals)
+        #print(orders_deals)
 
         list_orders = []
         trades = []
@@ -189,6 +189,97 @@ async def list_orders_deals(account_id: str, id_account_mt5: int, history_days: 
         print(api.format_error(err))
 
 
+def corroborate_management_week(id_user, current_balance, net_profit):
+    # Conectamos a la base de datos
+    try:
+        connection = psycopg2.connect(database=get_secret(
+            "DB_NAME"), user=get_secret("USER"), password=get_secret("PASSWORD"))
+        cursor = connection.cursor()
+
+    except Exception as err:
+        print("Error en la conexión de la base de datos: ", err)
+    # Consultamos los datos necesarios para corroborrar la semana de gestión
+    try:
+        cursor.execute(f"SELECT end_date FROM vps_accountmanagement WHERE id=(SELECT MAX(id) FROM vps_accountmanagement WHERE id_user_id={id_user});")
+        end_date_current_week = cursor.fetchall()
+    except Exception as err:
+        print("Error al consultar en la base de datos: ", err)
+    connection.commit()
+    print(end_date_current_week)
+    now = datetime.now()
+    if end_date_current_week:
+        # Como end_date del registro es hasta el viernes agregaremos el dia y las horas que faltan para que sea
+        # Domingo 19:00 horas que es el inicio de la siguiente semana de gestión
+        end_date = end_date_current_week[0][0]
+        end_week = datetime(end_date.year, end_date.month, end_date.day, 0, 0)
+        end_week = end_week + timedelta(days=2, hours=19)
+        
+        if now > end_week:
+            # Si no estamos dentro de la semana actual del registro creamos un registro con la semana actual.
+            today = date.today()
+            balance_initial = current_balance - net_profit
+            match today.weekday():
+                case 0:
+                    start_date = today - timedelta(days=1)
+                    end_date = today + timedelta(days=4)
+                case 1:
+                    start_date = today - timedelta(days=2)
+                    end_date = today + timedelta(days=3)
+                case 2:
+                    start_date = today - timedelta(days=3)
+                    end_date = today + timedelta(days=2)
+                case 3:
+                    start_date = today - timedelta(days=4)
+                    end_date = today + timedelta(days=1)
+                case 4:
+                    start_date = today - timedelta(days=5)
+                    end_date = today
+                case 6:
+                    start_date = today
+                    end_date = today + timedelta(days=5)
+            # Insertamos el nuevo registro de la semana actual en la base de datos
+            try:
+                cursor.execute(f"INSERT INTO vps_accountmanagement (start_date, end_date, start_balance, withdraw_deposit, end_balance, gross_profit, commission, swap, net_profit, id_user_id) VALUES('{start_date}', '{end_date}', {balance_initial}, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, {id_user})")
+            except Exception as err:
+                print("Error en la corroborate_management_week() al insertar en la base de datos: ", err)
+            connection.commit()
+            connection.close()
+    else:
+        # Si no hay registros en la tabla del usuario creamos un registro con la semana actual.
+        today = date.today()
+        start_date = ''
+        end_date = ''
+        balance_initial = current_balance - net_profit
+        match today.weekday():
+            case 0:
+                start_date = today - timedelta(days=1)
+                end_date = today + timedelta(days=4)
+            case 1:
+                start_date = today - timedelta(days=2)
+                end_date = today + timedelta(days=3)
+            case 2:
+                start_date = today - timedelta(days=3)
+                end_date = today + timedelta(days=2)
+            case 3:
+                start_date = today - timedelta(days=4)
+                end_date = today + timedelta(days=1)
+            case 4:
+                if now.hour <= 15:
+                    start_date = today - timedelta(days=5)
+                    end_date = today
+            case 6:
+                if now.hour >= 19:
+                    start_date = today
+                    end_date = today + timedelta(days=5)
+        # Insertamos el nuevo registro de la semana actual en la base de datos
+        if start_date and end_date:
+            try:
+                cursor.execute(f"INSERT INTO vps_accountmanagement (start_date, end_date, start_balance, withdraw_deposit, end_balance, gross_profit, commission, swap, net_profit, id_user_id) VALUES('{start_date}', '{end_date}', {balance_initial}, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, {id_user})")
+            except Exception as err:
+                print("Error en la corroborate_management_week() al insertar en la base de datos: ", err)
+            connection.commit()
+            connection.close()
+
 # Función para calcular beneficios, comisiones y swap para la tabla de ganancias semanales
 async def history_and_profit():
 
@@ -232,7 +323,8 @@ async def history_and_profit():
             trades.append(order)
 
         net_profit = (profits - abs(commissions)) + swap
-
+        # Corroboramos que haya un registro de la semana actual de no ser asi creamos un registro nuevo
+        corroborate_management_week(id_user, data['balance'], net_profit)
         # dejamos en formato listo para agregar a una base de datos
         management = f"UPDATE vps_accountmanagement SET withdraw_deposit={data['balance_change']}, end_balance={data['balance']}, gross_profit={profits}, commission={commissions}, swap={swap}, net_profit={net_profit}, id_user_id={id_user} WHERE id=(SELECT id FROM vps_accountmanagement WHERE id=(SELECT MAX(id) FROM vps_accountmanagement WHERE id_user_id={id_user}));"
 

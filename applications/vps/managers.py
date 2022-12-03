@@ -31,10 +31,16 @@ class AccountMt5Manager(models.Manager):
 class AccountManagementManager(models.Manager):
    """ Procedimientos para AccountManagement """
 
-   def get_account_management(self, id):
-      management = self.filter(id_user=id).order_by('-id')
+   def get_account_management(self, id_user):
+      management = self.filter(id_user=id_user).order_by('-id')
       return management
 
+   def last_management_by_user(self, id_user):
+      management = self.filter(id_user=id_user).last()
+      if management:
+         return management[0]
+      else:
+         return None
 
 class AccountOperationManager(models.Manager):
    """ Procedimientos para AccountManagement """
