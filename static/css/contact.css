@@ -12,40 +12,44 @@
     align-items: center;
     background-image: url("../img/fondo_contact.jpg");
     background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+    background-size: cover;
 }
 
 .form-container {
     width: 95%;
-    margin: 30px 0px;
-    padding: 20px 0px;
+    margin: 1.875em 0em;
+    padding: 1.25em 0em;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    border-radius: 25px;
+    border-radius: 1.5625em;
     background-color: var(--color-container);
-    box-shadow: 0px 0px 10px #099;
+    box-shadow: 0em 0em 0.625em #099;
 }
 
 .form__info {
-    padding: 5px;
+    padding: 0.3125em;
     display: flex;
     flex-direction: column;
     text-align: center;
 }
 .form__info p, .form p {
-    padding: 0px 10px;
+    padding: 0em 0.625em;
     color: #fff;
     font-weight: 600;
 }
 .form-img-container {
-    width: 150px;
-    margin: 25px auto;
+    width: 9.375em;
+    margin: 1.5625em auto;
     background-color: #fff;
-    border-radius: 15px;
+    border-radius: 0.9375em;
 }
 .form-link-img img {
     width: 85%;
-    margin: 10px;
+    margin: 0.625em;
     transform: scale(0.8);
     animation: girar 4s infinite ease;
 }
@@ -53,25 +57,25 @@
 /*Form of Contact*/
 
 .form {
-    padding: 5px 15px;
+    padding: 0.3125em 0.9375em;
     display: flex;
     flex-direction: column;
     text-align: center;
-    row-gap: 20px;
+    row-gap: 1.25em;
 }
 .form p {
-    padding: 30px 0px;
-    border-top: 2px solid #fff4;
+    padding: 1.875em 0em;
+    border-top: 0.125em solid #fff4;
 }
 .form__input, .form__input--size, .form__input--submit {
     width: 100%;
-    margin: 5px 0px;
-    padding: 5px 0px;
-    font-size: 18px;
+    margin: 0.3125em 0em;
+    padding: 0.3125em 0em;
+    font-size: 1.125em;
     background-color: transparent;
     border: none;
     outline: none;
-    border-bottom: 2px solid var(--color-form);
+    border-bottom: 0.125em solid var(--color-form);
     color: #fff;
     align-self: center;
 }
@@ -80,7 +84,7 @@
 }
 .form__input:focus, .form__input--size:focus {
     background: linear-gradient(to bottom, #444, #222);
-    border-bottom: 2px solid #44f;
+    border-bottom: 0.125em solid #44f;
 }
 .form__input--submit:active {
     background: #fff4;
@@ -88,18 +92,18 @@
 }
 .form__input-container {
     width: 100%;
-    margin: 0px 10px;
+    margin: 0em 0.625em;
     display: flex;
-    column-gap: 15px;
+    column-gap: 0.9375em;
     align-self: center;
 }
 .form textarea {
-    height: 140px;
+    height: 8.75em;
     resize: none;
 }
 .form__input--submit {
-    margin: 10px;
-    padding: 10px 0px;
+    margin: 0.625em;
+    padding: 0.625em 0em;
     background-color: var(--color-form);
     border: none;
 }
@@ -129,7 +133,8 @@
     
     /*Informacion de contacto*/
     .box {
-        height: 100vh;
+        min-height: 100vh;
+        background-image: url("../img/fondo_contact2.jpg");
     }
 
     .form-container {
@@ -144,31 +149,45 @@
 
     .form {
         width: 50%;
-        padding: 10px 25px;
-        border-left: 2px solid #fff4;
+        padding: 0.625em 1.5625em;
+        border-left: 0.125em solid #fff4;
     }
     .form__info p, .form p {
         border: none;
-        font-size: 18px;
+        font-size: 1.125em;
     }
     .form__input, .form__input--size, .form__input--submit {
-        font-size: 18px;
+        font-size: 1.125em;
     }
 }
 
 @media screen and (min-width: 1440px) {
     /*Informacion de contacto*/
-
-    .form-container {
-            width: 45%;
-        }
-
-
-    .form__info p, .form p {
-        border: none;
-        font-size: 18px;
+    .box {
+        font-size: 17px;
     }
-    .form__input, .form__input--size, .form__input--submit {
-        font-size: 18px;
+}
+
+
+@media screen and (min-width: 1920px){
+    /*Informacion de contacto*/
+    .box {
+        font-size: 22px;
+    }
+}
+
+
+@media screen and (min-width: 2560px){
+    /*Informacion de contacto*/
+    .box {
+        font-size: 30px;
+    }
+}
+
+
+@media screen and (min-width: 3840px){
+    /*Informacion de contacto*/
+    .box {
+        font-size: 45px;
     }
 }

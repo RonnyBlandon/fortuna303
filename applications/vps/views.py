@@ -32,6 +32,16 @@ class PanelUserView(LoginRequiredMixin, TemplateView):
         context['form_mt5'] = CreateAccountMt5Form
         context['accounts'] = AccountMt5.objects.get_account_mt5(id_user)
 
+        # Mostramos mensajes avisando de nuevos importes en el panel de usuario
+        trader_payment = TraderPayment.objects.unpaid_trader_payments(self.request.user.id)
+        vps_payment = VpsPayment.objects.unpaid_vps_payments(self.request.user.id)
+        if vps_payment or trader_payment:
+            messages.add_message(request=self.request, level=messages.WARNING, message='Tienes importes que pagar en la página de pagos.')
+            # Usamos un for para que no siga agregando el mismo mensaje cada vez que envie una solicitud por fecth
+            # No se como funciona que un for pare esto pero lo importante es que funciona.
+            for message in messages.get_messages(self.request):  
+                pass
+            
         # Agregamos el estado de copytrading a la pagina de panel de control
         context['copytrading'] = False
         context['vps'] = False
@@ -47,13 +57,7 @@ class PanelUserView(LoginRequiredMixin, TemplateView):
             if today <= disconnection_date:
                 context['vps'] = True
 
-        # Mostramos mensajes avisando de nuevos importes en el panel de usuario
-        trader_payment = TraderPayment.objects.unpaid_trader_payments(id_user)
-        vps_payment = VpsPayment.objects.unpaid_vps_payments(id_user)
-        if vps_payment or trader_payment:
-            messages.add_message(request=self.request, level=messages.WARNING, message='Tienes importes que pagar en la página de pagos.')
-
-        # Verificando la fecha y hora que deben estar habilitados los botones de agregar y borrar cuenta mt5
+        # Verificando la fecha y hora que deben estar habilitados los boton de borrar cuenta mt5
         context['active'] = active_buttons_time()
 
         # Paginando los registros de la tabla ganancias semanales
@@ -103,7 +107,6 @@ class PanelUserView(LoginRequiredMixin, TemplateView):
             for register in data:
                 register.pop('id_account_mt5_id') # borrando dato innecesario
                 register.pop('id') # borrando dato innecesario
-            print(register)
             return JsonResponse({'operations2': data, 'total_pages': context['operations2_pages']})
         
         else:

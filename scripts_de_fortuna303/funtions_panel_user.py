@@ -135,7 +135,7 @@ async def list_orders_deals(account_id: str, id_account_mt5: int, history_days: 
         orders_deals = orders_deals['deals']
         await connection.close()
 
-        #print(orders_deals)
+        print(orders_deals)
 
         list_orders = []
         trades = []
@@ -164,7 +164,7 @@ async def list_orders_deals(account_id: str, id_account_mt5: int, history_days: 
             # Ordenamos los dict y los pasamos a tuplas
             ordered_dict = {}
 
-            ordered_dict['open_time'] = trades[i]['open_time'] - timedelta(hours=4)
+            ordered_dict['open_time'] = trades[i]['open_time'] - timedelta(hours=6)
             ordered_dict['open_time'] = ordered_dict['open_time'].strftime('%Y-%m-%d %H:%M:%S')
             ordered_dict['open_price'] = trades[i]['open_price']
             ordered_dict['symbol'] = trades[i]['symbol']
@@ -173,7 +173,7 @@ async def list_orders_deals(account_id: str, id_account_mt5: int, history_days: 
             elif trades[i]['type'] == 'DEAL_TYPE_SELL':
                 ordered_dict['type'] = 'Compra'
             ordered_dict['volume'] = trades[i]['volume']
-            ordered_dict['close_time'] = trades[i]['time'] - timedelta(hours=4)
+            ordered_dict['close_time'] = trades[i]['time'] - timedelta(hours=6)
             ordered_dict['close_time'] = ordered_dict['close_time'].strftime('%Y-%m-%d %H:%M:%S')
             ordered_dict['close_price'] = trades[i]['price']
             ordered_dict['commission'] = trades[i]['commission']
@@ -309,7 +309,7 @@ async def history_and_profit():
             case 5:
                 data = await list_orders_deals(id_client_metaapi, id_account_mt5, 7)
             case 6:
-                data = await list_orders_deals(id_client_metaapi, id_account_mt5, 8)
+                data = await list_orders_deals(id_client_metaapi, id_account_mt5, 1)
 
         commissions = 0.00
         swap = 0.00
@@ -373,7 +373,8 @@ async def operations_database(data: dict):
 
     # Insertamos los datos de los trades de cada usuario en la tabla "vps_accountoperation"
     try:
-        cursor.execute("INSERT INTO vps_accountoperation (open_time, open_price, symbol, type, volume, close_time, close_price, commission, swap, profit, id_account_mt5_id)"
+        if data_str:
+            cursor.execute("INSERT INTO vps_accountoperation (open_time, open_price, symbol, type, volume, close_time, close_price, commission, swap, profit, id_account_mt5_id)"
                        "VALUES " + data_str)
     except Exception as err:
         print("Error al insertar datos. Proveniente de la función operations_database(): ", err)

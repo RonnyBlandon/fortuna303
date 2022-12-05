@@ -3,7 +3,8 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    background-image: url('../img/fondo-how-work2.jpg');
+    background: url('../img/fondo-how-work.jpg') no-repeat;
+    background-attachment: fixed;
     background-size: cover;
 }
 .details-info {
@@ -64,5 +65,33 @@
     }
     .details-info {
         width: 56em;
+    }
+}
+
+
+@media screen and (min-width: 1440px){
+    .box-general {
+        font-size: 17px;
+    }
+}
+
+
+@media screen and (min-width: 1920px){
+    .box-general {
+        font-size: 22px;
+    }
+}
+
+
+@media screen and (min-width: 2560px){
+    .box-general {
+        font-size: 30px;
+    }
+}
+
+
+@media screen and (min-width: 3840px){
+    .box-general {
+        font-size: 45px;
     }
 }

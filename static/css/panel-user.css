@@ -20,23 +20,23 @@
 .box-title, .header-modal h2 {
     text-align: center;
     color: #080;
-    text-shadow: 2px 2px #000;
+    text-shadow: 0.1em 0.1em #000;
 }
 .title-account-mt5 {
-    font-size: 24px;
+    font-size: 1.5em;
 }
 
 /* primera Sección caja de datos de usuario */
 .box-user {
-    min-width: 320px;
+    min-width: 17.777em;
     min-height: fit-content;
-    margin: 20px auto 20px auto;
-    padding: 7px;
-    font-size: 18px;
+    margin: 1.25em auto 1.25em auto;
+    padding: 0.4375em 0em;
+    font-size: 1.125em;
     background-color: #888;
-    border-radius: 10px;
-    border-left: 4px solid transparent;
-    border-right: 4px solid transparent;
+    border-radius: 0.625em;
+    border-left: 0.25em solid transparent;
+    border-right: 0.25em solid transparent;
     animation: colores-3 1s linear infinite alternate;
 }
 .box-user h2 {
@@ -44,7 +44,7 @@
 }
 .box-user h4 span {
     color: #ffbd59;
-    text-shadow: 2px 2px #f00;
+    text-shadow: 0.125em 0.125em #f00;
 }
 .link-fisrt-payment, .unsubscribe {
     display: inline-block;
@@ -54,9 +54,9 @@
     text-align: center;
     background-color: #08f;
     font-size: 0.7em;
-    border: 2px solid #fff;
+    border: 0.125em solid #fff;
     color: #fff;
-    border-radius: 8px;
+    border-radius: 0.5em;
     cursor: pointer;
 }
 .unsubscribe {
@@ -69,12 +69,12 @@
 
 /* tablas de cuentas mt5 del usuario y operaciones de la cuenta madre*/
 .box-mt5 {
-    padding: 7px;
-    margin: 1.2em 0px 40px 0px;
+    padding: 0.4375em;
+    margin: 1.2em 0em 2.5em 0em;
     background-color: #222;
-    border-radius: 10px;
-    border-left: 4px solid transparent;
-    border-right: 4px solid transparent;
+    border-radius: 0.625em;
+    border-left: 0.25em solid transparent;
+    border-right: 0.25em solid transparent;
     animation: colores-3 1s linear infinite alternate;
 }
 .header-table {
@@ -84,20 +84,20 @@
     gap: 0.6em;
 }
 .accounts-table {
-    margin: 10px auto 10px auto;
-    border-radius: 10px;
+    margin: 0.625em auto 0.625em auto;
+    border-radius: 0.625em;
     border-collapse: collapse;
 }
 .accounts-table tr:hover, .accounts-table tr:active {
     background-color: #00d;
 }
 .accounts-table th, .accounts-table td{
-    padding: .4em .6em;
+    padding: 0.4em 0.6em;
     border-bottom: 1px solid #fff;
 }
 .accounts-table th{
     background-color: #ffbd59;
-    border: 1px solid #ffbd59;
+    border: 0.0625em solid #ffbd59;
 }
 .accounts-table td {
     color: #fff;
@@ -105,11 +105,11 @@
 }
 .open-modal-add, .img-trash, .button-modal-message{
     display: block;
-    padding: 5px 5px;
+    padding: 0.3125em 0.3125em;
     color: #fff;
     background-color: #070;
-    border-radius: 10px;
-    border: 2px solid #fff;
+    border-radius: 0.625em;
+    border: 0.125em solid #fff;
 }
 .open-modal-add:active, .button-modal-message:active {
     background-color: #0709;
@@ -130,8 +130,8 @@
 determinado */
 #modal-message {
     margin: auto;
-    width: 320px;
-    border-radius: 10px;
+    width: 20em;
+    border-radius: 0.625em;
 }
 #modal-message::backdrop {
     background-color: #0004;
@@ -163,10 +163,10 @@ determinado */
 /*Modal para Agregar cuenta mt5*/
 #modal-add {
     margin: auto;
-    width: 320px;
-    border-radius: 10px;
+    width: 20em;
+    border-radius: 0.625em;
     background-color: #333;
-    box-shadow: 0px 0px 10px #099;
+    box-shadow: 0em 0em 0.625em #099;
 }
 #modal-add::backdrop {
     background-color: #0007;
@@ -175,38 +175,38 @@ determinado */
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 10px;
+    margin-bottom: 0.625em;
     background-color: #ffbd59;
 }
 .header-modal button {
-    font-size: 18px;
-    padding: 5px 10px;
+    font-size: 1.125em;
+    padding: 0.3125em 0.625em;
     background-color: #f00;
 }
 /* Formulario del modal para agregar cuenta mt5 */
 .form-add {
-    padding: 10px 0px;
+    padding: 0.625em 0em;
     display: flex;
     flex-direction: column;
     align-items: center;
-    row-gap: 25px;
+    row-gap: 1.5625em;
     align-items: center;
     background-color: #222;
-    border-radius: 15px;
+    border-radius: 0.9375em;
 }
 .form-add p {
-    margin: 7px;
-    padding: 7px;
+    margin: 0.4375em;
+    padding: 0.4375em;
     background-color: #090;
     color: #fff;
 }
 .button-send-modal {
-    margin: 10px;
-    padding: 5px 10px;
+    margin: 0.625em;
+    padding: 0.3125em 0.625em;
     color: #fff;
-    font-size: 20px;
+    font-size: 1.25em;
     background-color: #070;
-    border-radius: 5px;
+    border-radius: 0.3125em;
     border: none;
     cursor: pointer;
 }
@@ -234,7 +234,7 @@ determinado */
 #paginator, #paginator2 {
     display: flex;
     justify-content: center;
-    margin: 5px 0px;
+    margin: 0.3125em 0em;
     list-style: none;
 }
 .page, .page2, .page3 {
@@ -259,41 +259,47 @@ determinado */
 /*All animations of panel-user*/
 @keyframes colores-3 {    /*titulo de la pagina de inicio*/
     0% {
-        border-left: 4px solid #ff0;
-        border-right: 4px solid #ff0;
+        border-left: 0.25em solid #ff0;
+        border-right: 0.25em solid #ff0;
     }
 }
 
 
 /* MEDIA QUERY */
 
+@media screen and (min-width: 375px) {
+    .box-user {
+        padding: 0.3888em;
+    }
+}
+
 @media screen and (min-width: 768px){
     .box-user {
-        width: 450px;
-        font-size: 22px;
+        width: 25em;
+        font-size: 1.2222em;
     }
     
 
     .box-mt5 {
-        width: 720px;
-        margin: 20px auto;
-        font-size: 18px;
+        width: 45em;
+        margin: 1.25em auto;
+        font-size: 1.125em;
     }
     .box-mt5-width {
         width: fit-content;
     }
 
     #modal-message {
-        width: 500px;
-        font-size: 18px;
+        width: 31.25em;
+        font-size: 1.125em;
     }
 
 }
 
 @media screen and (min-width: 1024px){
     .box-user {
-        width: 480px;
-        font-size: 24px;
+        width: 22em;
+        font-size: 1.5em;
     }
 
     /* Contenedor de sección con los datos de usuario y de agregar y visualizacion de cuentas mt5 */
@@ -305,34 +311,34 @@ determinado */
     }
 
     .box-mt5 {
-        width: 900px;
+        width: 50em;
     }
 
     .open-modal-add .open-modal-add-2 {
-        border: 3px solid #fff;
+        border: 0.1875em solid #fff;
     }
 
 
     #modal-add {
-        width: 480px;
-        border-radius: 10px;
+        width: 30em;
+        border-radius: 0.625em;
     }
     .header-modal {
-        font-size: 22px;
+        font-size: 1.375em;
     }
     .header-modal button {
-        font-size: 18px;
-        padding: 7px 14px;
+        font-size: 0.8181em;
+        padding: 0.3888em 0.7777em;
         background-color: #f00;
     }
     .form-add input {
-        font-size: 22px;
+        font-size: 1.375em;
     }
     .form-add p {
-        font-size: 20px;
+        font-size: 1.25em;
     }
     .form-add button {
-        font-size: 24px;
+        font-size: 1.5em;
     }
 
     .box-mt5-width {
@@ -352,26 +358,25 @@ determinado */
 }
 
 @media screen and (min-width: 1440px) {
-    #modal-message {
-        width: 700px;
-        font-size: 24px;
+    .box-general {
+        font-size: 17px;
     }
 }
 
 @media screen and (min-width: 1920px){
-    .box-user {
-        width: 720px;
-        font-size: 32px;
+    .box-general {
+        font-size: 22px;
     }
-    
+}
 
-    .box-mt5 {
-        width: fit-content;
-        font-size: 28px;
+@media screen and (min-width: 2560px){
+    .box-general {
+        font-size: 30px;
     }
+}
 
-    .accounts-table th, .accounts-table td{
-        padding: .5em;
+@media screen and (min-width: 3840px){
+    .box-general {
+        font-size: 45px;
     }
-
 }

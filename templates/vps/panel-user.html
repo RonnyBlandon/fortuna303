@@ -18,8 +18,8 @@
 {% if messages %}
 <ul class="messages">
     {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
-        {% endfor %}
+    <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>  
+    {% endfor %}
 </ul>
 {% endif %}
 
@@ -101,8 +101,8 @@
 
     <dialog id="modal-message">
         <div>
-            <p>Solo se puede "Agregar" o "Eliminar" cuentas metatrader5 los viernes de 3:00 pm 
-            hasta el domingo 8:00 pm (horario UTC-6).
+            <p>Solo se puede "Eliminar" cuentas metatrader5 los viernes de 3:00 pm 
+            hasta el domingo 7:00 pm (horario UTC-6).
             </p>
             <p>
             Visita la página de <a href="{% url 'home_app:how_work' %}"> ¿Cómo funciona?</a> 
@@ -341,7 +341,7 @@
             </nav>
         </div>
     </section>
-
+    
 </div>
 
 <script src="{% static 'js/panel-user.js' %}" type="module"></script>

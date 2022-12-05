@@ -1,7 +1,5 @@
 from datetime import datetime, date, timedelta
 
-today = 'f'
-end = 'e'
+date_modify = datetime(2022, 12, 5, 4, 44, 23, 674000)
 
-if today and end:
-    print("Eres gay")
+print(date_modify)

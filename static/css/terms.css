@@ -1,16 +1,16 @@
 .terms {
-    margin: 30px 10px 30px 10px;
+    margin: 1.875em 0.625em 1.875em 0.625em;
     padding: 5px;
     background-color: var(--color-principal);
-    box-shadow: 0px 0px 10px #000;
+    box-shadow: 0em 0em 0.625em #000;
 }
 .terms h3, .terms p {
-    margin-bottom: 10px;
-    text-shadow: 2px 2px #000;
+    margin-bottom: 0.625em;
+    text-shadow: 0.125em 0.125em #000;
     color: var(--color-secondary);
 }
 .terms p {
-    padding-bottom: 5px;
+    padding-bottom: 0.3125em;
     text-shadow: none;
     color: #fff;
 }
@@ -18,13 +18,33 @@
 
 @media screen and (min-width: 768px) {
     .terms {
-        margin: 20px;
-        padding: 10px;
+        margin: 1.25em;
+        padding: 0.625em;
     }    
 }
 @media screen and (min-width: 1024px) {
     .terms {
-        margin: 40px;
-        padding: 20px;
+        margin: 2.5em;
+        padding: 1.25em;
+    }
+}
+@media screen and (min-width: 1440px) {
+    .terms {
+        font-size: 17px;
+    }
+}
+@media screen and (min-width: 1920px) {
+    .terms {
+        font-size: 22px;
+    }
+}
+@media screen and (min-width: 2560px) {
+    .terms {
+        font-size: 30px;
+    }
+}
+@media screen and (min-width: 3840px) {
+    .terms {
+        font-size: 45px;
     }
 }
