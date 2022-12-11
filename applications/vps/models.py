@@ -44,12 +44,12 @@ class AccountManagement(models.Model):
 
 class AccountOperation(models.Model):
     open_time = models.DateTimeField('Fecha Apertura', max_length=20)
-    open_price = models.DecimalField('Precio Apertura', max_digits=7, decimal_places=5)
+    open_price = models.FloatField('Precio Apertura')
     symbol = models.CharField('Par', max_length=10)
     type = models.CharField('Tipo', max_length=6)
     volume = models.DecimalField('Lotaje', max_digits=5, decimal_places=2)
     close_time = models.DateTimeField('Fecha Cierre', max_length=20)
-    close_price = models.DecimalField('Precio Cierre', max_digits=7, decimal_places=5)
+    close_price = models.FloatField('Precio Cierre')
     commission = models.DecimalField('Comisiones', max_digits=6, decimal_places=2)
     swap = models.DecimalField('Swap', max_digits=6, decimal_places=2)
     profit = models.DecimalField('Beneficio', max_digits=8, decimal_places=2)

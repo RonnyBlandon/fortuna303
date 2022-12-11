@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} 404 Error {% endblock title %}
+{% block css %} {% static 'css/http-errors.css' %} {% endblock css %}
+
+{% block content %}
+{% include 'includes/header.html' %}
+
+<!--Titulo de la pagina-->
+
+<h1 class="title">Página no encontrada</h1>
+
+<!--Contenido-->
+<div class="error-404">
+    <div class="box-img">
+        <img src="{% static 'img/error-404.png' %}" alt="error-404">
+    </div>
+</div>
+
+{% include 'includes/footer.html' %}
+{% endblock content %}

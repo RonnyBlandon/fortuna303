@@ -1,4 +1,5 @@
 import asyncio
+import MetaTrader5 as mt5
 from metaapi_cloud_sdk import MetaApi
 from metaapi_cloud_sdk.clients.metaApi.tradeException import TradeException
 from datetime import datetime, timedelta, date
@@ -68,8 +69,7 @@ async def balance_initial():
                 print('Deploying account')
                 await account.deploy()
 
-            print(
-                'Esperando a que el servidor API se conecte al intermediario (puede tardar un par de minutos)')
+            print('Esperando a que el servidor API se conecte al intermediario (puede tardar un par de minutos)')
             await account.wait_connected()
 
             # connect to MetaApi API
@@ -101,6 +101,101 @@ async def balance_initial():
         except Exception as err:
             print("Error en la conexion de una cuenta mt5 /n",
                   api.format_error(err))
+
+
+# Funcion que retorna el valor 'time' para el metodo sort() de las listas y ordenar los trades por fecha de cierre
+def sort_trades_by_date(key):
+    return key['time']
+
+
+# Función que Unifica en una orden las ordenes cerradas de forma parcial tomando la ultima orden de la 
+# position para unificarla.
+def unify_partial_orders(trades: list):
+    index_list = []
+    for trade in trades:
+        partial_trades = [trade,]
+        for trade2 in trades:
+            if trade['positionId'] == trade2['positionId'] and trade['orderId'] != trade2['orderId']:
+                if trades.index(trade) not in index_list:
+                    index_list.append(trades.index(trade))
+                partial_trades.append(trade2)
+
+        data_change = {'volume': 0.00, 'commission': 0.00, 'swap': 0.00, 'profit': 0.00}
+        for trade in partial_trades:
+            # Para el volumen, precio, comision, swap y el beneficio solo los sumamos.        
+            data_change['volume'] += trade['volume']
+            data_change['commission'] += trade['commission']
+            data_change['swap'] += trade['swap']
+            data_change['profit'] += trade['profit']
+            # Borramos los trades parciales de la lista de trades
+            trades.remove(trade)
+
+        if partial_trades:
+            unified_trade = partial_trades[-1]
+            unified_trade['volume'] = round(data_change['volume'], 2)
+            unified_trade['commission'] = round(data_change['commission'], 2)
+            unified_trade['swap'] = round(data_change['swap'], 2)
+            unified_trade['profit'] = round(data_change['profit'], 2)
+            # Despues de unificar a un solo trade lo agregamos a la lista de trades.
+            trades.append(unified_trade)
+            # Ordenamos los trades por fecha de cierre
+            trades.sort(key=sort_trades_by_date)
+            # Metemos en una lista las indices de los trades unificados para actualizar su precio de cierre en la
+            # función de close_price_of_unified_trades()
+
+    return index_list
+
+
+# Función que modifica el precio de cierre de la orden unificada que eran ordenes cerradas parcialmente.
+def change_closing_price(trade: tuple, pips: float):
+    if trade[3] == "Compra":
+        if trade[9] > 0:
+            trade[6] = trade[1] + pips
+        else:
+            trade[6] = trade[1] - pips
+
+    if trade[3] == "Venta":
+        if trade[9] > 0:
+            trade[6] = trade[1] - pips
+        else:
+            trade[6] = trade[1] + pips
+
+
+# Función que actualiza los precios de cierre de las trades unificados ya que estos no se pueden cambiar desde
+# la función unify_partial_ordes()
+def close_price_of_unified_trades(trades: list, index_list: list):
+    # Sacamos el precio de cierre dependiendo el par o simbolo de la orden.
+    for index in index_list:
+        # Sacamos los pares emparejados con el 'JPY' porque su valor por pip es 1000 yenes
+        if trades[index][2] in ["USDJPY", "EURJPY", "GBPJPY" "AUDJPY", "CADJPY", "CHFJPY", "NZDJPY"]:
+            pip_value = trades[index][4] / trades[index][1] * 1000
+            pips = round((trades[index][9] / pip_value) / 100, 4)
+            # Cambiamos el precio de cierre
+            trades[index] = list(trades[index]) #convertimos a lista para modificar el precio de cierre.
+            change_closing_price(trades[index], abs(pips))
+            trades[index] = tuple(trades[index]) #convertimos de nuevo a tupla para guardarlo en base de datos.
+
+        # Sacamos los pares mas populares que no tienen el "USD" como moneda secundaria.
+        if trades[index][2] in ["AUDCAD", "AUDCHF", "AUDNZD", "CADCHF", "EURGBP", "EURAUD", "EURCAD", "EURCHF", "EURGBP", "EURNZD", "GBPAUD", "GPBCAD", "GPBCHF", "GBPNZD", "NZDCAD", "NZDCHF", "USDCAD", "USDCHF"]:
+            pip_value = trades[index][4] / trades[index][1] * 10
+            pips = round((trades[index][9] / pip_value) / 10000, 8)
+            # Cambiamos el precio de cierre
+            trades[index] = list(trades[index]) #convertimos a lista para modificar el precio de cierre.
+            change_closing_price(trades[index], abs(pips))
+            trades[index] = tuple(trades[index]) #convertimos de nuevo a tupla para guardarlo en base de datos.
+            
+        # Sacamos los pares mas populares que tengan el "USD" como moneda base o secundaria excepto "USDJPY".
+        if trades[index][2] in ["AUDUSD","EURUSD", "GBPUSD", "NZDUSD"]:
+            trades[index] = list(trades[index]) #convertimos a lista para modificar el precio de cierre.
+            pip_value = 10 * trades[index][4]
+            pips = round((trades[index][9] / pip_value) / 10000, 8)
+            if trades[index][7] == -1.42:  
+                print(pip_value)
+                print(pips)
+            # Cambiamos el precio de cierre
+            trades[index] = list(trades[index]) #convertimos a lista para modificar el precio de cierre.
+            change_closing_price(trades[index], abs(pips))
+            trades[index] = tuple(trades[index]) #convertimos de nuevo a tupla para guardarlo en base de datos.
 
 
 # APARTIR DE AQUI ESTAN LAS FUNCIONES QUE SE EJECUTARAN EL VIERNES CUANDO CIERRE EL MERCADO
@@ -135,8 +230,6 @@ async def list_orders_deals(account_id: str, id_account_mt5: int, history_days: 
         orders_deals = orders_deals['deals']
         await connection.close()
 
-        print(orders_deals)
-
         list_orders = []
         trades = []
         balance_change = 0.00
@@ -152,8 +245,11 @@ async def list_orders_deals(account_id: str, id_account_mt5: int, history_days: 
                 # La solucion al problema se coloca aqui
                 trades.append(order)
 
+        # Unificamos los trades que se hayan cerrado parcialmente.
+        index_list = unify_partial_orders(trades=trades)
+
+        # Agregamos a las ordenes de tipo 'DEAL_ENTRY_OUT datos extras desde las ordenes de tipo 'DEAL_ENTRY_IN'
         for i in range(len(trades)):
-            # Agregamos a las ordenes de tipo 'DEAL_ENTRY_OUT datos extras desde las ordenes de tipo 'DEAL_ENTRY_IN'
             for j in orders_deals:
                 if j['entryType'] == 'DEAL_ENTRY_IN':
                     if trades[i]['positionId'] == j['positionId']:
@@ -182,6 +278,8 @@ async def list_orders_deals(account_id: str, id_account_mt5: int, history_days: 
             ordered_dict['id_account_mt5'] = str(id_account_mt5)
 
             trades[i] = tuple(ordered_dict.values())
+        
+        close_price_of_unified_trades(trades, index_list)
 
         return {'orders': list_orders, 'trades': trades, 'balance': balance, 'balance_change': balance_change}
 
@@ -205,7 +303,7 @@ def corroborate_management_week(id_user, current_balance, net_profit):
     except Exception as err:
         print("Error al consultar en la base de datos: ", err)
     connection.commit()
-    print(end_date_current_week)
+
     now = datetime.now()
     if end_date_current_week:
         # Como end_date del registro es hasta el viernes agregaremos el dia y las horas que faltan para que sea

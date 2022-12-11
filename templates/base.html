@@ -9,6 +9,7 @@
     <title>{% block title %}{% endblock title %}</title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/normalize.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/banner-cookies.css' %}">
     <link rel="stylesheet" type="text/css" href="{% block css %} {% endblock css %}">
     <link rel="stylesheet" type="text/css" href="{% block css2 %} {% endblock css2 %}">
     <link rel='icon' href="{% static 'img/favicon.ico' %}">
@@ -19,5 +20,16 @@
     
     {% endblock content %}
 
+    <div class="background-cookie" id="background-cookies">
+        <div class="banner-cookie" id="banner-cookies">
+            <img class="cookie" src="/static/img/img-cookie.svg" alt="cookie">
+            <h3 class="Banner-title">Cookies</h3>
+            <p class="banner-message">Utilizamos cookies propias y de terceros para mejorar nuestros servicios.</p>
+            <button class="button-accept" id="btn-accept-cookies">De acuerdo</button>
+            <a class="privacy-policies" href="{% url 'home_app:privacy_policy' %}">Politica de Privacidad.</a>
+        </div>
+    </div>
+
+    <script src="{% static 'js/banner-cookies.js' %}"></script>
 </body>
 </html>

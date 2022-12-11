@@ -5,6 +5,9 @@
     flex-direction: column;
     justify-content: space-evenly;
     background-image: url('../img/fondo-panel.jpg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center center;
     background-size: cover;
 }
 
