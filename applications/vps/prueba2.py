@@ -1,15 +1,94 @@
-open_price = 137.172
-volume = 0.2
-profit = -0.51
+import datetime
 
-pip_value = volume / open_price * 1000
-pips = abs(profit) / pip_value / 100
+orders = [{'id': '223106669', 'platform': 'mt5', 'type': 'DEAL_TYPE_BUY', 'time': datetime.datetime(2022, 12, 12, 5, 31, 52, 84000, tzinfo=datetime.timezone.utc), 'brokerTime': '2022-12-12 07:31:52.084', 'commission': -0.53, 'swap': 0, 'profit': 0.66, 'symbol': 'USDCAD', 'magic': 0, 'orderId': '309071336', 'positionId': '309071252', 'volume': 0.15, 'price': 1.36534, 'entryType': 'DEAL_ENTRY_OUT', 'reason': 'DEAL_REASON_EXPERT', 'brokerComment': 'ZfKC_+6VpNG_JrqJNRgPw:', 'accountCurrencyExchangeRate': 1, 'clientId': 'ZfKC_+6VpNG_JrqJNRgPw'}, 
 
-print(pips)
+{'id': '223107981', 'platform': 'mt5', 'type': 'DEAL_TYPE_BUY', 'time': datetime.datetime(2022, 12, 12, 5, 42, 34, 620000, tzinfo=datetime.timezone.utc), 'brokerTime': '2022-12-12 07:42:34.620', 'commission': -0.28, 'swap': 0, 'profit': -1.03, 'symbol': 'USDCHF', 'magic': 0, 'orderId': '309073070', 'positionId': '309073002', 'volume': 0.08, 'price': 0.93647, 'entryType': 'DEAL_ENTRY_OUT', 'reason': 'DEAL_REASON_CLIENT', 'accountCurrencyExchangeRate': 1}, 
 
-print()
-print()
+{'id': '223108047', 'platform': 'mt5', 'type': 'DEAL_TYPE_BUY', 'time': datetime.datetime(2022, 12, 12, 5, 43, 19, 585000, tzinfo=datetime.timezone.utc), 'brokerTime': '2022-12-12 07:43:19.585', 'commission': -0.11, 'swap': 0, 'profit': -0.29, 'symbol': 'USDCHF', 'magic': 0, 'orderId': '309073180', 'positionId': '309073002', 'volume': 0.03, 'price': 0.93644, 'entryType': 'DEAL_ENTRY_OUT', 'reason': 'DEAL_REASON_CLIENT', 'accountCurrencyExchangeRate': 1}, 
 
-num = round(0, 6)
+{'id': '223108061', 'platform': 'mt5', 'type': 'DEAL_TYPE_BUY', 'time': datetime.datetime(2022, 12, 12, 5, 43, 51, 259000, tzinfo=datetime.timezone.utc), 'brokerTime': '2022-12-12 07:43:51.259', 'commission': -0.07, 'swap': 0, 'profit': -0.19, 'symbol': 'USDCHF', 'magic': 0, 'orderId': '309073193', 'positionId': '309073002', 'volume': 0.02, 'price': 0.93644, 'entryType': 'DEAL_ENTRY_OUT', 'reason': 'DEAL_REASON_CLIENT', 'accountCurrencyExchangeRate': 1}, 
 
-print("Lo que contiene num: ", num * 100)
+{'id': '223108094', 'platform': 'mt5', 'type': 'DEAL_TYPE_BUY', 'time': datetime.datetime(2022, 12, 12, 5, 44, 29, 898000, tzinfo=datetime.timezone.utc), 'brokerTime': '2022-12-12 07:44:29.898', 'commission': -0.11, 'swap': 0, 'profit': -0.16, 'symbol': 'USDCHF', 'magic': 0, 'orderId': '309073253', 'positionId': '309073002', 'volume': 0.03, 'price': 0.9364, 'entryType': 'DEAL_ENTRY_OUT', 'reason': 'DEAL_REASON_CLIENT', 'accountCurrencyExchangeRate': 1}, 
+
+{'id': '223108411', 'platform': 'mt5', 'type': 'DEAL_TYPE_BUY', 'time': datetime.datetime(2022, 12, 12, 5, 47, 23, 186000, tzinfo=datetime.timezone.utc), 'brokerTime': '2022-12-12 07:47:23.186', 'commission': -0.07, 'swap': 0, 'profit': -0.23, 'symbol': 'USDCHF', 'magic': 0, 'orderId': '309073750', 'positionId': 
+'309073002', 'volume': 0.02, 'price': 0.93646, 'entryType': 'DEAL_ENTRY_OUT', 'reason': 'DEAL_REASON_CLIENT', 'accountCurrencyExchangeRate': 1}, 
+
+{'id': '223108736', 'platform': 'mt5', 'type': 'DEAL_TYPE_BUY', 'time': datetime.datetime(2022, 12, 12, 5, 51, 
+27, 573000, tzinfo=datetime.timezone.utc), 'brokerTime': '2022-12-12 07:51:27.573', 'commission': -0.07, 'swap': 0, 'profit': -0.21, 'symbol': 'USDCHF', 'magic': 0, 'orderId': '309074246', 'positionId': '309073002', 'volume': 0.02, 'price': 0.93645, 'entryType': 'DEAL_ENTRY_OUT', 'reason': 'DEAL_REASON_CLIENT', 'accountCurrencyExchangeRate': 1}, 
+
+{'id': '223116454', 'platform': 'mt5', 'type': 'DEAL_TYPE_SELL', 'time': datetime.datetime(2022, 12, 12, 6, 33, 49, 811000, tzinfo=datetime.timezone.utc), 'brokerTime': '2022-12-12 08:33:49.811', 'commission': -0.46, 'swap': 0, 'profit': -1.11, 'symbol': 'USDCHF', 'magic': 0, 'orderId': '309084539', 'positionId': '309084533', 'volume': 0.13, 'price': 0.93676, 'entryType': 'DEAL_ENTRY_OUT', 'reason': 'DEAL_REASON_CLIENT', 'accountCurrencyExchangeRate': 1}, 
+
+{'id': '223116484', 'platform': 'mt5', 'type': 'DEAL_TYPE_SELL', 'time': datetime.datetime(2022, 12, 12, 6, 34, 4, 817000, tzinfo=datetime.timezone.utc), 'brokerTime': '2022-12-12 08:34:04.817', 'commission': -0.14, 
+'swap': 0, 'profit': -0.3, 'symbol': 'USDCHF', 'magic': 0, 'orderId': '309084578', 'positionId': '309084533', 'volume': 0.04, 'price': 0.93677, 'entryType': 'DEAL_ENTRY_OUT', 'reason': 'DEAL_REASON_CLIENT', 'accountCurrencyExchangeRate': 1}, 
+
+{'id': '223117765', 'platform': 'mt5', 'type': 'DEAL_TYPE_SELL', 'time': datetime.datetime(2022, 12, 12, 6, 41, 57, 581000, tzinfo=datetime.timezone.utc), 'brokerTime': '2022-12-12 08:41:57.581', 'commission': -0.11, 'swap': 0, 'profit': -1.06, 'symbol': 'USDCHF', 'magic': 0, 'orderId': '309086158', 'positionId': '309084533', 'volume': 0.03, 'price': 0.93651, 'entryType': 'DEAL_ENTRY_OUT', 'reason': 'DEAL_REASON_CLIENT', 'accountCurrencyExchangeRate': 1}, 
+
+{'id': '223123901', 'platform': 'mt5', 'type': 'DEAL_TYPE_BUY', 'time': datetime.datetime(2022, 12, 12, 6, 53, 3, 469000, tzinfo=datetime.timezone.utc), 'brokerTime': '2022-12-12 08:53:03.469', 
+'commission': -0.53, 'swap': 0, 'profit': -2.3, 'symbol': 'EURNZD', 'magic': 0, 'orderId': '309093126', 'positionId': '309092803', 'volume': 0.15, 'price': 1.64678, 'entryType': 'DEAL_ENTRY_OUT', 'reason': 'DEAL_REASON_CLIENT', 'accountCurrencyExchangeRate': 1}, 
+
+{'id': '223123948', 'platform': 'mt5', 'type': 'DEAL_TYPE_BUY', 'time': datetime.datetime(2022, 12, 12, 6, 53, 8, 273000, tzinfo=datetime.timezone.utc), 'brokerTime': '2022-12-12 08:53:08.273', 'commission': -0.53, 'swap': 0, 'profit': -1.42, 'symbol': 'GBPAUD', 'magic': 0, 'orderId': '309093199', 'positionId': '309092971', 'volume': 0.15, 'price': 1.80661, 'entryType': 'DEAL_ENTRY_OUT', 'reason': 'DEAL_REASON_CLIENT', 'accountCurrencyExchangeRate': 1}, 
+
+{'id': '223123967', 'platform': 'mt5', 'type': 
+'DEAL_TYPE_SELL', 'time': datetime.datetime(2022, 12, 12, 6, 53, 13, 962000, tzinfo=datetime.timezone.utc), 'brokerTime': '2022-12-12 08:53:13.962', 'commission': -0.53, 'swap': 0, 'profit': -3.94, 'symbol': 'GBPJPY', 'magic': 0, 'orderId': '309093248', 'positionId': '309092726', 'volume': 0.15, 'price': 167.457, 'entryType': 'DEAL_ENTRY_OUT', 'reason': 'DEAL_REASON_CLIENT', 'accountCurrencyExchangeRate': 1}, 
+
+{'id': '223123987', 'platform': 'mt5', 'type': 'DEAL_TYPE_SELL', 'time': datetime.datetime(2022, 12, 12, 6, 53, 18, 930000, tzinfo=datetime.timezone.utc), 'brokerTime': '2022-12-12 08:53:18.930', 'commission': -0.53, 'swap': 0, 'profit': -1.44, 'symbol': 'NZDCHF', 'magic': 0, 'orderId': '309093279', 'positionId': '309092866', 'volume': 0.15, 'price': 0.59837, 'entryType': 'DEAL_ENTRY_OUT', 'reason': 'DEAL_REASON_CLIENT', 'accountCurrencyExchangeRate': 1}, 
+
+{'id': '223124509', 'platform': 'mt5', 'type': 'DEAL_TYPE_BUY', 'time': datetime.datetime(2022, 12, 12, 6, 55, 47, 629000, tzinfo=datetime.timezone.utc), 'brokerTime': '2022-12-12 08:55:47.629', 'commission': -0.07, 'swap': 0, 'profit': -0.05, 'symbol': 'EURNZD', 'magic': 0, 'orderId': '309094087', 'positionId': '309092803', 'volume': 0.02, 'price': 1.64658, 'entryType': 'DEAL_ENTRY_OUT', 'reason': 'DEAL_REASON_CLIENT', 'accountCurrencyExchangeRate': 1}, 
+
+{'id': '223124527', 'platform': 'mt5', 'type': 'DEAL_TYPE_BUY', 'time': datetime.datetime(2022, 12, 12, 6, 55, 53, 161000, tzinfo=datetime.timezone.utc), 'brokerTime': '2022-12-12 08:55:53.161', 'commission': -0.07, 'swap': 0, 'profit': 0.39, 'symbol': 'GBPAUD', 'magic': 0, 'orderId': '309094104', 'positionId': '309092971', 'volume': 0.02, 'price': 1.80618, 'entryType': 'DEAL_ENTRY_OUT', 'reason': 'DEAL_REASON_CLIENT', 'accountCurrencyExchangeRate': 1}, 
+
+{'id': '223124541', 'platform': 'mt5', 'type': 'DEAL_TYPE_SELL', 'time': datetime.datetime(2022, 12, 12, 6, 55, 58, 427000, tzinfo=datetime.timezone.utc), 'brokerTime': '2022-12-12 08:55:58.427', 'commission': -0.07, 'swap': 0, 'profit': -1.32, 'symbol': 'GBPJPY', 'magic': 0, 'orderId': '309094119', 'positionId': '309092726', 'volume': 0.02, 'price': 167.403, 'entryType': 'DEAL_ENTRY_OUT', 'reason': 'DEAL_REASON_CLIENT', 'accountCurrencyExchangeRate': 1}, 
+
+{'id': '223124565', 'platform': 'mt5', 'type': 'DEAL_TYPE_SELL', 'time': datetime.datetime(2022, 12, 12, 6, 56, 3, 691000, tzinfo=datetime.timezone.utc), 'brokerTime': '2022-12-12 08:56:03.691', 'commission': -0.07, 'swap': 0, 'profit': -0.26, 'symbol': 'NZDCHF', 'magic': 0, 'orderId': '309094177', 'positionId': '309092866', 'volume': 0.02, 'price': 0.59834, 'entryType': 'DEAL_ENTRY_OUT', 'reason': 'DEAL_REASON_CLIENT', 'accountCurrencyExchangeRate': 1}, 
+
+{'id': '223125253', 'platform': 'mt5', 'type': 'DEAL_TYPE_BUY', 'time': datetime.datetime(2022, 12, 12, 6, 
+59, 12, 719000, tzinfo=datetime.timezone.utc), 'brokerTime': '2022-12-12 08:59:12.719', 'commission': -0.04, 'swap': 0, 'profit': -0.18, 'symbol': 'EURNZD', 'magic': 0, 'orderId': '309095049', 'positionId': '309092803', 'volume': 0.01, 'price': 1.64682, 'entryType': 'DEAL_ENTRY_OUT', 'reason': 'DEAL_REASON_CLIENT', 'accountCurrencyExchangeRate': 1}, 
+
+{'id': '223125264', 'platform': 
+'mt5', 'type': 'DEAL_TYPE_BUY', 'time': datetime.datetime(2022, 12, 12, 6, 59, 16, 239000, tzinfo=datetime.timezone.utc), 'brokerTime': '2022-12-12 08:59:16.239', 'commission': -0.04, 'swap': 0, 'profit': 0.26, 'symbol': 'GBPAUD', 'magic': 0, 'orderId': '309095060', 'positionId': '309092971', 'volume': 0.01, 'price': 1.80608, 'entryType': 'DEAL_ENTRY_OUT', 'reason': 'DEAL_REASON_CLIENT', 'accountCurrencyExchangeRate': 1}, 
+
+{'id': '223125270', 'platform': 'mt5', 'type': 'DEAL_TYPE_SELL', 'time': datetime.datetime(2022, 12, 12, 6, 59, 19, 367000, tzinfo=datetime.timezone.utc), 'brokerTime': '2022-12-12 08:59:19.367', 'commission': -0.04, 'swap': 0, 'profit': -0.91, 'symbol': 'GBPJPY', 'magic': 0, 'orderId': '309095066', 'positionId': '309092726', 'volume': 0.01, 'price': 167.368, 'entryType': 'DEAL_ENTRY_OUT', 'reason': 'DEAL_REASON_CLIENT', 'accountCurrencyExchangeRate': 1}, 
+
+{'id': '223125281', 'platform': 'mt5', 'type': 'DEAL_TYPE_SELL', 'time': datetime.datetime(2022, 12, 12, 6, 59, 22, 740000, tzinfo=datetime.timezone.utc), 'brokerTime': '2022-12-12 08:59:22.740', 'commission': -0.04, 'swap': 0, 'profit': -0.17, 'symbol': 'NZDCHF', 'magic': 0, 'orderId': '309095076', 'positionId': '309092866', 'volume': 0.01, 'price': 0.5983, 'entryType': 'DEAL_ENTRY_OUT', 'reason': 'DEAL_REASON_CLIENT', 'accountCurrencyExchangeRate': 1}, 
+
+{'id': '223145416', 'platform': 'mt5', 'type': 'DEAL_TYPE_BUY', 'time': datetime.datetime(2022, 12, 12, 7, 59, 37, 682000, tzinfo=datetime.timezone.utc), 'brokerTime': '2022-12-12 09:59:37.682', 'commission': -0.07, 'swap': 0, 'profit': -1.6, 'symbol': 'GBPAUD', 'magic': 0, 'orderId': '309119485', 'positionId': '309092971', 'volume': 0.02, 'price': 1.80765, 'entryType': 'DEAL_ENTRY_OUT', 'reason': 'DEAL_REASON_CLIENT', 'accountCurrencyExchangeRate': 1}, 
+
+{'id': '223145422', 'platform': 'mt5', 'type': 'DEAL_TYPE_BUY', 'time': datetime.datetime(2022, 12, 12, 7, 59, 38, 540000, tzinfo=datetime.timezone.utc), 'brokerTime': '2022-12-12 09:59:38.540', 'commission': -0.07, 'swap': 0, 'profit': 2.57, 'symbol': 'EURNZD', 'magic': 0, 'orderId': '309119491', 'positionId': '309092803', 'volume': 0.02, 'price': 1.64453, 'entryType': 'DEAL_ENTRY_OUT', 'reason': 'DEAL_REASON_CLIENT', 'accountCurrencyExchangeRate': 1}, 
+
+{'id': '223145426', 'platform': 'mt5', 'type': 'DEAL_TYPE_SELL', 'time': datetime.datetime(2022, 12, 12, 7, 59, 39, 480000, tzinfo=datetime.timezone.utc), 'brokerTime': '2022-12-12 09:59:39.480', 'commission': -0.07, 'swap': 0, 'profit': 0.35, 'symbol': 'GBPJPY', 'magic': 0, 'orderId': '309119495', 'positionId': '309092726', 'volume': 0.02, 'price': 167.517, 'entryType': 'DEAL_ENTRY_OUT', 'reason': 'DEAL_REASON_CLIENT', 'accountCurrencyExchangeRate': 1}, 
+
+{'id': '223145428', 'platform': 'mt5', 'type': 'DEAL_TYPE_SELL', 'time': datetime.datetime(2022, 12, 12, 7, 59, 40, 365000, tzinfo=datetime.timezone.utc), 'brokerTime': '2022-12-12 09:59:40.365', 'commission': -0.07, 'swap': 0, 'profit': 0.28, 'symbol': 'NZDCHF', 'magic': 0, 'orderId': '309119497', 'positionId': '309092866', 'volume': 0.02, 'price': 0.59859, 'entryType': 'DEAL_ENTRY_OUT', 'reason': 'DEAL_REASON_CLIENT', 'accountCurrencyExchangeRate': 1}, 
+
+{'id': '223437795', 'platform': 'mt5', 'type': 'DEAL_TYPE_SELL', 'time': datetime.datetime(2022, 12, 12, 22, 47, 21, 860000, tzinfo=datetime.timezone.utc), 'brokerTime': '2022-12-13 00:47:21.860', 'commission': -0.18, 'swap': 0, 'profit': -6.27, 'symbol': 'GBPAUD', 'magic': 0, 'orderId': '309476945', 'positionId': '309476925', 'volume': 0.05, 'price': 1.81698, 'entryType': 'DEAL_ENTRY_OUT', 'reason': 'DEAL_REASON_CLIENT', 'accountCurrencyExchangeRate': 1}, 
+
+{'id': '223437799', 'platform': 'mt5', 'type': 'DEAL_TYPE_SELL', 'time': datetime.datetime(2022, 12, 12, 22, 47, 44, 342000, tzinfo=datetime.timezone.utc), 'brokerTime': '2022-12-13 00:47:44.342', 'commission': -0.18, 'swap': 0, 'profit': -6.24, 'symbol': 'GBPAUD', 'magic': 0, 'orderId': '309476949', 'positionId': '309476925', 'volume': 0.05, 'price': 1.81699, 'entryType': 'DEAL_ENTRY_OUT', 'reason': 'DEAL_REASON_CLIENT', 'accountCurrencyExchangeRate': 1}, 
+
+{'id': '223437803', 'platform': 'mt5', 'type': 'DEAL_TYPE_SELL', 'time': datetime.datetime(2022, 12, 12, 22, 47, 59, 766000, tzinfo=datetime.timezone.utc), 'brokerTime': '2022-12-13 00:47:59.766', 'commission': -0.18, 'swap': 0, 'profit': -6.31, 'symbol': 'GBPAUD', 'magic': 0, 'orderId': '309476958', 'positionId': '309476925', 'volume': 0.05, 'price': 1.81697, 'entryType': 'DEAL_ENTRY_OUT', 'reason': 'DEAL_REASON_CLIENT', 'accountCurrencyExchangeRate': 1}, 
+
+{'id': '223437813', 'platform': 'mt5', 'type': 'DEAL_TYPE_SELL', 'time': datetime.datetime(2022, 12, 12, 22, 48, 12, 52000, tzinfo=datetime.timezone.utc), 'brokerTime': '2022-12-13 00:48:12.052', 'commission': -0.18, 'swap': 0, 'profit': -6.31, 'symbol': 'GBPAUD', 'magic': 0, 'orderId': '309477004', 'positionId': '309476925', 'volume': 0.05, 'price': 1.81697, 'entryType': 'DEAL_ENTRY_OUT', 'reason': 'DEAL_REASON_CLIENT', 'accountCurrencyExchangeRate': 1}]
+
+
+
+
+only_orders = [{'id': '223106669', 'platform': 'mt5', 'type': 'DEAL_TYPE_BUY', 'time': datetime.datetime(2022, 12, 12, 5, 31, 52, 84000, tzinfo=datetime.timezone.utc), 'brokerTime': '2022-12-12 07:31:52.084', 'commission': -0.53, 'swap': 0, 'profit': 0.66, 'symbol': 'USDCAD', 'magic': 0, 'orderId': '309071336', 'positionId': '309071252', 'volume': 0.15, 'price': 1.36534, 'entryType': 'DEAL_ENTRY_OUT', 'reason': 'DEAL_REASON_EXPERT', 'brokerComment': 'ZfKC_+6VpNG_JrqJNRgPw:', 'accountCurrencyExchangeRate': 1, 'clientId': 'ZfKC_+6VpNG_JrqJNRgPw'},
+
+{'id': '223107981', 'platform': 'mt5', 'type': 'DEAL_TYPE_BUY', 'time': datetime.datetime(2022, 12, 12, 5, 42, 34, 620000, tzinfo=datetime.timezone.utc), 'brokerTime': '2022-12-12 07:42:34.620', 'commission': -0.28, 'swap': 0, 'profit': -1.03, 'symbol': 'USDCHF', 'magic': 0, 'orderId': '309073070', 'positionId': '309073002', 'volume': 0.08, 'price': 0.93647, 'entryType': 'DEAL_ENTRY_OUT', 'reason': 'DEAL_REASON_CLIENT', 'accountCurrencyExchangeRate': 1},
+
+{'id': '223116454', 'platform': 'mt5', 'type': 'DEAL_TYPE_SELL', 'time': datetime.datetime(2022, 12, 12, 6, 33, 49, 811000, tzinfo=datetime.timezone.utc), 'brokerTime': '2022-12-12 08:33:49.811', 'commission': -0.46, 'swap': 0, 'profit': -1.11, 'symbol': 'USDCHF', 'magic': 0, 'orderId': '309084539', 'positionId': '309084533', 'volume': 0.13, 'price': 0.93676, 'entryType': 'DEAL_ENTRY_OUT', 'reason': 'DEAL_REASON_CLIENT', 'accountCurrencyExchangeRate': 1},
+
+{'id': '223123901', 'platform': 'mt5', 'type': 'DEAL_TYPE_BUY', 'time': datetime.datetime(2022, 12, 12, 6, 53, 3, 469000, tzinfo=datetime.timezone.utc), 'brokerTime': '2022-12-12 08:53:03.469', 'commission': -0.53, 'swap': 0, 'profit': -2.3, 'symbol': 'EURNZD', 'magic': 0, 'orderId': '309093126', 'positionId': '309092803', 'volume': 0.15, 'price': 1.64678, 'entryType': 'DEAL_ENTRY_OUT', 'reason': 'DEAL_REASON_CLIENT', 'accountCurrencyExchangeRate': 1},
+
+{'id': '223123967', 'platform': 'mt5', 'type': 'DEAL_TYPE_SELL', 'time': datetime.datetime(2022, 12, 12, 6, 53, 13, 962000, tzinfo=datetime.timezone.utc), 'brokerTime': '2022-12-12 08:53:13.962', 'commission': -0.53, 'swap': 0, 'profit': -3.94, 'symbol': 'GBPJPY', 'magic': 0, 'orderId': '309093248', 'positionId': '309092726', 'volume': 0.15, 'price': 167.457, 'entryType': 'DEAL_ENTRY_OUT', 'reason': 'DEAL_REASON_CLIENT', 'accountCurrencyExchangeRate': 1},
+
+{'id': '223124527', 'platform': 'mt5', 'type': 'DEAL_TYPE_BUY', 'time': datetime.datetime(2022, 12, 12, 6, 55, 53, 161000, tzinfo=datetime.timezone.utc), 'brokerTime': '2022-12-12 08:55:53.161', 'commission': -0.07, 'swap': 0, 'profit': 0.39, 'symbol': 'GBPAUD', 'magic': 0, 'orderId': '309094104', 'positionId': '309092971', 'volume': 0.02, 'price': 1.80618, 'entryType': 'DEAL_ENTRY_OUT', 'reason': 'DEAL_REASON_CLIENT', 'accountCurrencyExchangeRate': 1},
+
+{'id': '223145416', 'platform': 'mt5', 'type': 'DEAL_TYPE_BUY', 'time': datetime.datetime(2022, 12, 12, 7, 59, 37, 682000, tzinfo=datetime.timezone.utc), 'brokerTime': '2022-12-12 09:59:37.682', 'commission': -0.71, 'swap': 0.0, 'profit': -2.37, 'symbol': 
+'GBPAUD', 'magic': 0, 'orderId': '309119485', 'positionId': '309092971', 'volume': 0.2, 'price': 1.80765, 'entryType': 'DEAL_ENTRY_OUT', 'reason': 'DEAL_REASON_CLIENT', 'accountCurrencyExchangeRate': 1},
+
+{'id': '223145422', 'platform': 'mt5', 'type': 'DEAL_TYPE_BUY', 'time': datetime.datetime(2022, 12, 12, 7, 59, 38, 540000, tzinfo=datetime.timezone.utc), 'brokerTime': '2022-12-12 09:59:38.540', 'commission': -0.71, 'swap': 0.0, 'profit': 0.04, 'symbol': 'EURNZD', 'magic': 0, 'orderId': '309119491', 'positionId': '309092803', 'volume': 0.2, 'price': 1.64453, 'entryType': 'DEAL_ENTRY_OUT', 'reason': 'DEAL_REASON_CLIENT', 'accountCurrencyExchangeRate': 1},
+
+{'id': '223145426', 'platform': 'mt5', 'type': 'DEAL_TYPE_SELL', 'time': datetime.datetime(2022, 12, 12, 7, 59, 39, 480000, tzinfo=datetime.timezone.utc), 'brokerTime': '2022-12-12 09:59:39.480', 'commission': -0.71, 'swap': 0.0, 'profit': -5.82, 'symbol': 'GBPJPY', 'magic': 0, 'orderId': '309119495', 'positionId': '309092726', 'volume': 0.2, 'price': 167.517, 'entryType': 'DEAL_ENTRY_OUT', 'reason': 'DEAL_REASON_CLIENT', 'accountCurrencyExchangeRate': 1},
+
+{'id': '223145428', 'platform': 'mt5', 'type': 'DEAL_TYPE_SELL', 'time': datetime.datetime(2022, 12, 12, 7, 59, 40, 365000, tzinfo=datetime.timezone.utc), 'brokerTime': '2022-12-12 09:59:40.365', 'commission': -0.07, 'swap': 0, 'profit': 0.28, 'symbol': 'NZDCHF', 'magic': 0, 'orderId': '309119497', 'positionId': '309092866', 'volume': 0.02, 'price': 0.59859, 'entryType': 'DEAL_ENTRY_OUT', 'reason': 'DEAL_REASON_CLIENT', 'accountCurrencyExchangeRate': 1},
+
+{'id': '223437813', 'platform': 'mt5', 'type': 'DEAL_TYPE_SELL', 'time': datetime.datetime(2022, 12, 12, 22, 48, 12, 52000, tzinfo=datetime.timezone.utc), 'brokerTime': '2022-12-13 00:48:12.052', 'commission': -0.18, 'swap': 0, 'profit': -6.31, 'symbol': 'GBPAUD', 'magic': 0, 'orderId': '309477004', 'positionId': '309476925', 'volume': 0.05, 'price': 1.81697, 'entryType': 'DEAL_ENTRY_OUT', 'reason': 'DEAL_REASON_CLIENT', 'accountCurrencyExchangeRate': 1}]

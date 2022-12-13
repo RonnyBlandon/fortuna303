@@ -49,7 +49,7 @@ class AccountOperation(models.Model):
     type = models.CharField('Tipo', max_length=6)
     volume = models.DecimalField('Lotaje', max_digits=5, decimal_places=2)
     close_time = models.DateTimeField('Fecha Cierre', max_length=20)
-    close_price = models.FloatField('Precio Cierre')
+    close_price = models.CharField('Precio Cierre', max_length=10)
     commission = models.DecimalField('Comisiones', max_digits=6, decimal_places=2)
     swap = models.DecimalField('Swap', max_digits=6, decimal_places=2)
     profit = models.DecimalField('Beneficio', max_digits=8, decimal_places=2)

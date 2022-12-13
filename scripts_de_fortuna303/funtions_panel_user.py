@@ -105,7 +105,7 @@ async def balance_initial():
 
 # Funcion que retorna el valor 'time' para el metodo sort() de las listas y ordenar los trades por fecha de cierre
 def sort_trades_by_date(key):
-    return key['time']
+    return key['positionId']
 
 
 # Función que Unifica en una orden las ordenes cerradas de forma parcial tomando la ultima orden de la 
@@ -115,6 +115,7 @@ def unify_partial_orders(trades: list):
     for trade in trades:
         partial_trades = [trade,]
         for trade2 in trades:
+            # Filtramos las ordenes por positions repetidos para saber cuales son las ordenes parciales.
             if trade['positionId'] == trade2['positionId'] and trade['orderId'] != trade2['orderId']:
                 if trades.index(trade) not in index_list:
                     index_list.append(trades.index(trade))
@@ -127,7 +128,7 @@ def unify_partial_orders(trades: list):
             data_change['commission'] += trade['commission']
             data_change['swap'] += trade['swap']
             data_change['profit'] += trade['profit']
-            # Borramos los trades parciales de la lista de trades
+            # Borramos los trades parciales de la lista de trades   
             trades.remove(trade)
 
         if partial_trades:
@@ -145,20 +146,39 @@ def unify_partial_orders(trades: list):
 
     return index_list
 
-
+# Lista de pares que tienen la moneda "JPY" como moneda secundaria.
+par_jpy = ["USDJPY", "EURJPY", "GBPJPY" "AUDJPY", "CADJPY", "CHFJPY", "NZDJPY"]
+# Lista de pares que tienen la moneda "USD" como moneda secundaria.
+par_usd = ["AUDUSD","EURUSD", "GBPUSD", "NZDUSD"]
+# Lista de pares alternativos y populares
+par_alternatives = ["AUDCAD", "AUDCHF", "AUDNZD", "CADCHF", "EURGBP", "EURAUD", "EURCAD", "EURCHF", "EURGBP", "EURNZD", "GBPAUD", "GPBCAD", "GPBCHF", "GBPNZD", "NZDCAD", "NZDCHF", "USDCAD", "USDCHF"]
 # Función que modifica el precio de cierre de la orden unificada que eran ordenes cerradas parcialmente.
 def change_closing_price(trade: tuple, pips: float):
-    if trade[3] == "Compra":
-        if trade[9] > 0:
-            trade[6] = trade[1] + pips
-        else:
-            trade[6] = trade[1] - pips
+    if trade[2] in par_jpy:
+        if trade[3] == "Compra":
+            if trade[9] > 0:
+                trade[6] = f'{(trade[1] + pips):.4f}'
+            else:
+                trade[6] = f'{(trade[1] - pips):.4f}'
 
-    if trade[3] == "Venta":
-        if trade[9] > 0:
-            trade[6] = trade[1] - pips
-        else:
-            trade[6] = trade[1] + pips
+        if trade[3] == "Venta":
+            if trade[9] > 0:
+                trade[6] = f'{(trade[1] - pips):.4f}'
+            else:
+                trade[6] = f'{(trade[1] + pips):.4f}'
+    #
+    if trade[2] in par_alternatives or trade[2] in par_usd:
+        if trade[3] == "Compra":
+            if trade[9] > 0:
+                trade[6] = round(trade[1] + pips, 6)
+            else:
+                trade[6] = round(trade[1] - pips, 6)
+
+        if trade[3] == "Venta":
+            if trade[9] > 0:
+                trade[6] = round(trade[1] - pips, 6)
+            else:
+                trade[6] = round(trade[1] + pips, 6)
 
 
 # Función que actualiza los precios de cierre de las trades unificados ya que estos no se pueden cambiar desde
@@ -167,34 +187,34 @@ def close_price_of_unified_trades(trades: list, index_list: list):
     # Sacamos el precio de cierre dependiendo el par o simbolo de la orden.
     for index in index_list:
         # Sacamos los pares emparejados con el 'JPY' porque su valor por pip es 1000 yenes
-        if trades[index][2] in ["USDJPY", "EURJPY", "GBPJPY" "AUDJPY", "CADJPY", "CHFJPY", "NZDJPY"]:
+        if trades[index][2] in par_jpy:
             pip_value = trades[index][4] / trades[index][1] * 1000
-            pips = round((trades[index][9] / pip_value) / 100, 4)
+            pips = abs((trades[index][9] / pip_value) / 100)
+            print()
+            print(pips)
+            print()
             # Cambiamos el precio de cierre
             trades[index] = list(trades[index]) #convertimos a lista para modificar el precio de cierre.
-            change_closing_price(trades[index], abs(pips))
+            change_closing_price(trades[index], pips)
             trades[index] = tuple(trades[index]) #convertimos de nuevo a tupla para guardarlo en base de datos.
 
         # Sacamos los pares mas populares que no tienen el "USD" como moneda secundaria.
-        if trades[index][2] in ["AUDCAD", "AUDCHF", "AUDNZD", "CADCHF", "EURGBP", "EURAUD", "EURCAD", "EURCHF", "EURGBP", "EURNZD", "GBPAUD", "GPBCAD", "GPBCHF", "GBPNZD", "NZDCAD", "NZDCHF", "USDCAD", "USDCHF"]:
+        if trades[index][2] in par_alternatives:
             pip_value = trades[index][4] / trades[index][1] * 10
-            pips = round((trades[index][9] / pip_value) / 10000, 8)
+            pips = abs((trades[index][9] / pip_value) / 10000)
             # Cambiamos el precio de cierre
             trades[index] = list(trades[index]) #convertimos a lista para modificar el precio de cierre.
-            change_closing_price(trades[index], abs(pips))
+            change_closing_price(trades[index], pips)
             trades[index] = tuple(trades[index]) #convertimos de nuevo a tupla para guardarlo en base de datos.
             
-        # Sacamos los pares mas populares que tengan el "USD" como moneda base o secundaria excepto "USDJPY".
-        if trades[index][2] in ["AUDUSD","EURUSD", "GBPUSD", "NZDUSD"]:
+        # Sacamos los pares mas populares que tengan el "USD" como moneda secundaria.
+        if trades[index][2] in par_usd:
             trades[index] = list(trades[index]) #convertimos a lista para modificar el precio de cierre.
             pip_value = 10 * trades[index][4]
-            pips = round((trades[index][9] / pip_value) / 10000, 8)
-            if trades[index][7] == -1.42:  
-                print(pip_value)
-                print(pips)
+            pips = abs((trades[index][9] / pip_value) / 10000)
             # Cambiamos el precio de cierre
             trades[index] = list(trades[index]) #convertimos a lista para modificar el precio de cierre.
-            change_closing_price(trades[index], abs(pips))
+            change_closing_price(trades[index], pips)
             trades[index] = tuple(trades[index]) #convertimos de nuevo a tupla para guardarlo en base de datos.
 
 
@@ -242,9 +262,9 @@ async def list_orders_deals(account_id: str, id_account_mt5: int, history_days: 
                 list_orders.append(order)
 
             if order['entryType'] == "DEAL_ENTRY_OUT":
-                # La solucion al problema se coloca aqui
                 trades.append(order)
 
+        trades.sort(key=sort_trades_by_date)
         # Unificamos los trades que se hayan cerrado parcialmente.
         index_list = unify_partial_orders(trades=trades)
 
@@ -278,7 +298,7 @@ async def list_orders_deals(account_id: str, id_account_mt5: int, history_days: 
             ordered_dict['id_account_mt5'] = str(id_account_mt5)
 
             trades[i] = tuple(ordered_dict.values())
-        
+
         close_price_of_unified_trades(trades, index_list)
 
         return {'orders': list_orders, 'trades': trades, 'balance': balance, 'balance_change': balance_change}
