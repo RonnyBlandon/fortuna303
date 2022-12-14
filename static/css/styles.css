@@ -104,9 +104,15 @@ body {
 
 /*Sección de informacion del servicio de trading automatico*/
 
+.box-video {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 0.7em;
+}
 .video {
-    margin: 1.25em 0px 2.5em;
-    height: 19.68em;
+    width: 32em;
+    height: 18em;
+    margin: 1.1em auto;
 }
 .content {
     display: flex;
@@ -182,6 +188,7 @@ body {
     background-color: var(--color-button);
     font-size: 1.25em;
     color: #fff;
+    text-decoration: none;
     border: 4px solid transparent;
     border-radius: 0.625em;
     animation: colores-2 3s linear infinite;
@@ -357,12 +364,6 @@ body {
     .menu__list-responsive a:active {
         background-color: #0006;
         text-decoration: underline 2px #fff;
-    }
-
-    /*Sección de informacion de los servicio (media query min-width: 1024px)*/
-    .video {
-        width: 48em;
-        margin: 1.875em auto;
     }
 
     /*Sección de informacion de los servicio (media query min-width: 1024px)*/
