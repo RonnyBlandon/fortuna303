@@ -147,7 +147,7 @@ def unify_partial_orders(trades: list):
     return index_list
 
 # Lista de pares que tienen la moneda "JPY" como moneda secundaria.
-par_jpy = ["USDJPY", "EURJPY", "GBPJPY" "AUDJPY", "CADJPY", "CHFJPY", "NZDJPY"]
+par_jpy = ["USDJPY", "EURJPY", "GBPJPY", "AUDJPY", "CADJPY", "CHFJPY", "NZDJPY"]
 # Lista de pares que tienen la moneda "USD" como moneda secundaria.
 par_usd = ["AUDUSD","EURUSD", "GBPUSD", "NZDUSD"]
 # Lista de pares alternativos y populares
@@ -157,15 +157,15 @@ def change_closing_price(trade: tuple, pips: float):
     if trade[2] in par_jpy:
         if trade[3] == "Compra":
             if trade[9] > 0:
-                trade[6] = f'{(trade[1] + pips):.4f}'
+                trade[6] = round(trade[1] + pips, 4)
             else:
-                trade[6] = f'{(trade[1] - pips):.4f}'
+                trade[6] = round(trade[1] - pips, 4)
 
         if trade[3] == "Venta":
             if trade[9] > 0:
-                trade[6] = f'{(trade[1] - pips):.4f}'
+                trade[6] = round(trade[1] - pips, 4)
             else:
-                trade[6] = f'{(trade[1] + pips):.4f}'
+                trade[6] = round(trade[1] + pips, 4)
     #
     if trade[2] in par_alternatives or trade[2] in par_usd:
         if trade[3] == "Compra":
@@ -190,9 +190,6 @@ def close_price_of_unified_trades(trades: list, index_list: list):
         if trades[index][2] in par_jpy:
             pip_value = trades[index][4] / trades[index][1] * 1000
             pips = abs((trades[index][9] / pip_value) / 100)
-            print()
-            print(pips)
-            print()
             # Cambiamos el precio de cierre
             trades[index] = list(trades[index]) #convertimos a lista para modificar el precio de cierre.
             change_closing_price(trades[index], pips)
@@ -298,7 +295,7 @@ async def list_orders_deals(account_id: str, id_account_mt5: int, history_days: 
             ordered_dict['id_account_mt5'] = str(id_account_mt5)
 
             trades[i] = tuple(ordered_dict.values())
-
+        
         close_price_of_unified_trades(trades, index_list)
 
         return {'orders': list_orders, 'trades': trades, 'balance': balance, 'balance_change': balance_change}
