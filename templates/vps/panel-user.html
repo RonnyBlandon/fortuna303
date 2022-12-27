@@ -32,11 +32,13 @@
             <h2 class="box-title">Datos de Usuario</h2>
             <h4>Nombre: <span>{{ user.name }} {{ user.last_name }}</span></h4>
             <h4>Correo: <span>{{ user.email }}</span></h4>
+            
             {% if copytrading %}
             <h4>Copytrading: <span>Activo</span></h4>
             {% else %}
             <h4>Copytrading: <span>Inactivo</span></h4>
             {% endif %}
+
             {% if vps %}
             <h4>Vps: <span>Activo</span></h4>
             {% else %}
@@ -55,8 +57,8 @@
                 <h2 class="box-title">Cuenta Metatrader5</h2>
                 {% if user.subscriber %}
                     {% if active == False %}
-                    {% if accounts.count == 0 %}
-                    <button class="open-modal-message button-modal-message">Agregar</button>
+                        {% if accounts.count == 0 %}
+                    <button class="open-modal-add">Agregar</button>
                         {% else %}
                         {% for account in accounts %}
                     <div class="open-modal-message">

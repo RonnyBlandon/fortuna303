@@ -1,5 +1,5 @@
 import asyncio
-from datetime import datetime, date, timedelta
+from datetime import date, timedelta
 from email.policy import default
 from django.views.generic import View, TemplateView, DeleteView, FormView
 # importar formularios
@@ -45,13 +45,13 @@ class PanelUserView(LoginRequiredMixin, TemplateView):
         # Agregamos el estado de copytrading a la pagina de panel de control
         context['copytrading'] = False
         context['vps'] = False
-        if context['accounts']:
+        if context['accounts'] and self.request.user.subscriber == True:
             status = context['accounts'][0].status
             if status == '1':
                 context['copytrading'] = True
         # Agregamos el estado de vps a la pagina de panel de control
         unpaid_payment_vps = VpsPayment.objects.vps_payments_by_status(status="Pagado", id_user=id_user).order_by('-id')
-        if unpaid_payment_vps:
+        if unpaid_payment_vps and self.request.user.subscriber == True:
             disconnection_date = unpaid_payment_vps[0].expiration + timedelta(days=5)
             today = date.today()
             if today <= disconnection_date:
@@ -205,7 +205,7 @@ class UnsubscriberView(LoginRequiredMixin, View):
             account_mt5.delete()
 
         # Actualizamos los pagos que estan en estado de "Pagar" a Cancelado
-        vps_payments = VpsPayment.objects.vps_payments_by_status('Pagar')
+        vps_payments = VpsPayment.objects.vps_payments_by_status('Pagar', request.user.id)
 
         if vps_payments:
             vps_payments.update(status="Cancelado")

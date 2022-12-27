@@ -1,6 +1,6 @@
 .box-invoices {
     display: none;
-    font-size: 18px;
+    font-size: 1.125em;
 }
 
 /* Caja que contiene al accordion */
@@ -9,24 +9,29 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 40px 0px;
+    padding: 2.5em 0em;
     background-image: url('../img/fondo-panel.jpg');
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+    background-size: cover;
 }
 
 /* Caja del accordion */
 .box-accordion, .box-accordion-2 {
     display: flex;
     flex-direction: column;
-    margin: 40px 24px;
-    padding: 0px 24px;
+    margin: 2.5em 1.5em;
+    padding: 0em 1.5em;
     background-color: #fff;
-    box-shadow: 0px 0px 10px #044;
+    box-shadow: 0em 0em 0.625em #044;
 }
 .box-title {
-    padding: 15px 0px;
+    padding: 0.9375em 0em;
     text-align: center;
     color: #070;
-    text-shadow: 1px 1px #000;
+    text-shadow: 0.0625em 0.0625em #000;
     }
 
 /* facturas */
@@ -35,8 +40,8 @@
 }
 .primary-details, .primary-details-2, .details, .details-2 {
     padding: 0.8em 0.4em;
-    border-top: 1px solid #f2f2f2;
-    border-bottom: 1px solid #f2f2f2;
+    border-top: 0.0625em solid #f2f2f2;
+    border-bottom: 0.0625em solid #f2f2f2;
 }
 .primary-details summary, .details summary, .primary-details-2 summary, .details-2 summary {
     display: flex;
@@ -55,13 +60,13 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 10px 0px 0px 0px;
+    padding: 0.625em 0em 0em 0em;
 }
 .details li, .details-2 li {
     display: flex;
     justify-content: space-between;
     text-align: center;
-    padding-top: 3px;
+    padding-top: 0.1875em;
 }
 .title-celdas {
     color: #7e7d7d;
@@ -72,10 +77,10 @@
     text-align: center;
     padding: 0.4em 0.6em;
     background-color: #08f;
-    border: 2px solid #00f;
+    border: 0.125em solid #00f;
     text-decoration: none;
     color: #fff;
-    border-radius: 8px;
+    border-radius: 0.5em;
 }
 .link-first-payment:hover {
     cursor: pointer;
@@ -91,7 +96,7 @@
     border: 0.15em solid #fff;
     text-decoration: none;
     color: #fff;
-    border-radius: 8px;
+    border-radius: 0.5em;
     cursor: pointer;
 }
 .btn-pay:active {
@@ -126,8 +131,8 @@
 /*All animations of panel-user*/
 @keyframes colores-3 {    /*titulo de la pagina de inicio*/
     0% {
-        border-left: 4px solid #00c;
-        border-right: 4px solid #00c;
+        border-left: 0.25em solid #00c;
+        border-right: 0.25em solid #00c;
     }
 }
 
@@ -145,22 +150,23 @@
     display: block;
     width: fit-content;
     height: fit-content;
-    padding: 7px;
-    margin: 30px auto;
+    padding: 0.4375em;
+    margin: 1.875em auto;
     background-color: #fff;
-    border-radius: 10px;
-    border-left: 4px solid transparent;
-    border-right: 4px solid transparent;
+    border-radius: 0.625em;
+    border-left: 0.25em solid transparent;
+    border-right: 0.25em solid transparent;
     animation: colores-3 1s linear infinite alternate;
     }
     .box-title {
-        font-size: 28px;
+        padding: 0.6666em;
+        font-size: 1.555em;
     }
     .invoice-table {
     margin: 1em auto;
-    border-radius: 10px;
+    border-radius: 0.625em;
     border-collapse: collapse;
-    font-size: 16px;
+    font-size: 0.8888em;
     }
     .rows-trader-payment, .rows-vps-payment {
         text-align: center;
@@ -171,7 +177,7 @@
     }
     .invoice-table th, .invoice-table td{
         padding: .6em;
-        border-bottom: 1px solid #f2f2f2;
+        border-bottom: 0.0625em solid #f2f2f2;
     }
     .invoice-table th{
         background-color: #f0f0f0;
@@ -185,11 +191,11 @@
 
 @media screen and (min-width: 1024px) {
     /* Modificamos las tablas de facturas */
-    .invoice-table {
-        font-size: 19px;
-    }
     .box-title {
-        font-size: 26px;
+        font-size: 1.4444em;
+    }
+    .invoice-table {
+        font-size: 1.0555em;
     }
 }
 
@@ -199,5 +205,29 @@
         flex-direction: row;
         align-items: center;
         row-gap: 1em;
+    }
+}
+
+@media screen and (min-width: 1440px) {
+    .box-invoices {
+        font-size: 19px;
+    }
+}
+
+@media screen and (min-width: 1920px) {
+    .box-invoices {
+        font-size: 25.3px;
+    }
+}
+
+@media screen and (min-width: 2560px) {
+    .box-invoices {
+        font-size: 33.73px;
+    }
+}
+
+@media screen and (min-width: 3840px) {
+    .box-invoices {
+        font-size: 50.6px;
     }
 }
