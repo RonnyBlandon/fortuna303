@@ -203,7 +203,7 @@ class UnsubscriberView(LoginRequiredMixin, View):
 
             # Borramos la cuenta mt5 en la base de datos local
             account_mt5.delete()
-        
+
         # Actualizamos los pagos que estan en estado de "Pagar" a Cancelado
         vps_payments = VpsPayment.objects.vps_payments_by_status('Pagar')
 

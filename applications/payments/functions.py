@@ -101,8 +101,8 @@ def create_order(amount: float, description: str, ):
             'brand_name': 'Fortuna 303',
             'payment_method': {'payee_preferred': 'IMMEDIATE_PAYMENT_REQUIRED'},
             'user_action': 'PAY_NOW',
-            'return_url': 'http://127.0.0.1:8000/payments/',
-            'cancel_url': 'http://127.0.0.1:8000/payments/'
+            'return_url': 'https://fortuna303.com/payments/',
+            'cancel_url': 'https://fortuna303.com/payments/'
         }
     }
 
@@ -136,8 +136,8 @@ def create_renewal_order(case: str, payment_id: int, amount: float, description:
             'brand_name': 'Fortuna 303',
             'payment_method': {'payee_preferred': 'IMMEDIATE_PAYMENT_REQUIRED'},
             'user_action': 'PAY_NOW',
-            'return_url': 'http://127.0.0.1:8000/payments/',
-            'cancel_url': 'http://127.0.0.1:8000/payments/'
+            'return_url': 'https://fortuna303.com/payments/',
+            'cancel_url': 'https://fortuna303.com/payments/'
         }
     }
 

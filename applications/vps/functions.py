@@ -29,7 +29,7 @@ def trading_history():
 
         # obtenemos el número de órdenes en la historia en un periodo de 4 semanas
         time = datetime.now()
-        from_date = time - timedelta(weeks=40)
+        from_date = time - timedelta(weeks=4)
         to_date = time + timedelta(days=1)
         history_orders = mt5.history_deals_get(from_date, to_date)
 

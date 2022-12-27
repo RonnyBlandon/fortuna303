@@ -1,6 +1,6 @@
 import asyncio
 from numpy import rint
-from fortuna_303.settings.local import get_secret
+from fortuna_303.settings.base import get_secret
 from metaapi_cloud_sdk import MetaApi, CopyFactory
 from metaapi_cloud_sdk.clients.metaApi.tradeException import TradeException
 from datetime import datetime, date, timedelta
