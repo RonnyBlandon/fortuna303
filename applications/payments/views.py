@@ -54,13 +54,17 @@ class PaymentsView(LoginRequiredMixin, TemplateView):
                         id_payment = dictionary['trader']
                         TraderPayment.objects.update_payment_trader(id_payment, 'Paypal', details['id'])
                         # Verificamos si la cuenta esta desconectada
-                        account_mt5 = AccountMt5.objects.get(id_user=user.id)
-                        if account_mt5.status == '0':
-                            trader_payment = TraderPayment.objects.unpaid_trader_payments(user.id)
-                            vps_payment = VpsPayment.objects.unpaid_vps_payments(user.id)
-                            # Conectamos la cuenta mt5 de nuevo a metaapi en caso de que este desconectado y este al dia con los pagos
-                            if trader_payment == False and vps_payment == False:
-                                reconnect_mt5_account(user.id, self.request)
+                        try: 
+                            account_mt5 = AccountMt5.objects.get(id_user=user.id)
+                        
+                            if account_mt5.status == '0':
+                                trader_payment = TraderPayment.objects.unpaid_trader_payments(user.id)
+                                vps_payment = VpsPayment.objects.unpaid_vps_payments(user.id)
+                                # Conectamos la cuenta mt5 de nuevo a metaapi en caso de que este desconectado y este al dia con los pagos
+                                if trader_payment == False and vps_payment == False:
+                                    reconnect_mt5_account(user.id, self.request)
+                        except Exception as err:
+                            print("Hubo un error al intentar reconectar la cuenta mt5 del usuario a metaapi. ", err)
 
         context = self.get_context_data(**kwargs)
         return self.render_to_response(context)

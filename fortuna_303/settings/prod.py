@@ -4,16 +4,16 @@ from .base import *
 DEBUG = True
 
 # HTTPS settings
-#SECURE_SSL_REDIRECT = True
-#SESSION_COOKIE_SECURE = True
-#CSRF_COOKIE_SECURE = True
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 
 # HSTS settings
-#SECURE_HSTS_SECONDS = 31536000
-#SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-#SECURE_HSTS_PRELOAD = True
+SECURE_HSTS_SECONDS = 31536000
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['fortuna303.com']
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
@@ -24,8 +24,8 @@ DATABASES = {
         'NAME': get_secret('DB_NAME'),
         'USER': get_secret('USER'),
         'PASSWORD': get_secret('PASSWORD'),
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'HOST': get_secret('HOST'),
+        'PORT': get_secret('PORT'),
     }
 }
 

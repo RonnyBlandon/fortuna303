@@ -7,7 +7,7 @@ import json
 import psycopg2
 
 # Funcion para extraer los datos importantes y privados del sistema
-with open(r"C:\Users\RONNY BLANDON\Desktop\fortuna\secret.json") as f:
+with open(r"C:\projects_django\fortuna\secret.json") as f:
     secret = json.loads(f.read())
 
 
