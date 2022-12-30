@@ -5,10 +5,8 @@
 
 {% block css %} {% static 'css/register.css' %} {% endblock css %}
 {% block css2 %} {% static 'css/panel-user.css' %} {% endblock css2 %}
-
 {% block content %}
 {% include 'includes/header.html' %}
-
 <!--Titulo de la pagina-->
 
 <h1 class="title">Panel de usuario</h1>
@@ -145,6 +143,11 @@
         </form>
     </dialog>
 
+    <!--Loader para agregar cuentra mt5-->
+    
+    <div class="box-loader">
+        <img src="{% static 'img/image-loader.gif' %}" alt="image-loader">
+    </div>
 
     <!-- Tabla de historial de operaciones de la cuenta mt5 -->
 

@@ -18,4 +18,4 @@ class CreateAccountMt5Form(forms.ModelForm):
                 attrs={'class': 'form-register__input', 'placeholder': 'Servidor'}
             )
         }
-        
+    

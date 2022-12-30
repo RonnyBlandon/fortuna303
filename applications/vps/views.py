@@ -134,7 +134,7 @@ class CreateAccounMt5View(LoginRequiredMixin, FormView):
         server = form.cleaned_data['server']
         full_name = name + ' ' + last_name
         id_level = self.request.user.level
-        level = Level.objects.get(id=id_level)
+        level = Level.objects.get(id=id_level.id)
         # creamos el servidor y suscribimos la nueva cuenta en MetaApi
         account = asyncio.run(create_server_mt5(full_name, login, password, server, level, self.request))
         # Guardar en la base de datos local luego de confirmar la creacion y suscripcion de la nueva cuenta.
@@ -153,6 +153,7 @@ class CreateAccounMt5View(LoginRequiredMixin, FormView):
                 )
             messages.add_message(request=self.request, level=messages.SUCCESS, message='La cuenta ha sido creada y conectada con éxito.')
         else:
+            messages.add_message(request=self.request, level=messages.WARNING, message='La cuenta no se ha podido crear, inténtelo más tarde.')
             HttpResponseRedirect(
                 reverse('vps_app:panel_user')
             )

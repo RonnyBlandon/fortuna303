@@ -25,6 +25,7 @@
     color: #080;
     text-shadow: 0.1em 0.1em #000;
 }
+
 .title-account-mt5 {
     font-size: 1.5em;
 }
@@ -42,13 +43,16 @@
     border-right: 0.25em solid transparent;
     animation: colores-3 1s linear infinite alternate;
 }
+
 .box-user h2 {
     text-align: center;
 }
+
 .box-user h4 span {
     color: #ffbd59;
     text-shadow: 0.125em 0.125em #f00;
 }
+
 .link-fisrt-payment, .unsubscribe {
     display: inline-block;
     margin: 0.4em 0em;
@@ -62,9 +66,11 @@
     border-radius: 0.5em;
     cursor: pointer;
 }
+
 .unsubscribe {
     background-color: #f00;
 }
+
 .link-fisrt-payment:active, .unsubscribe:active {
     text-decoration: underline;
 }
@@ -80,33 +86,40 @@
     border-right: 0.25em solid transparent;
     animation: colores-3 1s linear infinite alternate;
 }
+
 .header-table {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 0.6em;
 }
+
 .accounts-table {
     margin: 0.625em auto 0.625em auto;
     border-radius: 0.625em;
     border-collapse: collapse;
 }
+
 .accounts-table tr:hover, .accounts-table tr:active {
     background-color: #00d;
 }
-.accounts-table th, .accounts-table td{
+
+.accounts-table th, .accounts-table td {
     padding: 0.4em 0.6em;
     border-bottom: 1px solid #fff;
 }
-.accounts-table th{
+
+.accounts-table th {
     background-color: #ffbd59;
     border: 0.0625em solid #ffbd59;
 }
+
 .accounts-table td {
     color: #fff;
     text-align: center;
 }
-.open-modal-add, .img-trash, .button-modal-message{
+
+.open-modal-add, .img-trash, .button-modal-message {
     display: block;
     padding: 0.3125em 0.3125em;
     color: #fff;
@@ -114,17 +127,21 @@
     border-radius: 0.625em;
     border: 0.125em solid #fff;
 }
+
 .open-modal-add:active, .button-modal-message:active {
     background-color: #0709;
 }
+
 .open-modal-add:hover, .button-modal-message:hover {
     cursor: pointer;
 }
+
 .img-trash {
     height: 1.96em;
     background-color: #f00;
     cursor: pointer;
 }
+
 .img-trash:active {
     background-color: #f009;
 }
@@ -136,19 +153,24 @@ determinado */
     width: 20em;
     border-radius: 0.625em;
 }
+
 #modal-message::backdrop {
     background-color: #0004;
 }
+
 #modal-message p {
     padding: 0.7em;
     font-weight: 600;
 }
+
 .button-modal-message {
     background-color: #A0A0A0;
 }
+
 .img-trash-modal {
     background-color: #A0A0A0;
 }
+
 .close-modal-message {
     display: block;
     margin: 0.4em auto;
@@ -159,6 +181,7 @@ determinado */
     border-radius: 0.6em;
     cursor: pointer;
 }
+
 .close-modal-message:active {
     text-decoration: underline;
 }
@@ -171,9 +194,11 @@ determinado */
     background-color: #333;
     box-shadow: 0em 0em 0.625em #099;
 }
+
 #modal-add::backdrop {
     background-color: #0007;
 }
+
 .header-modal {
     display: flex;
     align-items: center;
@@ -181,11 +206,13 @@ determinado */
     margin-bottom: 0.625em;
     background-color: #ffbd59;
 }
+
 .header-modal button {
     font-size: 1.125em;
     padding: 0.3125em 0.625em;
     background-color: #f00;
 }
+
 /* Formulario del modal para agregar cuenta mt5 */
 .form-add {
     padding: 0.625em 0em;
@@ -197,12 +224,14 @@ determinado */
     background-color: #222;
     border-radius: 0.9375em;
 }
+
 .form-add p {
     margin: 0.4375em;
     padding: 0.4375em;
     background-color: #090;
     color: #fff;
 }
+
 .button-send-modal {
     margin: 0.625em;
     padding: 0.3125em 0.625em;
@@ -213,12 +242,15 @@ determinado */
     border: none;
     cursor: pointer;
 }
+
 .button-send-modal:hover {
     background-color: #00f9;
 }
+
 .button-send-modal:active {
     background-color: #00f6;
 }
+
 .button-send-modal:disabled {
     background-color: #ccc;
 }
@@ -228,6 +260,7 @@ determinado */
 .box-mt5 div {
     overflow-x: auto;
 }
+
 .operations-table {
     width: max-content;
 }
@@ -240,27 +273,47 @@ determinado */
     margin: 0.3125em 0em;
     list-style: none;
 }
+
 .page, .page2, .page3 {
     padding: 0.1em 0.3em;
     color: #fff;
     border: none;
     background-color: transparent;
 }
+
 .page:active, .page2:active, .page3:active {
     background-color: #ff0;
 }
+
 .link-page-current, .page2-current, .page3-current {
     background-color: #00f;
     color: #fff;
 }
+
 .link-page-current:active, .page2-current:active, .page3-current:active {
     background-color: #ff0;
     color: #000;
 }
 
 
+/*Estilos del loader de agregar cuenta mt5 */
+.box-loader {
+    width: 100%;
+    height: 100vh;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    position: fixed;
+    top: 0;
+    z-index: 1000;
+}
+
+
 /*All animations of panel-user*/
-@keyframes colores-3 {    /*titulo de la pagina de inicio*/
+@keyframes colores-3 {
+
+    /*titulo de la pagina de inicio*/
     0% {
         border-left: 0.25em solid #ff0;
         border-right: 0.25em solid #ff0;
@@ -276,18 +329,19 @@ determinado */
     }
 }
 
-@media screen and (min-width: 768px){
+@media screen and (min-width: 768px) {
     .box-user {
         width: 25em;
         font-size: 1.2222em;
     }
-    
+
 
     .box-mt5 {
         width: 45em;
         margin: 1.25em auto;
         font-size: 1.125em;
     }
+
     .box-mt5-width {
         width: fit-content;
     }
@@ -299,7 +353,7 @@ determinado */
 
 }
 
-@media screen and (min-width: 1024px){
+@media screen and (min-width: 1024px) {
     .box-user {
         width: 22em;
         font-size: 1.5em;
@@ -326,20 +380,25 @@ determinado */
         width: 30em;
         border-radius: 0.625em;
     }
+
     .header-modal {
         font-size: 1.375em;
     }
+
     .header-modal button {
         font-size: 0.8181em;
         padding: 0.3888em 0.7777em;
         background-color: #f00;
     }
+
     .form-add input {
         font-size: 1.375em;
     }
+
     .form-add p {
         font-size: 1.25em;
     }
+
     .form-add button {
         font-size: 1.5em;
     }
@@ -350,7 +409,7 @@ determinado */
 
 }
 
-@media screen and (min-width: 1366px){
+@media screen and (min-width: 1366px) {
     .box-mt5 {
         width: fit-content;
     }
@@ -366,19 +425,19 @@ determinado */
     }
 }
 
-@media screen and (min-width: 1920px){
+@media screen and (min-width: 1920px) {
     .box-general {
         font-size: 22px;
     }
 }
 
-@media screen and (min-width: 2560px){
+@media screen and (min-width: 2560px) {
     .box-general {
         font-size: 30px;
     }
 }
 
-@media screen and (min-width: 3840px){
+@media screen and (min-width: 3840px) {
     .box-general {
         font-size: 45px;
     }

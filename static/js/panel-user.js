@@ -5,6 +5,11 @@ const modalAdd = document.getElementById("modal-add");
 const modalButtonOpen = document.querySelector('.open-modal-add');
 const modalButtonClose = document.querySelector('.close-modal-add');
 const ButtonSendModal = document.querySelector('.button-send-modal');
+/* Inputs a verificar para cargar el loader */
+const modalLoader = document.querySelector('.box-loader');
+const inputUser = document.getElementById('id_login');
+const inputPassword = document.getElementById('id_password');
+const inputServer = document.getElementById('id_server');
 
 if (modalButtonOpen != null ) {
     modalButtonOpen.addEventListener("click", () => {
@@ -16,7 +21,10 @@ if (modalButtonOpen != null ) {
 
     /* Desactivar el boton de "agregar" cuando le de el primer click para no enviar mas solicitudes. */
     ButtonSendModal.addEventListener("click", () => {
-            ButtonSendModal.setAttribute("disabled", "");
+        if (inputUser.value.length > 0 && inputPassword.value.length > 0 && inputServer.value.length > 0) {
+            modalAdd.close();
+            modalLoader.style.display = 'flex';
+        }
     });
 }
 

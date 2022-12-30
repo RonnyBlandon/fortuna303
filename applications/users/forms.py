@@ -76,8 +76,6 @@ class UserRegisterForm(forms.ModelForm):
             self.add_error('password2', 'La contraseña debe contener al menos una letra mayúscula.')
         if numeros == False:
             self.add_error('password2', 'La contraseña debe contener al menos un numero.')
-        if password1.isalnum() == False:
-            self.add_error('password2', 'La contraseña debe ser alfanumerica.')
 
     
 # Formulario de Inicio de Sesión
