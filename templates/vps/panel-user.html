@@ -49,11 +49,11 @@
             {% endif %}
         </section>
 
-        <!-- Sección de agregar y visualizacion de cuentas mt5 del usuario -->
+        <!-- Sección de agregar y visualizar cuentas mt5 del usuario -->
         <section class="box-mt5 box-mt5-width">
             <div class="header-table">
                 <h2 class="box-title">Cuenta Metatrader5</h2>
-                {% if user.subscriber %}
+                {% if user.subscriber and user.due_payments == False %}
                     {% if active == False %}
                         {% if accounts.count == 0 %}
                     <button class="open-modal-add">Agregar</button>
@@ -78,6 +78,13 @@
                         {% endfor %}
                         {% endif %}
                     {% endif %}
+                {% endif %}
+                {% if user.subscriber and user.due_payments %}
+                    {% for account in accounts %}
+                    {% if account.reconnect %}
+                    <a class="btn-reconnect" href="{% url 'vps_app:reconnect_account_mt5' %}">Reconectar</a>
+                    {% endif %}
+                    {% endfor %}
                 {% endif %}
             </div>
             <table class="accounts-table">
@@ -146,6 +153,9 @@
     <!--Loader para agregar cuentra mt5-->
     
     <div class="box-loader">
+        <h2 class="title-loader">
+            Conectando...<br>Por favor espere.  
+        </h2>
         <img src="{% static 'img/image-loader.gif' %}" alt="image-loader">
     </div>
 

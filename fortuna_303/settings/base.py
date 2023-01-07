@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'applications.payments',
     'applications.vps',
     'applications.home',
+    'captcha',
 ]
 
 MIDDLEWARE = [
@@ -111,3 +112,8 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = get_secret('EMAIL')
 EMAIL_HOST_PASSWORD = get_secret('PASS_EMAIL')
 EMAIL_PORT = 587
+
+
+# Recaptcha de Google
+RECAPTCHA_PUBLIC_KEY = "6LfmFNojAAAAADIvnJzzdEuYtjPZw2p69u7o6eHL"
+RECAPTCHA_PRIVATE_KEY = "6LfmFNojAAAAAOfPOVMIDZMvynQ_CJ3sEP2h3ruE"

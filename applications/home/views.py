@@ -24,11 +24,11 @@ class ContactView(FormView):
         last_name = form.cleaned_data['last_name']
         email = form.cleaned_data['email']
         affair = form.cleaned_data['affair']
-        mensaje = 'PAGINA DE CONTACTO' + '\n' + 'Mi nombre es: ' + name + ' ' + last_name + '\n' + 'Mi correo es: ' + email + '\n' +form.cleaned_data['message']
+        mensaje = 'PAGINA DE CONTACTO' + '\n\n' + 'Mi nombre es: ' + name + ' ' + last_name + '\n' + 'Mi correo es: ' + email + '\n\n' +form.cleaned_data['message']
         email_remitente = 'fortuna303.com@gmail.com'
         send_mail(affair, mensaje, email_remitente, [email_remitente,])
 
-        messages.add_message(request=self.request, level=messages.SUCCESS, message='Su mensaje fue enviado con exito. Muy pronto tendra su respuesta.')
+        messages.add_message(request=self.request, level=messages.SUCCESS, message='Su mensaje fue enviado con exito. Muy pronto recibira su respuesta.')
 
         # Redirigimos a la misma pagina de contacto
         return HttpResponseRedirect(

@@ -43,66 +43,6 @@ def get_accounts_mt5_database():
     connection.close()
 
 
-# Esta funcion solo se ejecutara el domingo cuando abra el mercado de tokio
-# Esta funcion recopila el balance de la cuenta en metaapi y lo inserta en la base de datos local
-async def balance_initial():
-
-    data = get_accounts_mt5_database()
-    accounts = data['accounts']
-    connetion = data['conexion']
-    cursor = connetion.cursor()
-
-    for account in accounts:
-        id_client_metaapi = account[1]
-        id_user = account[2]
-
-        # Nos conectamos a metaapi
-        api = MetaApi(get_secret('METAAPI_TOKEN'))
-
-        try:
-            account = await api.metatrader_account_api.get_account(id_client_metaapi)
-            initial_state = account.state
-            deployed_states = ['DEPLOYING', 'DEPLOYED']
-
-            if initial_state not in deployed_states:
-                #  espere hasta que la cuenta esté implementada y conectada al corredor
-                print('Deploying account')
-                await account.deploy()
-
-            print('Esperando a que el servidor API se conecte al intermediario (puede tardar un par de minutos)')
-            await account.wait_connected()
-
-            # connect to MetaApi API
-            connection = account.get_rpc_connection()
-            await connection.connect()
-
-            # espere hasta que el estado del terminal se sincronice con el estado local
-            print('Esperando a que el SDK se sincronice con el estado de la terminal (puede llevar algún tiempo según el tamaño de su historial)')
-            await connection.wait_synchronized()
-            # Obteniendo el balance de la cuenta
-            account_info = await connection.get_account_information()
-            balance = account_info['balance']
-            await connection.close()  # cerrando conexión
-
-            start_date = date.today()
-            end_date = start_date + timedelta(days=5)
-
-            # Insertamos los datos a la base de datos local
-            try:
-                cursor.execute(
-                    f"INSERT INTO vps_accountmanagement (start_date, end_date, start_balance, withdraw_deposit, end_balance, gross_profit, commission, swap, net_profit, id_user_id) VALUES('{start_date}', '{end_date}', {balance}, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, {id_user})")
-            except Exception as err:
-                print(
-                    "Error al insertar datos. Proveniente de la función balance_initial(): ", err)
-            else:
-                print("Datos insertados correctamente.")
-            connetion.commit()
-
-        except Exception as err:
-            print("Error en la conexion de una cuenta mt5 /n",
-                  api.format_error(err))
-
-
 # Funcion que retorna el valor 'time' para el metodo sort() de las listas y ordenar los trades por fecha de cierre
 def sort_trades_by_date(key):
     return key['positionId']
@@ -252,14 +192,17 @@ async def list_orders_deals(account_id: str, id_account_mt5: int, history_days: 
         balance_change = 0.00
         # filtramos las ordenes
         for order in orders_deals:
-            if order['type'] == "DEAL_TYPE_BALANCE":
-                balance_change += order['profit']
+            try:
+                if order['type'] == "DEAL_TYPE_BALANCE":
+                    balance_change += order['profit']
 
-            if order['type'] == "DEAL_TYPE_BUY" or order['type'] == "DEAL_TYPE_SELL":
-                list_orders.append(order)
+                if order['type'] == "DEAL_TYPE_BUY" or order['type'] == "DEAL_TYPE_SELL":
+                    list_orders.append(order)
 
-            if order['entryType'] == "DEAL_ENTRY_OUT":
-                trades.append(order)
+                if order['entryType'] == "DEAL_ENTRY_OUT":
+                    trades.append(order)
+            except Exception as err:
+                print("Error al agrupar las ordenes: ", err)
 
         trades.sort(key=sort_trades_by_date)
         # Unificamos los trades que se hayan cerrado parcialmente.

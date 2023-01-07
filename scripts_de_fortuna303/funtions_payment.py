@@ -240,7 +240,7 @@ async def add_vps_payment_database():
             # Checkeamos si ya es la fecha de pago
             today = date.today()
             if today >= last_vps_payment['expiration']:
-                expiration = expiration_monthly(today)
+                expiration = expiration_monthly(last_vps_payment['expiration'])
                 id_level = user[4]
 
                 # Consultamos el precio del level del usuario
@@ -257,7 +257,7 @@ async def add_vps_payment_database():
                 # Insertamos la nueva factura en la base de datos
                 try:
                     cursor.execute(
-                        f"INSERT INTO payments_vpspayment (created_date, expiration, total, status, transaction_id, id_user_id, payment_method) VALUES('{date.today()}', '{expiration}', {price}, 'Pagar', '', {id_user}, '');")
+                        f"INSERT INTO payments_vpspayment (created_date, expiration, total, status, transaction_id, id_user_id, payment_method) VALUES('{last_vps_payment['expiration']}', '{expiration}', {price}, 'Pagar', '', {id_user}, '');")
                 except Exception as err:
                     print(
                         "Error en add_vps_payment_database() al insertar en la base de datos: ", err)
@@ -331,15 +331,16 @@ async def disable_mt5_without_paying_trader():
 
         for account in accounts_mt5:
             #Desconectamos la cuenta borrando de metaapi la cuenta mt5
-            account_metaapi = await api.metatrader_account_api.get_account(account_id=account['id_account_metaapi'])
             try:
+                account_metaapi = await api.metatrader_account_api.get_account(account_id=account['id_account_metaapi'])
                 await account_metaapi.remove()
             except Exception as err:
-                print(err.details)
+                print("Error en disable_mt5_without_paying_trader() al eliminar cuenta metaapi", err.details)
     
             # Actualizamos la cuenta mt5 a 'desconectado' sin borrar o modificar los demas datos de la cuenta mt5
             # esto por si en futuro se pone al dia con los pagos se debe volver a conectar la cuenta a metaapi
             try:
+                cursor.execute(f"UPDATE users_user SET due_payments=true WHERE id={account['id_user']};")
                 cursor.execute(f"UPDATE vps_accountmt5 SET status='0' WHERE id={account['id']};")
                 cursor.execute(f"SELECT name, last_name, email FROM users_user WHERE id={account['id_user']};")
                 user = cursor.fetchone()
@@ -376,6 +377,7 @@ async def disable_mt5_without_paying_vps():
             # Actualizamos la cuenta mt5 a 'desconectado' sin borrar o modificar los demas datos de la cuenta
             # esto por si en futuro se pone al dia con los pagos se debe volver a conectar la cuenta a metaapi
             try:
+                cursor.execute(f"UPDATE users_user SET due_payments=true WHERE id={account['id_user']};")
                 cursor.execute(f"UPDATE vps_accountmt5 SET status='0' WHERE id={account['id']};")
                 cursor.execute(f"SELECT name, last_name, email FROM users_user WHERE id={account['id_user']};")
                 user = cursor.fetchone()

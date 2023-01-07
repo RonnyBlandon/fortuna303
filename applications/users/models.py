@@ -21,6 +21,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField('Correo Electronico', max_length=60, unique=True)
     level = models.ForeignKey(Level, on_delete=models.CASCADE)
     subscriber = models.BooleanField('Suscriptor')
+    due_payments = models.BooleanField('¿Tiene pagos vencidos?')
     validation_code = models.CharField(max_length=6)
     # creamos la columna staff en modelo para la creacion de superusuarios
     is_staff = models.BooleanField(default=False)

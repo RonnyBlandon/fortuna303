@@ -1,6 +1,5 @@
-import asyncio
 from datetime import date, timedelta
-from email.policy import default
+import asyncio
 from django.views.generic import View, TemplateView, DeleteView, FormView
 # importar formularios
 from .forms import CreateAccountMt5Form
@@ -17,7 +16,7 @@ from applications.users.models import User, Level
 from applications.payments.models import VpsPayment, TraderPayment
 # imortar funciones
 from .functions import trading_history, active_buttons_time
-from .metaapi import create_server_mt5, configure_copyfactory, delete_server_mt5
+from .metaapi import create_server_mt5, configure_copyfactory, delete_server_mt5, reconnect_mt5_account
 
 # Create your views here.
 
@@ -56,6 +55,7 @@ class PanelUserView(LoginRequiredMixin, TemplateView):
             today = date.today()
             if today <= disconnection_date:
                 context['vps'] = True
+        
 
         # Verificando la fecha y hora que deben estar habilitados los boton de borrar cuenta mt5
         context['active'] = active_buttons_time()
@@ -132,6 +132,7 @@ class CreateAccounMt5View(LoginRequiredMixin, FormView):
         login = form.cleaned_data['login']
         password = form.cleaned_data['password']
         server = form.cleaned_data['server']
+        reconnect = False
         full_name = name + ' ' + last_name
         id_level = self.request.user.level
         level = Level.objects.get(id=id_level.id)
@@ -139,7 +140,7 @@ class CreateAccounMt5View(LoginRequiredMixin, FormView):
         account = asyncio.run(create_server_mt5(full_name, login, password, server, level, self.request))
         # Guardar en la base de datos local luego de confirmar la creacion y suscripcion de la nueva cuenta.
         if account:
-            suscriber = asyncio.run(configure_copyfactory(account['id'], account['balance'], id_user))
+            suscriber = asyncio.run(configure_copyfactory(account['id']))
             # Verificamos si se conecto con exito como suscritor de la cuenta madre en metaapi.
             if suscriber.status_code == 204:
                 status = '1'
@@ -149,11 +150,12 @@ class CreateAccounMt5View(LoginRequiredMixin, FormView):
                     server,
                     account['id'],
                     status,
+                    reconnect,
                     id_user
                 )
             messages.add_message(request=self.request, level=messages.SUCCESS, message='La cuenta ha sido creada y conectada con éxito.')
         else:
-            messages.add_message(request=self.request, level=messages.WARNING, message='La cuenta no se ha podido crear, inténtelo más tarde.')
+            messages.add_message(request=self.request, level=messages.ERROR, message='La cuenta no se pudo crear.')
             HttpResponseRedirect(
                 reverse('vps_app:panel_user')
             )
@@ -180,6 +182,25 @@ class DeleteAccountMt5View(LoginRequiredMixin, DeleteView):
 
         return super(DeleteAccountMt5View, self).post(request, *args, **kwargs)
 
+
+class ReconnectMt5Account(LoginRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        # Obtenemos el level del usuario
+        level = self.request.user.level
+        # Verificamos que la cuenta tenga habilitada la reconexón.
+        accounts_mt5 = AccountMt5.objects.get_account_mt5(request.user.id)
+        if accounts_mt5:
+            account_mt5 = accounts_mt5[0]
+            if account_mt5.reconnect:
+                # Reconectamos la cuenta mt5 a metaapi
+                reconnect_mt5_account(self.request.user.id, level, self.request)
+        
+        # Redirigimos a la misma pagina de perfil de usuario
+        return HttpResponseRedirect(
+            reverse('vps_app:panel_user')
+        )
+        
 
 class ConfirmationUnsubscribeView(LoginRequiredMixin, TemplateView):
     template_name = 'vps/confirmation-unsubscribe.html'

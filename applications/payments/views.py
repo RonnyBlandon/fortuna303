@@ -1,5 +1,4 @@
 from datetime import datetime
-import asyncio
 from django.views.generic import TemplateView, DetailView
 from django.http import JsonResponse
 #
@@ -11,8 +10,8 @@ from .models import TraderPayment, VpsPayment
 from applications.users.models import User
 from applications.vps.models import AccountMt5
 #importamos funciones
-from .functions import (create_order, create_renewal_order, capture_order, 
-expiration_vps, reconnect_mt5_account)
+from .functions import (create_order, create_renewal_order, capture_order, enable_reconnection_mt5,
+expiration_vps)
 from applications.vps.functions import active_buttons_time
 # Create your views here.
 
@@ -48,7 +47,7 @@ class PaymentsView(LoginRequiredMixin, TemplateView):
                             vps_payment = VpsPayment.objects.unpaid_vps_payments(user.id)
                             # Conectamos la cuenta mt5 de nuevo a metaapi en caso de que este desconectado y este al dia con los pagos
                             if trader_payment == False and vps_payment == False:
-                                reconnect_mt5_account(user.id, self.request)
+                                enable_reconnection_mt5(user.id, self.request)
 
                     elif 'trader' in dictionary:
                         id_payment = dictionary['trader']
@@ -62,7 +61,7 @@ class PaymentsView(LoginRequiredMixin, TemplateView):
                                 vps_payment = VpsPayment.objects.unpaid_vps_payments(user.id)
                                 # Conectamos la cuenta mt5 de nuevo a metaapi en caso de que este desconectado y este al dia con los pagos
                                 if trader_payment == False and vps_payment == False:
-                                    reconnect_mt5_account(user.id, self.request)
+                                    enable_reconnection_mt5(user.id, self.request)
                         except Exception as err:
                             print("Hubo un error al intentar reconectar la cuenta mt5 del usuario a metaapi. ", err)
 

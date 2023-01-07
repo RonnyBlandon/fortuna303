@@ -10,6 +10,7 @@ class UserManager(BaseUserManager, models.Manager):
             email=email,
             level=account_level,
             subscriber=False,
+            due_payments=False,
             is_staff=is_staff,
             is_superuser=is_superuser,
             is_active=is_active,
@@ -46,4 +47,10 @@ class UserManager(BaseUserManager, models.Manager):
         user = self.get(id=id)
         level = user.level
         return level
+
+
+    def update_user_due_payments(self, id_user: int, due_payments: bool):
+        user = self.filter(id=id_user)
+        user.update(due_payments=due_payments)
+        return user
 

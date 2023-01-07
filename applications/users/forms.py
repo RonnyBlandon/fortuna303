@@ -1,6 +1,8 @@
 from django import forms
 from django.contrib.auth import authenticate
 from django.contrib.auth.hashers import check_password
+from captcha.fields import ReCaptchaField
+from captcha.widgets import ReCaptchaV3
 # Importar modelos de la app users
 from .models import User
 
@@ -26,6 +28,8 @@ class UserRegisterForm(forms.ModelForm):
             }
         )
     )
+
+    captcha = ReCaptchaField(widget=ReCaptchaV3)
     # clases Meta del formulario
     class Meta:
         model = User

@@ -4,8 +4,8 @@ import {tablePaginator, buttonsPaginator} from './paginator.js'
 const modalAdd = document.getElementById("modal-add");
 const modalButtonOpen = document.querySelector('.open-modal-add');
 const modalButtonClose = document.querySelector('.close-modal-add');
-const ButtonSendModal = document.querySelector('.button-send-modal');
-/* Inputs a verificar para cargar el loader */
+const buttonSendModal = document.querySelector('.button-send-modal');
+/* Inputs a verificar para cargar el loader de conectar cuenta mt5 a metaapi */
 const modalLoader = document.querySelector('.box-loader');
 const inputUser = document.getElementById('id_login');
 const inputPassword = document.getElementById('id_password');
@@ -20,11 +20,20 @@ if (modalButtonOpen != null ) {
     })
 
     /* Desactivar el boton de "agregar" cuando le de el primer click para no enviar mas solicitudes. */
-    ButtonSendModal.addEventListener("click", () => {
+    buttonSendModal.addEventListener("click", () => {
         if (inputUser.value.length > 0 && inputPassword.value.length > 0 && inputServer.value.length > 0) {
             modalAdd.close();
             modalLoader.style.display = 'flex';
         }
+    });
+}
+
+
+/* Inputs a verificar para cargar el loader de conectar cuenta mt5 a metaapi */
+const btnLoaderReconnect = document.querySelector('.btn-reconnect');
+if (btnLoaderReconnect) {
+    btnLoaderReconnect.addEventListener("click", () => {
+        modalLoader.style.display = 'flex';
     });
 }
 
@@ -87,6 +96,7 @@ PaginatorButtons2.forEach(function (currentValue, currentIndex) {
                 // Corrigiendo el formato de las fechas en las filas
                 operations.forEach(function (currentValue) {
                     const open_time = currentValue['open_time']
+                    console.log("Esto es lo que contiene open_time: ", open_time)
                     currentValue['open_time'] = open_time.replace('T', ' ')
                     const time = currentValue['time']
                     currentValue['time'] = time.replace('T', ' ')

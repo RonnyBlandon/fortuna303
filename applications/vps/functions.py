@@ -1,12 +1,11 @@
-from cryptography.fernet import Fernet
 from datetime import datetime, timedelta
+from cryptography.fernet import Fernet
 import MetaTrader5 as mt5
 import pandas as pd
+# functions own
 from fortuna_303.settings.base import get_secret
-# import modelos
 
 """ Funciones con la api de Metatrader 5 """
-
 
 def connect_terminal():
     # establecemos la conexión con el terminal MetaTrader 5
@@ -29,7 +28,7 @@ def trading_history():
 
         # obtenemos el número de órdenes en la historia en un periodo de 4 semanas
         time = datetime.now()
-        from_date = time - timedelta(weeks=4)
+        from_date = time - timedelta(weeks=5)
         to_date = time + timedelta(days=1)
         history_orders = mt5.history_deals_get(from_date, to_date)
 
@@ -67,15 +66,18 @@ def trading_history():
         # Reordenamos las claves de los dicts tomando solo las claves que se mostraran en el template
         ordered_data = []
         for i in range(len(data)):
-            ordered_dicts = {}
-            ordered_dicts['open_time'] = data[i]['open_time']
-            ordered_dicts['open_price'] = round(data[i]['open_price'], 5)
-            ordered_dicts['symbol'] = data[i]['symbol']
-            ordered_dicts['type'] = data[i]['type']
-            ordered_dicts['volume'] = data[i]['volume']
-            ordered_dicts['time'] = data[i]['time']
-            ordered_dicts['close_price'] = round(data[i]['price'], 5)
-            ordered_dicts['profit'] = round(data[i]['profit'], 2)
+            try:
+                ordered_dicts = {}
+                ordered_dicts['open_time'] = data[i]['open_time']
+                ordered_dicts['open_price'] = round(data[i]['open_price'], 5)
+                ordered_dicts['symbol'] = data[i]['symbol']
+                ordered_dicts['type'] = data[i]['type']
+                ordered_dicts['volume'] = data[i]['volume']
+                ordered_dicts['time'] = data[i]['time']
+                ordered_dicts['close_price'] = round(data[i]['price'], 5)
+                ordered_dicts['profit'] = round(data[i]['profit'], 2)
+            except Exception as err:
+                print("Error al ordenar los ordered_dicts: ", err)
 
             ordered_data.append(ordered_dicts)
 

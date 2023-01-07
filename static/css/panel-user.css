@@ -119,20 +119,21 @@
     text-align: center;
 }
 
-.open-modal-add, .img-trash, .button-modal-message {
+.open-modal-add, .img-trash, .button-modal-message, .btn-reconnect {
     display: block;
     padding: 0.3125em 0.3125em;
     color: #fff;
     background-color: #070;
     border-radius: 0.625em;
     border: 0.125em solid #fff;
+    text-decoration: none;
 }
 
-.open-modal-add:active, .button-modal-message:active {
+.open-modal-add:active, .button-modal-message:active, .btn-reconnect:active {
     background-color: #0709;
 }
 
-.open-modal-add:hover, .button-modal-message:hover {
+.open-modal-add:hover, .button-modal-message:hover, .btn-reconnect:hover {
     cursor: pointer;
 }
 
@@ -297,10 +298,14 @@ determinado */
 
 
 /*Estilos del loader de agregar cuenta mt5 */
+.title-loader {
+    text-align: center;
+}
 .box-loader {
-    width: 100%;
+    width: 100vw;
     height: 100vh;
     display: none;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     background-color: #fff;

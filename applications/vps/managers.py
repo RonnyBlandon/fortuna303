@@ -4,7 +4,7 @@ from .functions import encrypt_password
 class AccountMt5Manager(models.Manager):
    """ Procedimientos para cuentas mt5 """
 
-   def create_account_mt5(self, login, password, server, id_client_metaapi, status, id_user):
+   def create_account_mt5(self, login, password, server, id_client_metaapi, status, reconnect, id_user):
       encrypted = encrypt_password(password=password)
 
       account = self.model(
@@ -13,14 +13,15 @@ class AccountMt5Manager(models.Manager):
          server=server,
          id_client_metaapi=id_client_metaapi,
          status=status,
+         reconnect=reconnect,
          id_user=id_user
       )
       account.save(using=self.db)
       return account
 
-   def update_status_account_mt5(self, id: int, status: str, id_client_metaapi: str):
+   def update_status_account_mt5(self, id: int, status: str, id_client_metaapi: str, reconnect: bool):
       account = self.filter(id=id)
-      account.update(status=status, id_client_metaapi=id_client_metaapi)
+      account.update(status=status, id_client_metaapi=id_client_metaapi, reconnect=reconnect)
       return account
 
    def get_account_mt5(self, id):

@@ -14,6 +14,7 @@ class AccountMt5(models.Model):
     server = models.CharField('Servidor', max_length=30)
     id_client_metaapi = models.CharField('ID de cuenta MetaApi', max_length=50)
     status = models.CharField('Estado', max_length=1, choices=Status)
+    reconnect = models.BooleanField('Reconexión hablitada')
     id_user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     objects = AccountMt5Manager()
