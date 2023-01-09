@@ -2,6 +2,7 @@ import asyncio
 from fortuna_303.settings.base import get_secret
 from metaapi_cloud_sdk import MetaApi, CopyFactory
 from metaapi_cloud_sdk.clients.metaApi.tradeException import TradeException
+from metaapi_cloud_sdk.clients.timeoutException import TimeoutException
 from django.contrib import messages
 # import models
 from .models import AccountMt5
@@ -50,9 +51,9 @@ async def create_server_mt5(name: str, login: int, password: str, server: str, l
         else:
             messages.add_message(request=request, level=messages.ERROR, message='Fallo en la creación y conexión de la cuenta. Los datos de la cuenta son incorrectos.')
 
-    except TimeoutError as errTime:
-        print("Tiempo de espera excedido en create_server_mt5(): ", errTime)
-        messages.add_message(request=request, level=messages.ERROR, message='Tiempo de espera terminado, la plataforma metatrader 5 no devolvió ninguna respuesta.')
+    except TimeoutException as errTime:
+        print("error de TimeoutException en metaapi desde create_server_mt5(): ", errTime)
+        messages.add_message(request=request, level=messages.ERROR, message='Tiempo de espera excedido no se recibio ninguna respuesta, intentelo mas tarde o mande un mensaje en la pagina de contacto.')
 
     except Exception as err:
         # errores de proceso
