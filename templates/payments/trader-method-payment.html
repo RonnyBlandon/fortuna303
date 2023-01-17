@@ -36,7 +36,13 @@
         <h2>Metodos de pago</h2>
 
         <div class="container-methods">
-            <a class="link-paypal" href="{{ link_payment }}">Paypal</a>
+            <form action="{% url 'payments_app:checkout_session' %}" method="post"> {% csrf_token %}
+                <input type="hidden" name="type" value="renewal-trader">
+                <input type="hidden" name="id-payment" value="{{ id_payment }}">
+                <input type="hidden" name="payment-method" value="paypal">
+                <button type="submit" class="link-paypal">Paypal</button>
+            </form>
+            <a class="link-paypal" href="{{ detail_payment.link_payment_stripe }}">Tarjeta de Credito o Debito</a>
             <!--
             <div class="credit-card">
                 <h3>Tarjeta de Credito/Debito</h3>

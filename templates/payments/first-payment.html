@@ -26,7 +26,7 @@
         <div class="details-payment-child">
             <h3>Precio:</h3>
             <p>${{ detail_payment.price }}</p>
-        </div class="details-payment-child">
+        </div>
         <div class="details-payment-description">
             <h3>Descripción:</h3> 
             <p>Servicio mensual de vps para metatrader 5 y uso del sistema copytrading.</p>
@@ -38,7 +38,17 @@
         <h2>Metodos de pago</h2>
 
         <div class="container-methods">
-            <a class="link-paypal" href="{{ detail_payment.link_payment }}">Paypal</a>
+            <form action="{% url 'payments_app:checkout_session' %}" method="post"> {% csrf_token %}
+                <input type="hidden" name="type" value="first-payment">
+                <input type="hidden" name="payment-method" value="paypal">
+                <button type="submit" class="button-paypal">Paypal</button>
+            </form>
+
+            <form action="{% url 'payments_app:checkout_session' %}" method="post"> {% csrf_token %}
+                <input type="hidden" name="type" value="first-payment">
+                <input type="hidden" name="payment-method" value="stripe">
+                <button type="submit" class="button-stripe">Tarjeta de Crédito o Débito</button>
+            </form>
             <!--
             <div class="credit-card">
                 <h3>Tarjeta de Credito/Debito</h3>
@@ -51,9 +61,8 @@
                     <input type="number" placeholder="CVC">
                     <input class="button-send" type="submit" value="Adquirir servicio">
                 </form>
-            </div>
-            -->
-        </div class="box-secondary">
+            </div>-->
+        </div>
     </div>
 </div>
 

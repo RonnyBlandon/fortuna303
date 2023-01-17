@@ -102,7 +102,7 @@ async def configure_copyfactory(slave_account_id):
 
         # create subscriber
         suscriber = await configuration_api.update_subscriber(slave_metaapi_account.id, {
-            'name': 'Esto es un test de suscribcion',
+            'name': f'Esta suscripción es de {slave_metaapi_account.name}',
             'subscriptions': [
                 {
                     'strategyId': strategy_id,

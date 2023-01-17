@@ -64,7 +64,7 @@
     flex-direction: column;
     align-items: center;
 }
-.link-paypal, .link-paypal-disabled {
+.button-paypal, .button-stripe {
     width: fit-content;
     text-align: center;
     margin: 0.7em 0em;
@@ -77,16 +77,16 @@
     color: #fff;
     border-radius: 0.8em;
 }
-.link-paypal:hover, .link-paypal-disabled:hover {
+.button-paypal:hover, .button-stripe:hover {
     cursor: pointer;
 }
-.link-paypal:active {
+.button-paypal:active, .button-stripe:active {
     background-color: #0007;
     text-decoration: underline;
 }
-.link-paypal-disabled {
-    background-color: #ccc;
-    border: 0.125em solid #aaa;
+.button-stripe {
+    background-color: #9500DF;
+    border: 0.125em solid #f90;
 }
 
 /* Formulario de stripe */

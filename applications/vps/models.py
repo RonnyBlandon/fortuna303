@@ -19,8 +19,11 @@ class AccountMt5(models.Model):
 
     objects = AccountMt5Manager()
 
+    class Meta:
+        verbose_name_plural = 'Accounts mt5'
+
     def __str__(self):
-        return  str(self.id) + ' - ' + str(self.login) + ' - ' + self.password +' - ' + str(self.server) + ' - ' + str(self.id_user)
+        return  str(self.id)
 
 
 class AccountManagement(models.Model):

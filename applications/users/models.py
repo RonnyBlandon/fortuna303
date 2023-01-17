@@ -27,6 +27,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     # nueva columna para verificar si el correo es real
     is_active = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = ('email',)
     
     USERNAME_FIELD = 'email'
 

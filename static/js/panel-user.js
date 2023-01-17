@@ -96,7 +96,6 @@ PaginatorButtons2.forEach(function (currentValue, currentIndex) {
                 // Corrigiendo el formato de las fechas en las filas
                 operations.forEach(function (currentValue) {
                     const open_time = currentValue['open_time']
-                    console.log("Esto es lo que contiene open_time: ", open_time)
                     currentValue['open_time'] = open_time.replace('T', ' ')
                     const time = currentValue['time']
                     currentValue['time'] = time.replace('T', ' ')
