@@ -29,7 +29,7 @@ class UserRegisterForm(forms.ModelForm):
         )
     )
 
-    captcha = ReCaptchaField(widget=ReCaptchaV3)
+    #captcha = ReCaptchaField(widget=ReCaptchaV3)
     # clases Meta del formulario
     class Meta:
         model = User
@@ -50,6 +50,13 @@ class UserRegisterForm(forms.ModelForm):
 
     # Validacion de las contraseñas al crear usuario
     def clean(self):
+        # Validando si existe ya el correo electronico en la base de datos
+        email = self.cleaned_data['email']
+        email_exists = User.objects.email_exists(email)
+        if email_exists:
+            self.add_error('email', 'Ya existe una cuenta con este correo electrónico.')
+
+        # Validando los passwords
         password1 = self.cleaned_data['password1']
         password2 = self.cleaned_data['password2']
 

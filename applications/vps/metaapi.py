@@ -15,24 +15,61 @@ app_token = get_secret("METAAPI_TOKEN")
 
 async def create_server_mt5(name: str, login: int, password: str, server: str, level: int, request):
     api = MetaApi(app_token)
-
+    # Mayormente los nombres de los servidores inician con el nombre del broker seguido de un "-" para 
+    # difereciar los servidores de cuentas reales(Live) con las cuentas demo(Demo).
+    # Para saber que cuenta de mt5 esta en la lista de brokers con perfiles de aprovisionamiento en metaapi
+    # hay que tomar el nombre del broker antes del signo "-" y buscarlo en la lista de metaapi. 
+    substrings = server.split("-")
+    broker_name = substrings[0]
+    
     try:
-        account = await api.metatrader_account_api.create_account(account={
-            'name': name,
-            'type': 'cloud',
-            'login': login,
-            'platform': 'mt5',
-            'region': 'new-york',
-            # password can be investor password for read-only access
-            'password': password,
-            'server': server,
-            'application': 'MetaApi',
-            'copyFactoryRoles': ['SUBSCRIBER'],
-            'magic': 0,
-            'quoteStreamingIntervalInSeconds': 2.5,  # set to 0 to receive quote per tick
-            # set this field to 'high' value if you want to increase uptime of your account (recommended for production environments)
-            'reliability': 'high'
-        })
+        account = None
+        profile = None
+        profiles = await api.provisioning_profile_api.get_provisioning_profiles()
+        
+        for item in profiles:
+            if item.name == broker_name:
+                profile = item
+                break
+        
+        if not profile:
+            # Hacemos la creación de la cuenta mt5 dejando que metaapi lo cree y configure en automático.
+            account = await api.metatrader_account_api.create_account(account={
+                'name': name,
+                'type': 'cloud',
+                'login': login,
+                'platform': 'mt5',
+                'region': 'new-york',
+                # password can be investor password for read-only access
+                'password': password,
+                'server': server,
+                'application': 'MetaApi',
+                'copyFactoryRoles': ['SUBSCRIBER'],
+                'magic': 0,
+                'quoteStreamingIntervalInSeconds': 2.5,  # set to 0 to receive quote per tick
+                # set this field to 'high' value if you want to increase uptime of your account (recommended for production environments)
+                'reliability': 'high'
+            })
+        else:
+            # Hacemos la creación de la cuenta mt5 con el perfile de aprovisionamiento.
+            account = await api.metatrader_account_api.create_account(account={
+                'name': name,
+                'type': 'cloud',
+                'login': login,
+                'platform': 'mt5',
+                'region': 'new-york',
+                # password can be investor password for read-only access
+                'password': password,
+                'server': server,
+                'provisioningProfileId': profile.id,
+                'application': 'MetaApi',
+                'copyFactoryRoles': ['SUBSCRIBER'],
+                'magic': 0,
+                'quoteStreamingIntervalInSeconds': 2.5,  # set to 0 to receive quote per tick
+                # set this field to 'high' value if you want to increase uptime of your account (recommended for production environments)
+                'reliability': 'high'
+            })
+
         # Despues de crear la cuenta se verifica si la cuenta esta entre los limites del nivel de usuario
         if account:
             connection = account.get_rpc_connection()

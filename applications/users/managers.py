@@ -36,7 +36,7 @@ class UserManager(BaseUserManager, models.Manager):
             return False
 
 
-    def email_exists(self, email):
+    def email_exists(self, email: str):
         if self.filter(email=email):
             return True
         else:
@@ -54,3 +54,9 @@ class UserManager(BaseUserManager, models.Manager):
         user.update(due_payments=due_payments)
         return user
 
+
+    def get_id_customer_stripe(self, id_user: int):
+        user = self.get(id=id_user)
+        id_customer = user.id_customer_stripe
+        if id_customer:
+            return id_customer

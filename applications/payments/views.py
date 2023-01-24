@@ -1,11 +1,11 @@
 from datetime import datetime
 import stripe
-from django.views.generic import TemplateView, DetailView, View
+from django.views.generic import View, TemplateView, DetailView
 from django.http.response import JsonResponse, HttpResponseRedirect, HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
 from django.urls import reverse_lazy, reverse
 from django.core.paginator import Paginator
-from django.views.decorators.csrf import csrf_exempt
 # importamos los modelos
 from .models import TraderPayment, VpsPayment
 from applications.users.models import User
@@ -13,7 +13,7 @@ from applications.vps.models import AccountMt5
 #importamos funciones
 from .functions import enable_reconnection_mt5, expiration_vps
 from .paypal import create_order_paypal, create_renewal_order_paypal, capture_order_paypal
-from .stripe import create_order_stripe
+from .stripe import create_order_stripe, create_renewal_order_stripe
 from applications.vps.functions import active_buttons_time
 from fortuna_303.settings.base import get_secret
 # Create your views here.
@@ -35,6 +35,8 @@ class PaymentsView(LoginRequiredMixin, TemplateView):
                 if details['custom_id'] == 'first_payment':
                     User.objects.filter(id=request.user.id).update(subscriber=True)
                     VpsPayment.objects.save_payment_vps(details['amount'], user, 'Paypal', details['id'])
+                    messages.add_message(request=self.request, level=messages.SUCCESS, message='Su pago fue procesado exitosamente.')
+
                 else:
                     # Convertimos el string del valor de custom_id a un dict
                     dictionary = eval((details['custom_id']))
@@ -43,6 +45,7 @@ class PaymentsView(LoginRequiredMixin, TemplateView):
                     if 'vps' in dictionary:
                         id_payment = dictionary['vps']
                         VpsPayment.objects.update_payment_vps(id_payment, 'Paypal', details['id'])
+                        messages.add_message(request=self.request, level=messages.SUCCESS, message='Su pago fue procesado exitosamente.')
                         # Verificamos si la cuenta esta desconectada
                         try:
                             account_mt5 = AccountMt5.objects.get(id_user=user.id)
@@ -53,15 +56,17 @@ class PaymentsView(LoginRequiredMixin, TemplateView):
                                 if trader_payment == False and vps_payment == False:
                                     enable_reconnection_mt5(user.id, self.request)
                         except Exception as err:
-                            print("Hubo un error al intentar reconectar la cuenta mt5 del usuario a metaapi. ", err)
+                            messages.add_message(request=self.request, level=messages.WARNING, message='Hubo un error al intentar habilitar la reconexión de la cuenta mt5.')
+                            print("Hubo un error al intentar habilitar la reconexión de la cuenta mt5 del usuario a metaapi. ", err)
 
                     elif 'trader' in dictionary:
                         id_payment = dictionary['trader']
                         TraderPayment.objects.update_payment_trader(id_payment, 'Paypal', details['id'])
+                        messages.add_message(request=self.request, level=messages.SUCCESS, message='Su pago fue procesado exitosamente.')
                         # Verificamos si la cuenta esta desconectada
                         try: 
                             account_mt5 = AccountMt5.objects.get(id_user=user.id)
-                        
+                    
                             if account_mt5.status == '0':
                                 trader_payment = TraderPayment.objects.unpaid_trader_payments(user.id)
                                 vps_payment = VpsPayment.objects.unpaid_vps_payments(user.id)
@@ -69,7 +74,8 @@ class PaymentsView(LoginRequiredMixin, TemplateView):
                                 if trader_payment == False and vps_payment == False:
                                     enable_reconnection_mt5(user.id, self.request)
                         except Exception as err:
-                            print("Hubo un error al intentar reconectar la cuenta mt5 del usuario a metaapi. ", err)
+                            messages.add_message(request=self.request, level=messages.WARNING, message='Hubo un error al intentar habilitar la reconexión de la cuenta mt5.')
+                            print("Hubo un error al intentar habilitar la reconexión de la cuenta mt5 del usuario a metaapi. ", err)
 
         context = self.get_context_data(**kwargs)
         return self.render_to_response(context)
@@ -126,6 +132,7 @@ class PaymentsView(LoginRequiredMixin, TemplateView):
             )
 
 
+
 class FirstPaymentView(LoginRequiredMixin, TemplateView):
     template_name = 'payments/first-payment.html'
 
@@ -180,55 +187,67 @@ class TraderPaymentRenewalView(LoginRequiredMixin, DetailView):
 class CheckoutSessionView(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
-        type = self.request.POST['type']
-        payment_method = self.request.POST['payment-method']
-        email = self.request.user.email
-        level = User.objects.get(id=self.request.user.id).level
-        price = level.price
-        if type == 'first-payment':
-            description = "Servicio mensual vps para metatrader 5 y uso del sistema copytrading."
+
+        if 'payment-method' in request.POST and 'terms-and-conditions' in request.POST:
+            type = request.POST['type']
+            payment_method = request.POST['payment-method']
+            level = User.objects.get(id=request.user.id).level
+            price = level.price
+            if type == 'first-payment':
+                description = "Servicio mensual vps para metatrader 5 y uso del sistema copytrading."
             
-            if payment_method == 'paypal':
-                link_payment = create_order_paypal(amount=price, description=description)
-            elif payment_method == 'stripe':
-                link_payment = create_order_stripe(email=email, amount=price, description=description)
+                if payment_method == 'paypal':
+                    link_payment = create_order_paypal(amount=price, description=description)
+                elif payment_method == 'stripe':
+                    link_payment = create_order_stripe(id_user=request.user.id, amount=price, description=description)
 
-        elif type == 'renewal-vps':
-            id_payment = self.request.POST['id-payment']
-            # validamos el id_pyment para evitar equivocaciones
-            register = VpsPayment.objects.filter(id=id_payment)
-            if register[0].id_user.id == self.request.user.id:
-                if register[0].status == 'Pagar':
-                    amount = register[0].total
-                    description = f"Renovación del servicio mensual de vps para metarader 5 y uso del sistema copytrading."
+            elif type == 'renewal-vps':
+                id_payment = request.POST['id-payment']
+                # validamos el id_pyment para evitar equivocaciones
+                register = VpsPayment.objects.filter(id=id_payment)
+                if register[0].id_user.id == request.user.id:
+                    if register[0].status == 'Pagar':
+                        amount = register[0].total
+                        description = f"Renovación del servicio mensual de vps para metarader 5 y uso del sistema copytrading."
 
-            if payment_method == 'paypal':
-                link_payment = create_renewal_order_paypal(case="vps", payment_id=id_payment, amount=amount, description=description)
-            elif payment_method == 'stripe':
-                link_payment = create_order_stripe(email=email, amount=price, description=description)
+                if payment_method == 'paypal':
+                    link_payment = create_renewal_order_paypal(case="vps", payment_id=id_payment, amount=amount, description=description)
+                elif payment_method == 'stripe':
+                    link_payment = create_renewal_order_stripe(id_user=request.user.id, case="vps", payment_id=id_payment, amount=amount, description=description)
 
-        elif type == 'renewal-trader':
-            id_payment = self.request.POST['id-payment']
-            # validamos el id_pyment para evitar equivocaciones
-            register = TraderPayment.objects.filter(id=id_payment)
-            if register[0].id_user.id == self.request.user.id:
-                if register[0].status == 'Pagar':
-                    amount = register[0].total
-                    description = f"Gestión de cuenta de metatrader5 del {register[0].created_date} al {register[0].expiration}"
+            elif type == 'renewal-trader':
+                id_payment = request.POST['id-payment']
+                # validamos el id_pyment para evitar equivocaciones
+                register = TraderPayment.objects.filter(id=id_payment)
+                if register[0].id_user.id == request.user.id:
+                    if register[0].status == 'Pagar':
+                        amount = register[0].total
+                        description = f"Gestión de cuenta de metatrader5 del {register[0].created_date} al {register[0].expiration}"
 
-            if payment_method == 'paypal':
-                link_payment = create_renewal_order_paypal(case="trader", payment_id=id_payment, amount=amount, description=description)
-            elif payment_method == 'stripe':
-                link_payment = create_order_stripe(email=email, amount=price, description=description)
+                if payment_method == 'paypal':
+                    link_payment = create_renewal_order_paypal(case="trader", payment_id=id_payment, amount=amount, description=description)
+                elif payment_method == 'stripe':
+                    link_payment = create_renewal_order_stripe(id_user=request.user.id, case="trader", payment_id=id_payment, amount=amount, description=description)
 
-        return HttpResponseRedirect(link_payment)
+            return HttpResponseRedirect(link_payment)
+        else:
+            match request.POST['type']:
+                case 'first-payment':
+                    messages.add_message(request=self.request, level=messages.ERROR, message='Debe elegir un método de pago y aceptar los términos y condiciones.')
+                    return HttpResponseRedirect(reverse('payments_app:first_payment'))
+                case 'renewal-vps':
+                    id_payment = request.POST['id-payment']
+                    messages.add_message(request=self.request, level=messages.ERROR, message='Debe elegir un método de pago y aceptar los términos y condiciones.')
+                    return HttpResponseRedirect(reverse('payments_app:vps_payment_renewal', kwargs={'pk':id_payment}))
+                case 'renewal-trader':
+                    id_payment = request.POST['id-payment']
+                    messages.add_message(request=self.request, level=messages.ERROR, message='Debe elegir un método de pago y aceptar los términos y condiciones.')
+                    return HttpResponseRedirect(reverse('payments_app:trader_payment', kwargs={'pk':id_payment}))
 
 
-class WebhookStripeView(LoginRequiredMixin, View):
+class WebhookStripeView(View):
     
-    @csrf_exempt
-    def get(self, request, *args, **kwargs):
-        print("Webhook")
+    def post(self, request, *args, **kwargs):
         endpoint_secret = get_secret('STRIPE_ENDPOINT_SECRET')
         payload = request.body
         sig_header = request.META['HTTP_STRIPE_SIGNATURE']
@@ -244,23 +263,63 @@ class WebhookStripeView(LoginRequiredMixin, View):
         except stripe.error.SignatureVerificationError as e:
             # Invalid signature
             return HttpResponse(status=400)
+        except Exception as err:
+            # cualquier error
+            print("Error proveniente de stripe.Webhook.construct_event(): ", err)
+            return HttpResponse(status=400)
 
         # Handle the checkout.session.completed event
         if event['type'] == 'checkout.session.completed':
-            print("Payment was successful.")
             session = event['data']['object']
-            #creating order
-            customer_email = session["customer_details"]["email"]
-            price = session["amount_total"] /100
-            sessionID = session["id"]
-            ID=session["metadata"]["order_id"]
+            # creamos el importe del primer pago vps con la informacion relevante
+            price = session["amount_total"] / 100
+            transaction_id = session["payment_intent"]
+            id_user = session["metadata"]["id_user"]
+            custom_id = session["metadata"]["custom_id"]
+
+            # Verificamos si es un primer pago del servicio de VPS y COPYTRADING
+            if custom_id == 'first_payment':
+                user = User.objects.get(id=id_user)
+                User.objects.filter(id=id_user).update(subscriber=True)
+                VpsPayment.objects.save_payment_vps(price, user, 'Stripe', transaction_id)
+                messages.add_message(request=self.request, level=messages.SUCCESS, message='Su pago fue procesado exitosamente.')
+
+            # Verificamos si es una renovacion del servicio VPS o un pago para el trader
+            elif custom_id == 'vps':
+                id_payment = session["metadata"]["payment_id"]
+
+                VpsPayment.objects.update_payment_vps(id_payment, 'Stripe', transaction_id)
+                messages.add_message(request=self.request, level=messages.SUCCESS, message='Su pago fue procesado exitosamente.')
+                # Verificamos si la cuenta esta desconectada
+                try:
+                    account_mt5 = AccountMt5.objects.get(id_user=id_user)
+                    if account_mt5.status == '0':
+                        trader_payment = TraderPayment.objects.unpaid_trader_payments(id_user)
+                        vps_payment = VpsPayment.objects.unpaid_vps_payments(id_user)
+
+                        # Habilitamos la reconexión de la cuenta mt5 a metaapi en caso de que este desconectado y este al dia con los pagos.
+                        if trader_payment == False and vps_payment == False:
+                            enable_reconnection_mt5(id_user, self.request)
+                except Exception as err:
+                    messages.add_message(request=self.request, level=messages.WARNING, message='Hubo un error al intentar habilitar la reconexión de la cuenta mt5.')
+                    print("Hubo un error al intentar habilitar la reconexión de la cuenta mt5 del usuario a metaapi. ", err)
+
+            elif custom_id == 'trader':
+                id_payment = session["metadata"]["payment_id"]
+                TraderPayment.objects.update_payment_trader(id_payment, 'Stripe', transaction_id)
+                messages.add_message(request=self.request, level=messages.SUCCESS, message='Su pago fue procesado exitosamente.')
+                # Verificamos si la cuenta esta desconectada
+                try: 
+                    account_mt5 = AccountMt5.objects.get(id_user=id_user)
+                    if account_mt5.status == '0':
+                        trader_payment = TraderPayment.objects.unpaid_trader_payments(id_user)
+                        vps_payment = VpsPayment.objects.unpaid_vps_payments(id_user)
+
+                        # Habilitamos la reconexión de la cuenta mt5 a metaapi en caso de que este desconectado y este al dia con los pagos.
+                        if trader_payment == False and vps_payment == False:
+                            enable_reconnection_mt5(id_user, self.request)
+                except Exception as err:
+                    messages.add_message(request=self.request, level=messages.WARNING, message='Hubo un error al intentar habilitar la reconexión de la cuenta mt5.')
+                    print("Hubo un error al intentar habilitar la reconexión de la cuenta mt5 del usuario a metaapi. ", err)
 
         return HttpResponse(status=200)
-
-
-class CancelPaymentView(LoginRequiredMixin, TemplateView):
-    template_name = 'payments/payment-cancel.html'
-
-
-class SuccessPaymentView(LoginRequiredMixin, TemplateView):
-    template_name = 'payments/payment-success.html'

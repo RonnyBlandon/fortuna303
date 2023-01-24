@@ -28,7 +28,7 @@ class ContactView(FormView):
         email_remitente = 'fortuna303.com@gmail.com'
         send_mail(affair, mensaje, email_remitente, [email_remitente,])
 
-        messages.add_message(request=self.request, level=messages.SUCCESS, message='Su mensaje fue enviado con exito. Muy pronto recibira su respuesta.')
+        messages.add_message(request=self.request, level=messages.SUCCESS, message='Su mensaje fue enviado con exito. Muy pronto recibira respuesta en su correo.')
 
         # Redirigimos a la misma pagina de contacto
         return HttpResponseRedirect(

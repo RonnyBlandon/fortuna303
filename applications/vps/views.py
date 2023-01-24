@@ -231,7 +231,8 @@ class UnsubscriberView(LoginRequiredMixin, View):
 
         if vps_payments:
             vps_payments.update(status="Cancelado")
-
+            
+        messages.add_message(request=self.request, level=messages.SUCCESS, message='Se ha dado de baja con éxito.')
         # Redirigimos a la misma pagina de perfil de usuario
         return HttpResponseRedirect(
             reverse('vps_app:panel_user')

@@ -9,9 +9,19 @@
 {% include 'includes/header.html' %}
 
 <!--Titulo de la pagina-->
-
 <h1 class="title">Detalles de pago</h1>
 
+<!-- Mensajes de exito o de error -->
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>  
+    {% endfor %}
+</ul>
+{% endif %}
+
+<!-- Sección de detalles de pago -->
 <div class="box-general">
     <div class="details-payment">
         <div class="details-payment-child">
@@ -25,7 +35,7 @@
         <div class="details-payment-child">
             <h3>Precio:</h3>
             <p>${{ detail_payment.total }}</p>
-        </div class="details-payment-child">
+        </div>
         <div class="details-payment-description">
             <h3>Descripción:</h3> 
             <p>Gestión de cuenta de metatrader5 del {{ detail_payment.created_date|date:"Y-M-d" }} al {{ detail_payment.expiration|date:"Y-M-d" }}</p>
@@ -36,30 +46,29 @@
         <h2>Metodos de pago</h2>
 
         <div class="container-methods">
-            <form action="{% url 'payments_app:checkout_session' %}" method="post"> {% csrf_token %}
+            <form id="form-payment" action="{% url 'payments_app:checkout_session' %}" method="post"> {% csrf_token %}
                 <input type="hidden" name="type" value="renewal-trader">
                 <input type="hidden" name="id-payment" value="{{ id_payment }}">
-                <input type="hidden" name="payment-method" value="paypal">
-                <button type="submit" class="link-paypal">Paypal</button>
+
+                <label class="label-radio-paypal">
+                    <input id="paypal" type="radio" name="payment-method" value="paypal" required>Paypal<br>
+                </label>
+                <label class="label-radio-stripe">
+                    <input id="stripe" type="radio" name="payment-method" value="stripe" required>Tarjeta de Crédito o Débito<br>
+                </label>
+                <label class="input-checkbox">
+                    <h5>
+                        <input type="checkbox" name="terms-and-conditions" required>
+                        He leído y estoy de acuerdo con los <a href='{% url 'home_app:terms' %}'>términos y condiciones</a> de fortuna303.
+                    </h5>
+                </label>
+                <button class="button-payment" type="submit">Realizar pago</button>
             </form>
-            <a class="link-paypal" href="{{ detail_payment.link_payment_stripe }}">Tarjeta de Credito o Debito</a>
-            <!--
-            <div class="credit-card">
-                <h3>Tarjeta de Credito/Debito</h3>
-                <form class="form-stripe" method="post" action=""> {% csrf_token %}
-                    <label>Numero de tarjeta *</label>
-                    <input type="number" placeholder="1234 1234 1234 1234">
-                    <label>Fecha de caducidad *</label>
-                    <input type="text" placeholder="Mes/Año">
-                    <label>Codigo de tarjeta (CVC) *</label>
-                    <input type="number" placeholder="CVC">
-                    <input class="button-send" type="submit" value="Adquirir servicio">
-                </form>
-            </div>
-            -->
-        </div class="box-secondary">
+        </div>
     </div>
 </div>
+
+<script src="{% static 'js/details-payment.js' %}"></script>
 
 {% include 'includes/footer.html' %}
 {% endblock content %}

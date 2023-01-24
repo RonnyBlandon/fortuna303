@@ -1,0 +1,17 @@
+import asyncio
+from metaapi_cloud_sdk import MetaApi, CopyFactory
+from metaapi_cloud_sdk.clients.metaApi.tradeException import TradeException
+from metaapi_cloud_sdk.clients.timeoutException import TimeoutException
+
+app_token = "eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI3ZTYwMGI2ZDljYmM4ZTkwOTU0YzI2MGE2MjUzOThhMiIsInBlcm1pc3Npb25zIjpbXSwidG9rZW5JZCI6IjIwMjEwMjEzIiwiaWF0IjoxNjY5MDkwODE5LCJyZWFsVXNlcklkIjoiN2U2MDBiNmQ5Y2JjOGU5MDk1NGMyNjBhNjI1Mzk4YTIifQ.G34lgWy93VpmVw7xxEk07gR388-X7VawmRjkldzx58PVl_IEMswvrSh53USxlgKCotXmwqzBo88WvrbawPgIKKmEvRiZkjDbLc2SPP5DEiU6Njr_L82qJyrdQhgFL2sToU3IQvGSaheP-Gn_sYGpT69tKIaylC4SUX1KacB7JKSnLCGCUjIa31EwOnY5eH2-ukLpyHsZePhLxNI2nuZgq1CC5sNQO3gNvnmR7dx5U2YlLzTqxTR43bTYsmqq4RbgEPB9FCQWGRlxMAT_OFNqotBKOimYt0jj8nOP623KOW8NxOBPi7cCeLUvLLQNI9vYB-yyktgLVWM0RWroBbFoR8q9_BbFhJcyx4vD_d7Sy9XQUfhvLfKp_sFuFhcxMvpgQAX5Rusj8yB8bqCOZd2-4zUQQl1kZfmiQkAQJFd53wLphX9MSm8Ss04sC0u9_mGgOB0KimgLh3ySTw5_1Azus3yQnAw7V7BBacQ5PWV2RBGOk33fskvAA3S8YLNpeN4vnV78q0S_Ry_av9qSH3JQYaaWHa59qHRETqBxgx1Hj0IAaX-Oa0lERI0SH94pRuAV7PoIbYV1iQpBe4KgKupsek6DGDVgZCtpxwQqyTt1LVvViplvzARDbMNd0PTUFJaiCgFAMiFn_WmNp2fjG-omNkGm0Yt2SKidXEbAVFofTaE"
+
+async def prueba_perfile():
+    api = MetaApi(app_token)
+
+    try:
+        profiles = await api.provisioning_profile_api.get_provisioning_profiles()
+        print(profiles[0].id)
+    except Exception as err:
+        print("Error en prueba_profile() el error es: ", err)
+
+asyncio.run(prueba_perfile())

@@ -22,6 +22,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     level = models.ForeignKey(Level, on_delete=models.CASCADE)
     subscriber = models.BooleanField('Suscriptor')
     due_payments = models.BooleanField('¿Tiene pagos vencidos?')
+    id_customer_stripe = models.CharField('ID customer stripe', max_length=25, blank=True, null=True)
     validation_code = models.CharField(max_length=6)
     # creamos la columna staff en modelo para la creacion de superusuarios
     is_staff = models.BooleanField(default=False)

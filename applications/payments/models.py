@@ -16,7 +16,7 @@ class VpsPayment(models.Model):
     status = models.CharField('Estado', max_length=12, choices=payment_status)
     id_user = models.ForeignKey(User, on_delete=models.CASCADE)
     payment_method = models.CharField('Metodo de Pago', max_length=20, blank=True, choices=payment_methods)
-    transaction_id = models.CharField('ID Transacción', max_length=30, blank=True)
+    transaction_id = models.CharField('ID Transacción', max_length=50, blank=True)
     
     objects = VpsPaymentManager()
 

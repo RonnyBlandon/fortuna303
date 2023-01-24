@@ -4,7 +4,7 @@
     background-color: var(--color-principal);
     box-shadow: 0em 0em 0.625em #000;
 }
-.terms h3, .terms p {
+.terms h3, .terms h2, .terms p {
     margin-bottom: 0.625em;
     text-shadow: 0.125em 0.125em #000;
     color: var(--color-secondary);
@@ -13,6 +13,7 @@
     padding-bottom: 0.3125em;
     text-shadow: none;
     color: #fff;
+    word-spacing: 1.3pt;
 }
 
 

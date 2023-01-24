@@ -63,11 +63,41 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-top: 0.5em;
 }
-.button-paypal, .button-stripe {
-    width: fit-content;
+/* Formulario de pago */
+.label-radio-paypal, .label-radio-stripe {
+    display: block;
+    padding: 0.9em 0em;
+    background-color: #eee;
+    color: #05f;
+    font-weight: 600;
+}
+.label-radio-paypal:hover, .label-radio-stripe:hover {
+    background-color: #ddd;
+}
+.label-radio-paypal input[type="radio"], .label-radio-stripe input[type="radio"] {
+    width: 1em;
+    height: 1em;
+    margin: 0em 0.7em;
+}
+.input-radio-checked {
+    background-color: #ddd;
+}
+.input-checkbox{
+    display: block;
+    margin: 1em 0em 0em 0em;
     text-align: center;
-    margin: 0.7em 0em;
+}
+.input-checkbox input[type="checkbox"] {
+    width: 1em;
+    height: 1em;
+    margin: 0em 0.5em 0em 0em;
+}
+.button-payment {
+    display: block;
+    width: fit-content;
+    margin: 0.9em auto 0.6em auto;
     padding: 0.4em 1.5em;
     background-color: #08f;
     border: 0.125em solid #00f;
@@ -75,50 +105,15 @@
     font-size: 1.2em;
     font-weight: 600;
     color: #fff;
-    border-radius: 0.8em;
+    border-radius: 0.5em;
 }
-.button-paypal:hover, .button-stripe:hover {
+.button-payment:hover {
     cursor: pointer;
+    background-color: #04f;
 }
-.button-paypal:active, .button-stripe:active {
+.button-payment:active {
     background-color: #0007;
     text-decoration: underline;
-}
-.button-stripe {
-    background-color: #9500DF;
-    border: 0.125em solid #f90;
-}
-
-/* Formulario de stripe */
-.credit-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-.credit-card h3 {
-    margin: 0.5em 0em;
-}
-.form-stripe input {
-    display: block;
-    margin: 0.2em 0em 0.8em 0em;
-    font-size: 1.2em;
-}
-.button-send {
-    display: inline;
-    padding: 0.4em 0.8em;
-    background-color: #090;
-    color: #fff;
-    font-weight: 600;
-    border: none;
-    border-radius: 0.8em;
-    box-shadow: 0.125em 0.125em #000;
-}
-.button-send:hover {
-    cursor: pointer;
-    background-color: #00f8;
-}
-.button-send:active {
-    box-shadow: none;
 }
 
 
