@@ -5,7 +5,7 @@ from applications.users.models import User
 
 stripe.api_key = get_secret("STRIPE_PRIVATE_KEY")
 
-redirect_page = "http://127.0.0.1:8000"
+redirect_page = "https://fortuna303.com/"
 
 
 def create_customer_stripe(id_user: int):
@@ -75,8 +75,8 @@ def create_order_stripe(id_user: int, amount: float, description: str):
     mode='payment',
     metadata={'custom_id': 'first_payment', 'id_user': id_user},
     customer=id_customer,
-    success_url=redirect_page + '/payments',
-    cancel_url=redirect_page + '/payments'
+    success_url=redirect_page + '/payments/',
+    cancel_url=redirect_page + '/payments/'
     )
     return session.url
 
@@ -99,7 +99,7 @@ def create_renewal_order_stripe(id_user: int, case: str, payment_id: int, amount
     mode='payment',
     metadata={'custom_id': case, 'payment_id': payment_id, 'id_user': id_user},
     customer=id_customer,
-    success_url=redirect_page + '/payments',
-    cancel_url=redirect_page + '/payments'
+    success_url=redirect_page + '/payments/',
+    cancel_url=redirect_page + '/payments/'
     )
     return session.url

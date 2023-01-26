@@ -10,7 +10,7 @@ from fortuna_303.settings.base import get_secret
 
 def connect_terminal():
     # establecemos la conexión con el terminal MetaTrader 5
-    if not mt5.initialize(path="C:\\Program Files\\Traders Way MetaTrader 5\\terminal64.exe"):
+    if not mt5.initialize(path=get_secret("PATH_METATRADER_5")):
         print("initialize() failed, error code =", mt5.last_error())
         quit()
 

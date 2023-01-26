@@ -3,6 +3,8 @@ from fortuna_303.settings.base import get_secret
 
 """Funciones para usar la api de PAYPAL"""
 
+redirect_page = "https://fortuna303.com/"
+
 def create_order_paypal(amount: float, description: str):
 
     url = 'https://api-m.sandbox.paypal.com/v2/checkout/orders'
@@ -21,8 +23,8 @@ def create_order_paypal(amount: float, description: str):
             'brand_name': 'Fortuna 303',
             'payment_method': {'payee_preferred': 'IMMEDIATE_PAYMENT_REQUIRED'},
             'user_action': 'PAY_NOW',
-            'return_url': 'http://127.0.0.1:8000/payments/',
-            'cancel_url': 'http://127.0.0.1:8000/payments/'
+            'return_url': redirect_page + '/payments/',
+            'cancel_url': redirect_page + '/payments/'
         }
     }
 
@@ -56,8 +58,8 @@ def create_renewal_order_paypal(case: str, payment_id: int, amount: float, descr
             'brand_name': 'Fortuna 303',
             'payment_method': {'payee_preferred': 'IMMEDIATE_PAYMENT_REQUIRED'},
             'user_action': 'PAY_NOW',
-            'return_url': 'http://127.0.0.1:8000/payments/',
-            'cancel_url': 'http://127.0.0.1:8000/payments/'
+            'return_url': redirect_page + '/payments/',
+            'cancel_url': redirect_page + '/payments/'
         }
     }
 
