@@ -1,6 +1,4 @@
-""" Funciones extras de python para la aplicacion users. 
-    Aqui estan las funciones que no son parte de django. 
-"""
+"""Funciones extras de python para la aplicacion payments."""
 from datetime import datetime, timedelta
 from calendar import isleap, monthrange
 # functions of django

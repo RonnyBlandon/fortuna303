@@ -17,6 +17,7 @@ from applications.payments.models import VpsPayment, TraderPayment
 # imortar funciones
 from .functions import trading_history, active_buttons_time
 from .metaapi import create_server_mt5, configure_copyfactory, delete_server_mt5, reconnect_mt5_account
+from applications.users.function import notification_admin_by_mail, create_mail
 
 # Create your views here.
 
@@ -210,7 +211,8 @@ class UnsubscriberView(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         # actualizamos el campo subscriber del usuario a False
-        User.objects.filter(id=request.user.id).update(subscriber=False)
+        user = User.objects.filter(id=request.user.id)
+        user.update(subscriber=False)
 
         # Borramos la cuenta en metaapi 
         accounts_mt5 = AccountMt5.objects.get_account_mt5(request.user.id)
@@ -233,6 +235,15 @@ class UnsubscriberView(LoginRequiredMixin, View):
             vps_payments.update(status="Cancelado")
             
         messages.add_message(request=self.request, level=messages.SUCCESS, message='Se ha dado de baja con éxito.')
+        
+        # Enviamos el codigo de verificar cuenta al email del usuario
+        mail = create_mail(user[0].email, "SE HA DADO DE BAJA DE VPS+COPYTRADING", "vps/notify-unsubscribe.html", {})
+        mail.send(fail_silently=False)
+        # Enviamos un correo notificando al email del administrador que se ha creado una cuenta de usuario.
+        affair_admin = "UN USUARIO SE DIO DE BAJA"
+        message_admin = f"Un usuario se dio de baja de VPS+COPYTRADING. \n\n ID: {user[0].id} \n Name: {user[0].name} {user[0].last_name} \n Email: {user[0].email}"
+        notification_admin_by_mail(affair_admin, message_admin)
+
         # Redirigimos a la misma pagina de perfil de usuario
         return HttpResponseRedirect(
             reverse('vps_app:panel_user')

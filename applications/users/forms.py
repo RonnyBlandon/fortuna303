@@ -47,16 +47,9 @@ class UserRegisterForm(forms.ModelForm):
         'email': forms.EmailInput(
             attrs = {'class': 'form-register__input', 'placeholder': 'Correo Electronico'}
         )}
-
+    
     # Validacion de las contraseñas al crear usuario
-    def clean(self):
-        # Validando si existe ya el correo electronico en la base de datos
-        email = self.cleaned_data['email']
-        email_exists = User.objects.email_exists(email)
-        if email_exists:
-            self.add_error('email', 'Ya existe una cuenta con este correo electrónico.')
-
-        # Validando los passwords
+    def validate_password(self):
         password1 = self.cleaned_data['password1']
         password2 = self.cleaned_data['password2']
 
@@ -87,6 +80,15 @@ class UserRegisterForm(forms.ModelForm):
             self.add_error('password2', 'La contraseña debe contener al menos una letra mayúscula.')
         if numeros == False:
             self.add_error('password2', 'La contraseña debe contener al menos un numero.')
+    
+    def clean(self):
+        # Validando si existe ya el correo electronico en la base de datos
+        email = self.cleaned_data['email']
+        email_exists = User.objects.email_exists(email)
+        if email_exists:
+            self.add_error('email', 'Ya existe una cuenta con este correo electrónico.')
+
+        UserRegisterForm.validate_password(self)
 
     
 # Formulario de Inicio de Sesión
@@ -172,7 +174,8 @@ class UpdatePasswordForm(forms.Form):
         if not check_password(password3, user.password):
             raise forms.ValidationError('La contraseña vieja no es correcta.')
 
-        UserRegisterForm.clean(self)
+        # Validando los passwords
+        UserRegisterForm.validate_password(self)
 
 
 class VerificationForm(forms.Form):
@@ -262,4 +265,4 @@ class ChangePasswordForm(forms.Form):
         else:
             raise forms.ValidationError('El codigo es incorrecto')
         
-        UserRegisterForm.clean(self)
+        UserRegisterForm.validate_password(self)

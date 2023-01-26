@@ -1,3 +1,4 @@
+"""Funciones extras de python para la aplicacion payments."""
 from datetime import datetime, timedelta
 from cryptography.fernet import Fernet
 import MetaTrader5 as mt5

@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from django.views.generic import TemplateView, FormView
 from django.urls import reverse_lazy, reverse
 from django.core.mail import send_mail
@@ -28,7 +27,7 @@ class ContactView(FormView):
         email_remitente = 'fortuna303.com@gmail.com'
         send_mail(affair, mensaje, email_remitente, [email_remitente,])
 
-        messages.add_message(request=self.request, level=messages.SUCCESS, message='Su mensaje fue enviado con exito. Muy pronto recibira respuesta en su correo.')
+        messages.add_message(request=self.request, level=messages.SUCCESS, message='Su mensaje fue enviado con exito. Muy pronto recibira una respuesta en su correo.')
 
         # Redirigimos a la misma pagina de contacto
         return HttpResponseRedirect(

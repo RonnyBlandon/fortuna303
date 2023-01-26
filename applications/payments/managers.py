@@ -23,12 +23,13 @@ class VpsPaymentManager(models.Manager):
         return payment
     
     def update_payment_vps(self, id_payment: int, payment_method: str, transaction_id: str):
-        payment = self.filter(id=id_payment).update(
+        payment = self.filter(id=id_payment)
+        payment.update(
             status='Pagado',
             payment_method=payment_method,
             transaction_id=transaction_id
         )
-        return payment
+        return payment[0]
 
     def vps_payments_by_user(self, id_user: int):
         payments = self.filter(id_user=id_user).order_by('-id')
@@ -50,12 +51,13 @@ class TraderPaymentManager(models.Manager):
     """ Procedimientos para TraderPayment """
 
     def update_payment_trader(self, id_payment: int, payment_method: str, transaction_id: str):
-        payment = self.filter(id=id_payment).update(
+        payment = self.filter(id=id_payment)
+        payment.update(
             status='Pagado',
             payment_method=payment_method,
             transaction_id=transaction_id
         )
-        return payment
+        return payment[0]
 
     def trader_payments_by_management(self, id_management: int):
         payments = self.filter(id_management=id_management).order_by('-id')

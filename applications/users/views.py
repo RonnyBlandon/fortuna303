@@ -8,6 +8,7 @@ from django.http import HttpResponseRedirect
 # importamos las librerias de autenticacion de django
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
 # importamos los forms
 from .forms import (
     UserRegisterForm, UserLoginForm, UpdatePasswordForm, VerificationForm, 
@@ -16,7 +17,7 @@ from .forms import (
 # importamos los modelos
 from .models import User, Level
 # imporatmos function.py
-from .function import code_generator
+from .function import code_generator, notification_admin_by_mail, create_mail
 
 
 class UserRegisterView(FormView):
@@ -29,25 +30,30 @@ class UserRegisterView(FormView):
         codigo = code_generator()
         # este get devuelve una tupla de instancias
         level = Level.objects.get(account_level='0'), # Siempre iniciaran como nivel 0
-
-        usuario = User.objects.create_user(
-            form.cleaned_data['name'],
-            form.cleaned_data['last_name'],
-            form.cleaned_data['email'],
+        
+        name = form.cleaned_data['name']
+        last_name = form.cleaned_data['last_name']
+        email = form.cleaned_data['email']
+        user = User.objects.create_user(
+            name,
+            last_name,
+            email,
             level[0],
             form.cleaned_data['password1'],
             validation_code=codigo
         )
 
-        # Enviamos el codigo al email del usuario
-        asunto = 'Confirmación de Correo Electrónico.'
-        mensaje = 'Código de Verificación: ' + codigo
-        email_remitente = 'fortuna303.com@gmail.com'
-        send_mail(asunto, mensaje, email_remitente, [form.cleaned_data['email'],])
+        # Enviamos el codigo de verificar cuenta al email del usuario
+        mail = create_mail(user.email, "CÓDIGO DE VERIFICACIÓN", "users/send-verification.html", {"validation_code": codigo, "message_context": "Necesitas este código para verificar el correo electrónico."})
+        mail.send(fail_silently=False)
+        # Enviamos un correo notificando al email del administrador que se ha creado una cuenta de usuario.
+        affair_admin = "NUEVA CUENTA DE USUARIO."
+        message_admin = f"Se ha creado una nueva cuenta de usuario sin verificar. \n\n ID: {user.id} \n Name: {name} {last_name} \n Email: {email}"
+        notification_admin_by_mail(affair_admin, message_admin)
 
         # Redirigimos a pantalla de verificacion al usuario
         return HttpResponseRedirect(
-            reverse('users_app:user_verification', kwargs={'pk': usuario.id})
+            reverse('users_app:user_verification', kwargs={'pk': user.id})
         )
 
 
@@ -101,6 +107,13 @@ class UpdatePasswordView(LoginRequiredMixin, FormView):
             usuario.set_password(new_password)
             usuario.save()
 
+        messages.add_message(request=self.request, level=messages.SUCCESS, message='Se ha cambiado la contraseña, inicie sesión.')
+
+        # Enviamos un correo notificando al email del administrador que se ha creado una cuenta de usuario.
+        affair_admin = "USUARIO HA CAMBIADO SU CONTRASEÑA."
+        message_admin = f"Un usuario ha cambiado su contraseña. \n\n ID: {user.id} \n Name: {user.name} {user.last_name} \n Email: {user.email}"
+        notification_admin_by_mail(affair_admin, message_admin)
+
         logout(self.request)
 
         return super(UpdatePasswordView, self).form_valid(form)
@@ -121,9 +134,16 @@ class CodeVerificationView(FormView):
 
     def form_valid(self, form):
 
-        User.objects.filter(
+        user = User.objects.filter(
             id=self.kwargs['pk']
-        ).update(is_active=True)
+        )
+        user.update(is_active=True)
+        messages.add_message(request=self.request, level=messages.SUCCESS, message='Se ha verificado el correo electrónico, ya puede iniciar sesión.')
+
+        # Enviamos un correo notificando al email del administrador que se ha verificado una cuenta de usuario.
+        affair_admin = "SE HA VERIFICADO UNA CUENTA DE USUARIO"
+        message_admin = f"Se verifico la cuenta del usuario. \n\n ID: {user[0].id} \n Name: {user[0].name} {user[0].last_name} \n Email: {user[0].email}"
+        notification_admin_by_mail(affair_admin, message_admin)
 
         return super(CodeVerificationView, self).form_valid(form)
 
@@ -148,13 +168,11 @@ class RecoverAccountView(FormView):
         # Actualizamos el nuevo codigo al usuario en la base de datos
         user = User.objects.filter(email=email)
         user.update(validation_code=codigo)
-        id_user = user.get().id # obtenemos el id del usuario
+        id_user = user[0].id # obtenemos el id del usuario
 
-        # Enviamos el codigo al correo
-        asunto = 'Recuperación de cuenta'
-        mensaje = 'Codigo de Verificación: ' + codigo + '\nNecesita este código para cambiar su contraseña.'
-        email_remitente = 'fortuna303.com@gmail.com'
-        send_mail(asunto, mensaje, email_remitente, [email,])
+        # Enviamos el codigo de verificación para cambiar contraseña al usuario
+        mail = create_mail(user[0].email, "RECUPERACIÓN DE CUENTA", "users/send-verification.html", {"validation_code": codigo, "message_context": "Necesitas este código para cambiar la contraseña."})
+        mail.send(fail_silently=False)
 
         # Redirigimos a pantalla de verificacion al usuario para cambiar contraseña
         return HttpResponseRedirect(
@@ -180,10 +198,15 @@ class ChangePasswordView(FormView):
         
         user = User.objects.filter(validation_code=form.cleaned_data['validation_code'])
         user = user.get()
-        print('Esto es lo que contiene user en cambio de contraseña: ', user)
         new_password = self.request.POST.get('password2')
         user.set_password(new_password)
         user.save()
+        messages.add_message(request=self.request, level=messages.SUCCESS, message='Se ha cambiado la contraseña, inicie sesión.')
+
+        # Enviamos un correo notificando al email del administrador que se ha creado una cuenta de usuario.
+        affair_admin = "USUARIO HA CAMBIADO SU CONTRASEÑA."
+        message_admin = f"Un usuario ha cambiado su contraseña. \n\n ID: {user.id} \n Name: {user.name} {user.last_name} \n Email: {user.email}"
+        notification_admin_by_mail(affair_admin, message_admin)
 
         return super(ChangePasswordView, self).form_valid(form)
         

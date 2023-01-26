@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Invoice</title>
+    <style type="text/css">
+        body {
+            font-family: Arial, sans-serif;
+            padding: 2em;
+            color: #080;
+        }
+
+        h1,
+        h2,
+        h3 {
+            margin-bottom: 1em;
+        }
+
+        h1 {
+            font-size: 3em;
+            font-weight: bold;
+        }
+
+        h2 {
+            font-size: 2em;
+            color: #0b0;
+        }
+
+        h3 {
+            font-size: 1.5em;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 2em;
+        }
+
+        th,
+        td {
+            border: 0.1em solid #00A00F;
+            padding: 0.4em;
+            text-align: left;
+            font-size: 1.3em;
+        }
+
+        th {
+            background-color: #ffbd59;
+            font-weight: bold;
+            border-width: 0.1em;
+        }
+
+        tr:last-child td {
+            text-align: right;
+            border-color: #00A00F;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="https://fortuna303.com" target="_blank">
+        <img src="https://fortuna303.com/static/img/logo.png" alt="logo">
+    </a>
+    <h1>Importe #{{ id_payment }}</h1>
+    <h2>Estado: {{ status }}</h2>
+    <h3>Nombre: {{ name }}</h3>
+    <table>
+        <tr>
+            <th>Servicio</th>
+            <td>{{ service }}</td>
+        </tr>
+        <tr>
+            <th>Fecha de Creación</th>
+            <td>{{ created_date }}</td>
+        </tr>
+        <tr>
+            <th>Vecimiento</th>
+            <td>{{ expiration }}</td>
+        </tr>
+        <tr>
+            <th>Id. Referencia</th>
+            <td>{{ id_management }}</td>
+        </tr>
+        <tr>
+            <th>Total</th>
+            <td>${{ price }}</td>
+        </tr>
+    </table>
+</body>
+
+</html>

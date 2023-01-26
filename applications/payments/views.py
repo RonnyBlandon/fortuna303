@@ -16,6 +16,7 @@ from .paypal import create_order_paypal, create_renewal_order_paypal, capture_or
 from .stripe import create_order_stripe, create_renewal_order_stripe
 from applications.vps.functions import active_buttons_time
 from fortuna_303.settings.base import get_secret
+from applications.users.function import notification_admin_by_mail, create_mail
 # Create your views here.
 
 class PaymentsView(LoginRequiredMixin, TemplateView):
@@ -34,8 +35,16 @@ class PaymentsView(LoginRequiredMixin, TemplateView):
                 # Verificamos si es un primer pago del servicio de VPS y COPYTRADING
                 if details['custom_id'] == 'first_payment':
                     User.objects.filter(id=request.user.id).update(subscriber=True)
-                    VpsPayment.objects.save_payment_vps(details['amount'], user, 'Paypal', details['id'])
+                    payment = VpsPayment.objects.save_payment_vps(details['amount'], user, 'Paypal', details['id'])
                     messages.add_message(request=self.request, level=messages.SUCCESS, message='Su pago fue procesado exitosamente.')
+                    
+                    #Enviar un correo del importe al usuario cuando el pago haya sido procesado con exito.
+                    mail = create_mail(user.email, f"FORTUNA 303 IMPORTE DE VPS+COPYTRADING #{payment.id}", "payments/invoice-vps.html", {"id_payment": payment.id, "name": user.name +" "+ user.last_name, "status": payment.status, "service": "VPS+COPYTRADING", "created_date": payment.created_date, "expiration": payment.expiration, "price": payment.total})
+                    mail.send(fail_silently=False)
+                    #Enviar un correo de notificacion al admin cuando el pago haya sido procesado con exito.
+                    affair_admin = "NUEVO PAGO DE VPS+COPYTRADING RECIBIDO."
+                    message_admin = f"EL pago recibido es del usario:\n\n ID: {user.id}\n name: {user.name} {user.last_name}\n correo: {user.email}\n\nLos datos del importe:\n\n ID: {payment.id}\n Created date: {payment.created_date}\n Expiration: {payment.expiration}\n Total: {payment.total}\n Status: {payment.status}\n Method: {payment.payment_method}\n ID_Transaction: {payment.transaction_id}"
+                    notification_admin_by_mail(affair_admin, message_admin)
 
                 else:
                     # Convertimos el string del valor de custom_id a un dict
@@ -44,8 +53,17 @@ class PaymentsView(LoginRequiredMixin, TemplateView):
                     # Verificamos si es una renovacion del servicio VPS o un pago para el trader
                     if 'vps' in dictionary:
                         id_payment = dictionary['vps']
-                        VpsPayment.objects.update_payment_vps(id_payment, 'Paypal', details['id'])
+                        payment = VpsPayment.objects.update_payment_vps(id_payment, 'Paypal', details['id'])
                         messages.add_message(request=self.request, level=messages.SUCCESS, message='Su pago fue procesado exitosamente.')
+                        
+                        #Enviar un correo del importe al usuario cuando el pago haya sido procesado con exito.
+                        mail = create_mail(user.email, f"FORTUNA 303 IMPORTE DE VPS+COPYTRADING #{payment.id}", "payments/invoice-vps.html", {"id_payment": payment.id, "name": user.name +" "+ user.last_name, "status": payment.status, "service": "VPS+COPYTRADING", "created_date": payment.created_date, "expiration": payment.expiration, "price": payment.total})
+                        mail.send(fail_silently=False)
+                        #Enviar un correo de notificacion al admin cuando el pago haya sido procesado con exito.
+                        affair_admin = "NUEVO PAGO DE VPS+COPYTRADING RECIBIDO."
+                        message_admin = f"EL pago recibido es del usario:\n\n ID: {user.id}\n name: {user.name} {user.last_name}\n correo: {user.email}\n\nLos datos del importe:\n\n ID: {payment.id}\n Created date: {payment.created_date}\n Expiration: {payment.expiration}\n Total: {payment.total}\n Status: {payment.status}\n Method: {payment.payment_method}\n ID_Transaction: {payment.transaction_id}"
+                        notification_admin_by_mail(affair_admin, message_admin)
+
                         # Verificamos si la cuenta esta desconectada
                         try:
                             account_mt5 = AccountMt5.objects.get(id_user=user.id)
@@ -61,8 +79,17 @@ class PaymentsView(LoginRequiredMixin, TemplateView):
 
                     elif 'trader' in dictionary:
                         id_payment = dictionary['trader']
-                        TraderPayment.objects.update_payment_trader(id_payment, 'Paypal', details['id'])
+                        payment = TraderPayment.objects.update_payment_trader(id_payment, 'Paypal', details['id'])
                         messages.add_message(request=self.request, level=messages.SUCCESS, message='Su pago fue procesado exitosamente.')
+                        
+                        #Enviar un correo del importe al usuario cuando el pago haya sido procesado con exito.
+                        mail = create_mail(user.email, f"FORTUNA 303 IMPORTE DE GESTIÓN DE CUENTAS MT5 #{payment.id}", "payments/invoice-trader.html", {"id_payment": payment.id, "name": user.name +" "+ user.last_name, "status": payment.status, "service": "GESTIÓN DE CUENTAS MT5", "created_date": payment.created_date, "expiration": payment.expiration, "id_management": payment.id_management.id, "price": payment.total})
+                        mail.send(fail_silently=False)
+                        #Enviar un correo de notificacion al admin cuando el pago haya sido procesado con exito.
+                        affair_admin = "NUEVO PAGO DE GESTIÓN DE CUENTAS MT5 RECIBIDO."
+                        message_admin = f"EL pago recibido es del usario:\n\n ID: {user.id}\n name: {user.name} {user.last_name}\n correo: {user.email}\n\nLos datos del importe:\n\n ID: {payment.id}\n Created date: {payment.created_date}\n Expiration: {payment.expiration}\n Id_management: {payment.id_management.id}\n Total: {payment.total}\n Status: {payment.status}\n Method: {payment.payment_method}\n ID_Transaction: {payment.transaction_id}"
+                        notification_admin_by_mail(affair_admin, message_admin)
+                        
                         # Verificamos si la cuenta esta desconectada
                         try: 
                             account_mt5 = AccountMt5.objects.get(id_user=user.id)
@@ -276,20 +303,37 @@ class WebhookStripeView(View):
             transaction_id = session["payment_intent"]
             id_user = session["metadata"]["id_user"]
             custom_id = session["metadata"]["custom_id"]
-
+            user = User.objects.get(id=id_user)
+            
             # Verificamos si es un primer pago del servicio de VPS y COPYTRADING
             if custom_id == 'first_payment':
-                user = User.objects.get(id=id_user)
                 User.objects.filter(id=id_user).update(subscriber=True)
-                VpsPayment.objects.save_payment_vps(price, user, 'Stripe', transaction_id)
+                payment = VpsPayment.objects.save_payment_vps(price, user, 'Stripe', transaction_id)
                 messages.add_message(request=self.request, level=messages.SUCCESS, message='Su pago fue procesado exitosamente.')
-
+                print("Los mensajes deberian de funcionar pero no lo hacen")
+                #Enviar un correo del importe al usuario cuando el pago haya sido procesado con exito.
+                mail = create_mail(user.email, f"FORTUNA 303 IMPORTE DE VPS+COPYTRADING #{payment.id}", "payments/invoice-vps.html", {"id_payment": payment.id, "name": user.name +" "+ user.last_name, "status": payment.status, "service": "VPS+COPYTRADING", "created_date": payment.created_date, "expiration": payment.expiration, "price": payment.total})
+                mail.send(fail_silently=False)
+                #Enviar un correo de notificacion al admin cuando el pago haya sido procesado con exito.
+                affair_admin = "NUEVO PAGO DE VPS+COPYTRADING RECIBIDO."
+                message_admin = f"EL pago recibido es del usario:\n\n ID: {user.id}\n name: {user.name} {user.last_name}\n correo: {user.email}\n\nLos datos del importe:\n\n ID: {payment.id}\n Created date: {payment.created_date}\n Expiration: {payment.expiration}\n Total: {payment.total}\n Status: {payment.status}\n Method: {payment.payment_method}\n ID_Transaction: {payment.transaction_id}"
+                notification_admin_by_mail(affair_admin, message_admin)           
+            
             # Verificamos si es una renovacion del servicio VPS o un pago para el trader
             elif custom_id == 'vps':
                 id_payment = session["metadata"]["payment_id"]
 
-                VpsPayment.objects.update_payment_vps(id_payment, 'Stripe', transaction_id)
+                payment = VpsPayment.objects.update_payment_vps(id_payment, 'Stripe', transaction_id)
                 messages.add_message(request=self.request, level=messages.SUCCESS, message='Su pago fue procesado exitosamente.')
+                
+                #Enviar un correo del importe al usuario cuando el pago haya sido procesado con exito.
+                mail = create_mail(user.email, f"FORTUNA 303 IMPORTE DE VPS+COPYTRADING #{payment.id}", "payments/invoice-vps.html", {"id_payment": payment.id, "name": user.name +" "+ user.last_name, "status": payment.status, "service": "VPS+COPYTRADING", "created_date": payment.created_date, "expiration": payment.expiration, "price": payment.total})
+                mail.send(fail_silently=False)
+                #Enviar un correo de notificacion al admin cuando el pago haya sido procesado con exito.
+                affair_admin = "NUEVO PAGO DE VPS+COPYTRADING RECIBIDO."
+                message_admin = f"EL pago recibido es del usario:\n\n ID: {user.id}\n name: {user.name} {user.last_name}\n correo: {user.email}\n\nLos datos del importe:\n\n ID: {payment.id}\n Created date: {payment.created_date}\n Expiration: {payment.expiration}\n Total: {payment.total}\n Status: {payment.status}\n Method: {payment.payment_method}\n ID_Transaction: {payment.transaction_id}"
+                notification_admin_by_mail(affair_admin, message_admin)
+                
                 # Verificamos si la cuenta esta desconectada
                 try:
                     account_mt5 = AccountMt5.objects.get(id_user=id_user)
@@ -306,8 +350,17 @@ class WebhookStripeView(View):
 
             elif custom_id == 'trader':
                 id_payment = session["metadata"]["payment_id"]
-                TraderPayment.objects.update_payment_trader(id_payment, 'Stripe', transaction_id)
+                payment = TraderPayment.objects.update_payment_trader(id_payment, 'Stripe', transaction_id)
                 messages.add_message(request=self.request, level=messages.SUCCESS, message='Su pago fue procesado exitosamente.')
+                
+                #Enviar un correo del importe al usuario cuando el pago haya sido procesado con exito.
+                mail = create_mail(user.email, f"FORTUNA 303 IMPORTE DE GESTIÓN DE CUENTAS MT5 #{payment.id}", "payments/invoice-trader.html", {"id_payment": payment.id, "name": user.name +" "+ user.last_name, "status": payment.status, "service": "GESTIÓN DE CUENTAS MT5", "created_date": payment.created_date, "expiration": payment.expiration, "id_management": payment.id_management.id, "price": payment.total})
+                mail.send(fail_silently=False)
+                #Enviar un correo de notificacion al admin cuando el pago haya sido procesado con exito.
+                affair_admin = "NUEVO PAGO DE GESTIÓN DE CUENTAS MT5 RECIBIDO."
+                message_admin = f"EL pago recibido es del usario:\n\n ID: {user.id}\n name: {user.name} {user.last_name}\n correo: {user.email}\n\nLos datos del importe:\n\n ID: {payment.id}\n Created date: {payment.created_date}\n Expiration: {payment.expiration}\n Id_management: {payment.id_management.id}\n Total: {payment.total}\n Status: {payment.status}\n Method: {payment.payment_method}\n ID_Transaction: {payment.transaction_id}"
+                notification_admin_by_mail(affair_admin, message_admin)
+                
                 # Verificamos si la cuenta esta desconectada
                 try: 
                     account_mt5 = AccountMt5.objects.get(id_user=id_user)
