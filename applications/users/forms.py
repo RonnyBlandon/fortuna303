@@ -114,6 +114,7 @@ class UserLoginForm(forms.Form):
             }
         )
     )
+    captcha = ReCaptchaField(widget=ReCaptchaV3)
 
 
     """ la funcion llamada clean es la primera validacion que hace django en un form por eso es que cada
