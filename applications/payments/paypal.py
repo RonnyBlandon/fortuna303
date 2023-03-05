@@ -43,8 +43,7 @@ def create_order_paypal(amount: float, description: str):
 def create_renewal_order_paypal(case: str, payment_id: int, amount: float, description: str):
 
     url = link_main_api + '/v2/checkout/orders'
-    auth_user = ('AcdmHxGozWnFBLzScbP59mR8Nn3EADJz2ibstNgP4bAXbZ9QOoVDicHlaa5P4-66SvtR3Q0Zs4nEr4Av',
-                 'EH9FJ_TzOwTIwl2ZBHTAMjtj4QuMuPcT_h3zxvZhBdle-FH0OCaRQ8ResUt7LuHZ1QQe6smeGITeio86')
+    auth_user = (get_secret('PAYPAL_CLIENT_ID'), get_secret('PAYPAL_CLIENT_SECRET'))
     headers = {'Content-Type': 'application/json'}
     order = {
         'intent': 'CAPTURE',
@@ -78,8 +77,7 @@ def create_renewal_order_paypal(case: str, payment_id: int, amount: float, descr
 # Despues de que el usuario pague se debe capturar el pago para que se refleje en la cuenta paypal
 def capture_order_paypal(id_order):
     url = link_main_api + '/v2/checkout/orders/'+id_order+'/capture'
-    auth_user = ('AcdmHxGozWnFBLzScbP59mR8Nn3EADJz2ibstNgP4bAXbZ9QOoVDicHlaa5P4-66SvtR3Q0Zs4nEr4Av',
-                 'EH9FJ_TzOwTIwl2ZBHTAMjtj4QuMuPcT_h3zxvZhBdle-FH0OCaRQ8ResUt7LuHZ1QQe6smeGITeio86')
+    auth_user = (get_secret('PAYPAL_CLIENT_ID'), get_secret('PAYPAL_CLIENT_SECRET'))
     headers = {'Content-Type': 'application/json'}
 
     resp = requests.post(url, auth=auth_user, headers=headers)
