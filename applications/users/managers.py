@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager
+# import models
 
 class UserManager(BaseUserManager, models.Manager):
 
@@ -26,6 +27,9 @@ class UserManager(BaseUserManager, models.Manager):
 
 
     def create_superuser(self, name, last_name, email, account_level, password=None, **extra_fields):
+        if account_level is None:
+            # Establecer un valor predeterminado para account_level si no se proporciona
+            account_level = 2
         return self._create_user(name, last_name, email, account_level, password, True, True, True, **extra_fields)
 
 

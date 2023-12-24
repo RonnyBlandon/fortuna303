@@ -39,7 +39,7 @@ class PaymentsView(LoginRequiredMixin, TemplateView):
                     messages.add_message(request=self.request, level=messages.SUCCESS, message='Su pago fue procesado exitosamente.')
                     
                     #Enviar un correo del importe al usuario cuando el pago haya sido procesado con exito.
-                    mail = create_mail(user.email, f"FORTUNA 303 IMPORTE DE VPS+COPYTRADING #{payment.id}", "payments/invoice-vps.html", {"id_payment": payment.id, "name": user.name +" "+ user.last_name, "status": payment.status, "service": "VPS+COPYTRADING", "created_date": payment.created_date, "expiration": payment.expiration, "price": payment.total})
+                    mail = create_mail(user.email, f"FORTUNA 303 IMPORTE DE VPS+COPYTRADING #{payment.id}", "payments/invoice.html", {"id_payment": payment.id, "name": user.name +" "+ user.last_name, "status": payment.status, "service": "VPS+COPYTRADING", "created_date": payment.created_date, "expiration": payment.expiration, "price": payment.total})
                     mail.send(fail_silently=False)
                     #Enviar un correo de notificacion al admin cuando el pago haya sido procesado con exito.
                     affair_admin = "NUEVO PAGO DE VPS+COPYTRADING RECIBIDO."
@@ -57,7 +57,7 @@ class PaymentsView(LoginRequiredMixin, TemplateView):
                         messages.add_message(request=self.request, level=messages.SUCCESS, message='Su pago fue procesado exitosamente.')
                         
                         #Enviar un correo del importe al usuario cuando el pago haya sido procesado con exito.
-                        mail = create_mail(user.email, f"FORTUNA 303 IMPORTE DE VPS+COPYTRADING #{payment.id}", "payments/invoice-vps.html", {"id_payment": payment.id, "name": user.name +" "+ user.last_name, "status": payment.status, "service": "VPS+COPYTRADING", "created_date": payment.created_date, "expiration": payment.expiration, "price": payment.total})
+                        mail = create_mail(user.email, f"FORTUNA 303 IMPORTE DE VPS+COPYTRADING #{payment.id}", "payments/invoice.html", {"id_payment": payment.id, "name": user.name +" "+ user.last_name, "status": payment.status, "service": "VPS+COPYTRADING", "created_date": payment.created_date, "expiration": payment.expiration, "price": payment.total})
                         mail.send(fail_silently=False)
                         #Enviar un correo de notificacion al admin cuando el pago haya sido procesado con exito.
                         affair_admin = "NUEVO PAGO DE VPS+COPYTRADING RECIBIDO."
@@ -83,7 +83,7 @@ class PaymentsView(LoginRequiredMixin, TemplateView):
                         messages.add_message(request=self.request, level=messages.SUCCESS, message='Su pago fue procesado exitosamente.')
                         
                         #Enviar un correo del importe al usuario cuando el pago haya sido procesado con exito.
-                        mail = create_mail(user.email, f"FORTUNA 303 IMPORTE DE GESTIÓN DE CUENTAS MT5 #{payment.id}", "payments/invoice-trader.html", {"id_payment": payment.id, "name": user.name +" "+ user.last_name, "status": payment.status, "service": "GESTIÓN DE CUENTAS MT5", "created_date": payment.created_date, "expiration": payment.expiration, "id_management": payment.id_management.id, "price": payment.total})
+                        mail = create_mail(user.email, f"FORTUNA 303 IMPORTE DE GESTIÓN DE CUENTAS MT5 #{payment.id}", "payments/invoice.html", {"id_payment": payment.id, "name": user.name +" "+ user.last_name, "status": payment.status, "service": "GESTIÓN DE CUENTAS MT5", "created_date": payment.created_date, "expiration": payment.expiration, "id_management": payment.id_management.id, "price": payment.total})
                         mail.send(fail_silently=False)
                         #Enviar un correo de notificacion al admin cuando el pago haya sido procesado con exito.
                         affair_admin = "NUEVO PAGO DE GESTIÓN DE CUENTAS MT5 RECIBIDO."
@@ -310,9 +310,8 @@ class WebhookStripeView(View):
                 User.objects.filter(id=id_user).update(subscriber=True)
                 payment = VpsPayment.objects.save_payment_vps(price, user, 'Stripe', transaction_id)
                 messages.add_message(request=self.request, level=messages.SUCCESS, message='Su pago fue procesado exitosamente.')
-                print("Los mensajes deberian de funcionar pero no lo hacen")
                 #Enviar un correo del importe al usuario cuando el pago haya sido procesado con exito.
-                mail = create_mail(user.email, f"FORTUNA 303 IMPORTE DE VPS+COPYTRADING #{payment.id}", "payments/invoice-vps.html", {"id_payment": payment.id, "name": user.name +" "+ user.last_name, "status": payment.status, "service": "VPS+COPYTRADING", "created_date": payment.created_date, "expiration": payment.expiration, "price": payment.total})
+                mail = create_mail(user.email, f"FORTUNA 303 IMPORTE DE VPS+COPYTRADING #{payment.id}", "payments/invoice.html", {"id_payment": payment.id, "name": user.name +" "+ user.last_name, "status": payment.status, "service": "VPS+COPYTRADING", "created_date": payment.created_date, "expiration": payment.expiration, "price": payment.total})
                 mail.send(fail_silently=False)
                 #Enviar un correo de notificacion al admin cuando el pago haya sido procesado con exito.
                 affair_admin = "NUEVO PAGO DE VPS+COPYTRADING RECIBIDO."
@@ -327,7 +326,7 @@ class WebhookStripeView(View):
                 messages.add_message(request=self.request, level=messages.SUCCESS, message='Su pago fue procesado exitosamente.')
                 
                 #Enviar un correo del importe al usuario cuando el pago haya sido procesado con exito.
-                mail = create_mail(user.email, f"FORTUNA 303 IMPORTE DE VPS+COPYTRADING #{payment.id}", "payments/invoice-vps.html", {"id_payment": payment.id, "name": user.name +" "+ user.last_name, "status": payment.status, "service": "VPS+COPYTRADING", "created_date": payment.created_date, "expiration": payment.expiration, "price": payment.total})
+                mail = create_mail(user.email, f"FORTUNA 303 IMPORTE DE VPS+COPYTRADING #{payment.id}", "payments/invoice.html", {"id_payment": payment.id, "name": user.name +" "+ user.last_name, "status": payment.status, "service": "VPS+COPYTRADING", "created_date": payment.created_date, "expiration": payment.expiration, "price": payment.total})
                 mail.send(fail_silently=False)
                 #Enviar un correo de notificacion al admin cuando el pago haya sido procesado con exito.
                 affair_admin = "NUEVO PAGO DE VPS+COPYTRADING RECIBIDO."
@@ -354,7 +353,7 @@ class WebhookStripeView(View):
                 messages.add_message(request=self.request, level=messages.SUCCESS, message='Su pago fue procesado exitosamente.')
                 
                 #Enviar un correo del importe al usuario cuando el pago haya sido procesado con exito.
-                mail = create_mail(user.email, f"FORTUNA 303 IMPORTE DE GESTIÓN DE CUENTAS MT5 #{payment.id}", "payments/invoice-trader.html", {"id_payment": payment.id, "name": user.name +" "+ user.last_name, "status": payment.status, "service": "GESTIÓN DE CUENTAS MT5", "created_date": payment.created_date, "expiration": payment.expiration, "id_management": payment.id_management.id, "price": payment.total})
+                mail = create_mail(user.email, f"FORTUNA 303 IMPORTE DE GESTIÓN DE CUENTAS MT5 #{payment.id}", "payments/invoice.html", {"id_payment": payment.id, "name": user.name +" "+ user.last_name, "status": payment.status, "service": "GESTIÓN DE CUENTAS MT5", "created_date": payment.created_date, "expiration": payment.expiration, "id_management": payment.id_management.id, "price": payment.total})
                 mail.send(fail_silently=False)
                 #Enviar un correo de notificacion al admin cuando el pago haya sido procesado con exito.
                 affair_admin = "NUEVO PAGO DE GESTIÓN DE CUENTAS MT5 RECIBIDO."
