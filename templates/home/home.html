@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %} Inicio {% endblock title %}
-
+{% block css %} {% static 'css/plans-sections.css' %} {% endblock css %}
 {% block content %}
 {% include 'includes/header.html' %}
 
@@ -59,6 +59,59 @@
         </div>
     </section>
 
+    <!-- NUEVA SECCIÓN PLANES FORTUNA -->
+    <section class="plans-section">
+
+        <h2 class="plans-title">Planes Fortuna</h2>
+
+        <!-- PLAN A -->
+        <div class="plan-category">
+            <h3 class="plan-category__title">PLAN A — Forex</h3>
+
+            <div class="plans-grid">
+
+                <div class="plan-card">
+                    <h4>PAQUETE INICIO</h4>
+                    <p class="plan-price">$87 / mensual</p>
+                    <p>Señales automatizadas generadas por bot de trading.</p>
+                </div>
+
+                <div class="plan-card">
+                    <h4>PAQUETE ELEVATE</h4>
+                    <p class="plan-price">$97 / mensual</p>
+                    <p>Señales enviadas por trader profesional (Kary Mcfred).</p>
+                </div>
+
+                <div class="plan-card highlight">
+                    <h4>TRADING ESPEJO</h4>
+                    <p><strong>Inscripción:</strong> $97 (único pago)</p>
+                    <p><strong>Mantenimiento:</strong> $70 mensual</p>
+                    <p><strong>Ganancias:</strong> 50% utilidades mensuales</p>
+                    <p><strong>Requisito:</strong> cuenta mínima $3,000</p>
+                    <p>Conexión automática para copiar operaciones en tiempo real.</p>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- PLAN B -->
+        <div class="plan-category">
+            <h3 class="plan-category__title">PLAN B — Bolsa de Valores</h3>
+
+            <div class="plans-grid">
+
+                <div class="plan-card">
+                    <h4>PAQUETE ANUAL</h4>
+                    <p class="plan-price">$797 / anual</p>
+                    <p>Servicio anual de señales para bolsa de valores.</p>
+                    <p><strong>No incluye copytrading.</strong></p>
+                    <p class="note">Pagos gestionados mediante Fortuna303.</p>
+                </div>
+
+            </div>
+        </div>
+
+    </section>
 
     <section class="content-2">
         <article class="content-2__items">

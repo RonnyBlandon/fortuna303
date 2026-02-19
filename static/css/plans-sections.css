@@ -1,0 +1,105 @@
+/* ===== PLANES FORTUNA ===== */
+
+/* contenedor alineado con el resto del sitio */
+.plans-section{
+    width:95%;
+    margin:50px auto 0 auto;
+}
+
+/* tablet */
+@media (min-width:768px){
+    .plans-section{
+        width:80%;
+    }
+}
+
+/* desktop */
+@media (min-width:1024px){
+    .plans-section{
+        width:70%;
+    }
+}
+
+
+/* título principal */
+.plans-title{
+    text-align:center;
+    margin-bottom:30px;
+    color: var(--color-secondary);
+    text-shadow: 2px 2px #000;
+}
+
+
+/* categoría */
+.plan-category{
+    margin-bottom:45px;
+}
+
+
+/* subtitulo */
+.plan-category__title{
+    margin-bottom:20px;
+    padding:8px 12px;
+    background: var(--color-principal);
+    color: var(--color-secondary);
+    text-shadow: 2px 2px #000;
+    border-radius:6px;
+    display:inline-block;
+}
+
+
+/* grid de planes */
+.plans-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fit,minmax(260px,1fr));
+    gap:18px;
+}
+
+
+/* tarjetas */
+.plan-card{
+    background: var(--color-principal);
+    color:white;
+    padding:18px;
+    border-radius:12px;
+    border:4px solid transparent;
+    animation: colores-2 3s linear infinite;
+    transition:.25s;
+    text-align:center;
+}
+
+.plan-card:hover{
+    transform:scale(1.03);
+}
+
+
+/* titulo plan */
+.plan-card h4{
+    color: var(--color-secondary);
+    margin-bottom:8px;
+    text-shadow:1px 1px #000;
+}
+
+
+/* precio */
+.plan-price{
+    font-size:22px;
+    font-weight:bold;
+    color:#ffbb00;
+    margin-bottom:8px;
+}
+
+
+/* plan destacado */
+.highlight{
+    background: linear-gradient(145deg,#006400,#00cc22);
+    border:4px solid #ffbb00;
+    box-shadow:0 0 15px #00ff44;
+}
+
+
+/* nota */
+.note{
+    font-size:13px;
+    opacity:.8;
+}

@@ -13,7 +13,7 @@ SECURE_HSTS_SECONDS = 31536000
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
 
-ALLOWED_HOSTS = ['fortuna303.com']
+ALLOWED_HOSTS = ['fortuna303.com', '*']
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
