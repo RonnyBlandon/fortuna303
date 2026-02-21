@@ -1,44 +1,40 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %} Panel Usuario {% endblock title %}
+{% block title %} {{ title }} {% endblock title %}
 
 {% block css %} {% static 'css/details-payment.css' %} {% endblock css %}
 
 {% block content %}
 {% include 'includes/header.html' %}
 
-<!--Titulo de la pagina-->
-<h1 class="title">Detalles de pago</h1>
-
-<!-- Mensajes de exito o de error -->
+<h1 class="title">{{ title }}</h1>
 
 {% if messages %}
 <ul class="messages">
     {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>  
+    <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
     {% endfor %}
 </ul>
 {% endif %}
 
-<!-- Sección de detalles de pago -->
 <div class="box-general">
     <div class="details-payment">
         <div class="details-payment-child">
             <h3>Fecha: </h3>
-            <p>{{ detail_payment.created_date|date:"Y-M-d" }}</p>
+            <p>{{ date|date:"d-M-Y" }}</p>
         </div>
         <div class="details-payment-child">
-            <h3>Expiración:</h3>
-            <p>{{ detail_payment.expiration|date:"Y-M-d" }}</p>
+            <h3>Expiracion:</h3>
+            <p>{{ expiration|date:"d-M-Y" }}</p>
         </div>
         <div class="details-payment-child">
             <h3>Precio:</h3>
-            <p>${{ detail_payment.total }}</p>
+            <p>${{ price }}</p>
         </div>
         <div class="details-payment-description">
-            <h3>Descripción:</h3> 
-            <p>Renovación del servicio mensual de vps para metarader 5 y uso del sistema copytrading.</p>
+            <h3>Descripcion:</h3>
+            <p>{{ description }}</p>
         </div>
     </div>
 
@@ -47,19 +43,23 @@
 
         <div class="container-methods">
             <form id="form-payment" action="{% url 'payments_app:checkout_session' %}" method="post"> {% csrf_token %}
-                <input type="hidden" name="type" value="renewal-vps">
-                <input type="hidden" name="id-payment" value="{{ id_payment }}">
-
+                <input type="hidden" name="type" value="{{ payment_type }}">
+                {% if payment_id %}
+                <input type="hidden" name="id-payment" value="{{ payment_id }}">
+                {% endif %}
+                {% if plan_type %}
+                <input type="hidden" name="plan-type" value="{{ plan_type }}">
+                {% endif %}
                 <label class="label-radio-paypal">
                     <input id="paypal" type="radio" name="payment-method" value="paypal" required>Paypal<br>
                 </label>
                 <label class="label-radio-stripe">
-                    <input id="stripe" type="radio" name="payment-method" value="stripe" required>Tarjeta de Crédito o Débito<br>
+                    <input id="stripe" type="radio" name="payment-method" value="stripe" required>Tarjeta de Credito o Debito<br>
                 </label>
                 <label class="input-checkbox">
                     <h5>
-                        <input type="checkbox" name="terms-and-conditions" required>
-                        He leído y estoy de acuerdo con los <a href='{% url 'home_app:terms' %}'>términos y condiciones</a> de fortuna303.
+                        <input type="checkbox" name="terms-and-conditions" value="True" required>
+                        He leido y estoy de acuerdo con los <a href='{% url 'home_app:terms' %}'>terminos y condiciones</a> de fortuna303.
                     </h5>
                 </label>
                 <button class="button-payment" type="submit">Realizar pago</button>

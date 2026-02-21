@@ -3,61 +3,59 @@ import {buttonsPaginator} from './paginator.js';
 const buttonAccordion = document.querySelector(".primary-details");
 const buttonAccordion2 = document.querySelector(".primary-details-2");
 
-/* Boton para desplegar el accordion de todas las facturas de Gestión de cuentas */
-buttonAccordion.addEventListener("click", ()=> {
-    const listaDetails = document.querySelectorAll(".details");
+if (buttonAccordion) {
+    buttonAccordion.addEventListener("click", () => {
+        const listaDetails = document.querySelectorAll(".details");
+        const open = buttonAccordion.getAttribute('open');
 
-    const open = buttonAccordion.getAttribute('open');
-
-    if (open == null) {
-        listaDetails.forEach(function(currentValue, currentIndex, listObj) {
-            currentValue.setAttribute("open", "true");
-        })
-    } else {
-        listaDetails.forEach(function(currentValue) {
-            currentValue.removeAttribute("open");
-        })
-    } 
-});
-
-
-/* Boton para desplegar el accordion todas las facturas vps y copytrading */
-if (buttonAccordion2 != null) {
-    buttonAccordion2.addEventListener("click", ()=> {
-        const listaDetails = document.querySelectorAll(".details-2");
-    
-        const open = buttonAccordion2.getAttribute('open');
-        
         if (open == null) {
-            listaDetails.forEach(function(currentValue, currentIndex, listObj) {
+            listaDetails.forEach(function(currentValue) {
                 currentValue.setAttribute("open", "true");
-            })
+            });
         } else {
             listaDetails.forEach(function(currentValue) {
                 currentValue.removeAttribute("open");
-            })
+            });
+        } 
+    });
+}
+
+if (buttonAccordion2) {
+    buttonAccordion2.addEventListener("click", () => {
+        const listaDetails = document.querySelectorAll(".details-2");
+        const open = buttonAccordion2.getAttribute('open');
+        
+        if (open == null) {
+            listaDetails.forEach(function(currentValue) {
+                currentValue.setAttribute("open", "true");
+            });
+        } else {
+            listaDetails.forEach(function(currentValue) {
+                currentValue.removeAttribute("open");
+            });
         } 
     });
 }
 
 
 export function detailPaginator(data, details, bloque, url_payment) {
-    /*ACTUALIZAMOS LAS FILAS DE LA TABLA*/
-    const clase = details[0].className; // guardamos la clase de la tabla details para saber cual tabla es.
-    // Borramos los details para crear nuevos details con la nueva informacion recibida
+    if (!data || data.length === 0 || !details || details.length === 0 || !bloque) {
+        return;
+    }
+
+    const clase = details[0].className;
+    
     details.forEach(function (currentValue) {
         currentValue.remove();
     });
     
-    for (let i=0; i<data.length; i++) {
-        // creamos el detail
+    for (let i = 0; i < data.length; i++) {
         let new_details = document.createElement('DETAILS');
         new_details.setAttribute('class', clase);
 
-        // creamos los hijos directos de detail que son la etiqueta "summary" y "ul"
         let summary = document.createElement('SUMMARY');
         new_details.appendChild(summary);
-        // creamos los hijos directos de la etiqueta summary
+        
         let span = document.createElement('SPAN');
         span.innerHTML = data[i]['id'];
         summary.appendChild(span);
@@ -76,9 +74,8 @@ export function detailPaginator(data, details, bloque, url_payment) {
 
         let ul = document.createElement('UL');
         new_details.appendChild(ul);
-        // creamos los hijos directos de la etiqueta ul
-        for (let j=0; j<4; j++) {
-
+        
+        for (let j = 0; j < 4; j++) {
             const li = document.createElement('LI');
             ul.appendChild(li);
             const h4 = document.createElement('H4');
@@ -90,80 +87,190 @@ export function detailPaginator(data, details, bloque, url_payment) {
             switch (j) {
                 case 0:
                     h4.innerHTML = 'Fecha';
-                    li_span.innerHTML = data[i]['created_date'];
+                    li_span.innerHTML = data[i]['created_date'] || '';
                     break;
                 case 1:
                     h4.innerHTML = 'Vencimiento';
-                    li_span.innerHTML = data[i]['expiration'];
+                    li_span.innerHTML = data[i]['expiration'] || '';
                     break;
                 case 2:
                     if (data[i]['id_management_id']) {
-                    h4.innerHTML = 'Id. Referencia';
-                    li_span.innerHTML = data[i]['id_management_id'];
+                        h4.innerHTML = 'Id. Referencia';
+                        li_span.innerHTML = data[i]['id_management_id'];
                     }
                     break;
                 case 3:
                     h4.innerHTML = 'Total';
-                    li_span.innerHTML = data[i]['total'];
+                    li_span.innerHTML = data[i]['total'] || '';
                     break;
             }
         }
 
         bloque.appendChild(new_details);
-        
     }
 }
 
 
-// recogemos los botones del paginador de la tabla en version mobile de "VPS + COPYTRADING"
+function detailPaginatorAdditional(data, container) {
+    if (!data || data.length === 0 || !container) {
+        return;
+    }
+
+    const rows = container.querySelectorAll('.box-detail-3');
+    rows.forEach(function(row) {
+        row.remove();
+    });
+    
+    const primaryDetails = container.querySelector('.primary-details-3');
+    
+    for (let i = 0; i < data.length; i++) {
+        const div = document.createElement('DIV');
+        div.setAttribute('class', 'box-detail-3');
+        
+        const details = document.createElement('DETAILS');
+        details.setAttribute('class', 'details-3');
+        
+        const summary = document.createElement('SUMMARY');
+        
+        const spanId = document.createElement('SPAN');
+        spanId.innerHTML = data[i]['id'];
+        summary.appendChild(spanId);
+        
+        const spanPlan = document.createElement('SPAN');
+        spanPlan.setAttribute('class', 'plan-type-mobile');
+        spanPlan.innerHTML = data[i]['plan_type'] || '';
+        summary.appendChild(spanPlan);
+        
+        if (data[i]['status'] === 'Pagar') {
+            const enlace = document.createElement('A');
+            enlace.setAttribute('class', 'btn-pay');
+            enlace.setAttribute('href', '/payment/renewal-' + data[i]['payment_type'] + '/' + data[i]['id'] + '/');
+            enlace.innerHTML = data[i]['status'];
+            summary.appendChild(enlace);
+        } else {
+            const spanStatus = document.createElement('SPAN');
+            spanStatus.innerHTML = data[i]['status'] || '';
+            summary.appendChild(spanStatus);
+        }
+        
+        details.appendChild(summary);
+        
+        const ul = document.createElement('UL');
+        
+        const fields = [
+            { label: 'Tipo:', value: data[i]['plan_type'] || '' },
+            { label: 'Fecha:', value: data[i]['created_date'] || '' },
+            { label: 'Vencimiento:', value: data[i]['expiration'] || '' },
+            { label: 'Total:', value: '$' + (data[i]['total'] || '0') }
+        ];
+        
+        fields.forEach(function(field) {
+            const li = document.createElement('LI');
+            const h4 = document.createElement('H4');
+            h4.setAttribute('class', 'title-celdas');
+            h4.innerHTML = field.label;
+            li.appendChild(h4);
+            const span = document.createElement('SPAN');
+            span.innerHTML = field.value;
+            li.appendChild(span);
+            ul.appendChild(li);
+        });
+        
+        details.appendChild(ul);
+        div.appendChild(details);
+        
+        if (primaryDetails && primaryDetails.nextSibling) {
+            container.insertBefore(div, primaryDetails.nextSibling);
+        } else {
+            container.appendChild(div);
+        }
+    }
+}
+
+
 let PaginatorButtons3 = document.querySelectorAll('.link-page3');
 PaginatorButtons3.forEach(function (currentValue, currentIndex) {
-
     currentValue.addEventListener('click', () => {
         const origin = window.location.origin;
         const pathname = window.location.pathname;
         const url = origin + pathname;
-        const url_payment = origin + '/renewal-payment/';
-        // Hacemos una petición GET al servidor para traer los datos de la tabla "VPS + COPYTRADING" mobile
+        const url_payment = origin + '/payment/renewal-vps/';
+        
         fetch(url + "?page=" + currentValue.value)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error de red: ' + response.status);
+                }
+                return response.json();
+            })
             .then(function (data) {
-                // Tomamos los datos para actualizar la tabla
                 const payments = data.vps_payments;
                 const total_pages = data.total_pages;
-                //Tomamos las filas a modificar
                 const bloque = document.querySelector('.box-detail-2');
                 const details_list = document.querySelectorAll('.details-2');
-                // Hacemos la paginación a la tabla de ganancias semanales con una funcion
                 detailPaginator(payments, details_list, bloque, url_payment);
                 buttonsPaginator(PaginatorButtons3, currentIndex, total_pages);
+            })
+            .catch(function(error) {
+                console.error('Error en paginador VPS móvil:', error);
             });
     });
 });
 
 
-// recogemos los botones del paginador de la tabla "GESTION DE CUENTAS MT5"
 let PaginatorButtons4 = document.querySelectorAll('.link-page4');
 PaginatorButtons4.forEach(function (currentValue, currentIndex) {
-
     currentValue.addEventListener('click', () => {
         const origin = window.location.origin;
         const pathname = window.location.pathname;
         const url = origin + pathname;
-        const url_payment = origin + '/trader-payment/';
-        // Hacemos una petición GET al servidor para traer los datos de la tabla "GESTION DE CUENTAS MT5"
+        const url_payment = origin + '/payment/renewal-trader/';
+        
         fetch(url + "?page2=" + currentValue.value)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error de red: ' + response.status);
+                }
+                return response.json();
+            })
             .then(function (data) {
-                // Tomamos los datos para actualizar la tabla
                 const payments = data.trader_payments;
                 const total_pages = data.total_pages;
-                //Tomamos las filas a modificar
                 const bloque = document.querySelector('.box-detail');
                 const details_list = document.querySelectorAll('.details');
-                // Hacemos la paginación a la tabla de ganancias semanales con una funcion
                 detailPaginator(payments, details_list, bloque, url_payment);
                 buttonsPaginator(PaginatorButtons4, currentIndex, total_pages);
+            })
+            .catch(function(error) {
+                console.error('Error en paginador Gestion MT5 móvil:', error);
+            });
+    });
+});
+
+
+let PaginatorButtons5 = document.querySelectorAll('.link-page5');
+PaginatorButtons5.forEach(function (currentValue, currentIndex) {
+    currentValue.addEventListener('click', () => {
+        const origin = window.location.origin;
+        const pathname = window.location.pathname;
+        const url = origin + pathname;
+        
+        fetch(url + "?page3=" + currentValue.value)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error de red: ' + response.status);
+                }
+                return response.json();
+            })
+            .then(function (data) {
+                const payments = data.additional_payments;
+                const total_pages = data.total_pages;
+                const container = document.querySelector('.box-accordion-3');
+                detailPaginatorAdditional(payments, container);
+                buttonsPaginator(PaginatorButtons5, currentIndex, total_pages);
+            })
+            .catch(function(error) {
+                console.error('Error en paginador Planes Adicionales móvil:', error);
             });
     });
 });

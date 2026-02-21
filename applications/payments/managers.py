@@ -77,3 +77,86 @@ class TraderPaymentManager(models.Manager):
     def trader_payments_by_status(self, status: str):
         payments = self.filter(status=status).order_by('-id')
         return payments
+
+
+class ForexPlanPaymentManager(models.Manager):
+    """ Procedimientos para ForexPlanPayment """
+
+    def save_payment_forex(self, total: float, id_user, payment_method: str, transaction_id: str, plan_type: str):
+        date_now = date.today()
+        from dateutil.relativedelta import relativedelta
+        expiration = date_now + relativedelta(months=1)
+
+        payment = self.model(
+            created_date=date_now,
+            expiration=expiration,
+            total=total,
+            status='Pagado',
+            id_user=id_user,
+            payment_method=payment_method,
+            transaction_id=transaction_id,
+            plan_type=plan_type
+        )
+        payment.save(using=self.db)
+        return payment
+    
+    def update_payment_forex(self, id_payment: int, payment_method: str, transaction_id: str):
+        payment = self.filter(id=id_payment)
+        payment.update(
+            status='Pagado',
+            payment_method=payment_method,
+            transaction_id=transaction_id
+        )
+        return payment[0]
+
+    def forex_payments_by_user(self, id_user: int):
+        payments = self.filter(id_user=id_user).order_by('-id')
+        return payments
+
+    def unpaid_forex_payments(self, id_user: int):
+        payments = self.filter(id_user=id_user, status='Pagar')
+        if payments:
+            return True
+        else:
+            return False
+
+
+class StockPlanPaymentManager(models.Manager):
+    """ Procedimientos para StockPlanPayment """
+
+    def save_payment_stock(self, total: float, id_user, payment_method: str, transaction_id: str):
+        date_now = date.today()
+        from dateutil.relativedelta import relativedelta
+        expiration = date_now + relativedelta(years=1)
+
+        payment = self.model(
+            created_date=date_now,
+            expiration=expiration,
+            total=total,
+            status='Pagado',
+            id_user=id_user,
+            payment_method=payment_method,
+            transaction_id=transaction_id
+        )
+        payment.save(using=self.db)
+        return payment
+    
+    def update_payment_stock(self, id_payment: int, payment_method: str, transaction_id: str):
+        payment = self.filter(id=id_payment)
+        payment.update(
+            status='Pagado',
+            payment_method=payment_method,
+            transaction_id=transaction_id
+        )
+        return payment[0]
+
+    def stock_payments_by_user(self, id_user: int):
+        payments = self.filter(id_user=id_user).order_by('-id')
+        return payments
+
+    def unpaid_stock_payments(self, id_user: int):
+        payments = self.filter(id_user=id_user, status='Pagar')
+        if payments:
+            return True
+        else:
+            return False

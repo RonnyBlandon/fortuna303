@@ -1,7 +1,6 @@
 import asyncio
 import MetaTrader5 as mt5
 from metaapi_cloud_sdk import MetaApi
-from metaapi_cloud_sdk.clients.metaApi.tradeException import TradeException
 from datetime import datetime, timedelta, date
 import json
 import psycopg2

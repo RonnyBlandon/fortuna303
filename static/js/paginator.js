@@ -1,110 +1,105 @@
-/*Función para paginar las tablas de la pagina panel de usuario y el resto de paginas que tenga tablas
-a paginar.*/
 export function tablePaginator(data, rows, url=null) {
-    /*ACTUALIZAMOS LAS FILAS DE LA TABLA*/
-    /* Verificamos si hay filas sobrantes para ocultarlas y agregar los datos a los no sobrantes */
-    if (rows.length > data.length) {
-        // Escondemos las filas sobrantes
-        let leftover_rows = rows.length - data.length;
-        for (let row = 0; row < leftover_rows; row++) {
-            rows[row + data.length].setAttribute('hidden', 'true');
-        };
-
-        // Agregamos la nueva data a las celdas de las filas que estan visibles 
-        for (let row2 = 0; row2 < data.length; row2++) {
-            let childs = rows[row2].children;
-            let keys = Object.keys(data[row2]);
-
-            for (let i = 0; i < keys.length; i++) {
-                let key = keys[i];
-                childs[i].innerHTML = data[row2][key];
-            };
-        };
+    if (!data || data.length === 0) {
+        rows.forEach(function(row) {
+            row.setAttribute('hidden', 'true');
+        });
+        return;
     }
-    else {
-        // En caso de que no hay filas sobrantes tomamos las filas que hay y agregamos los datos a cada celda
-        let counter_row = 0;
-        rows.forEach(function (currentValue) {
-            currentValue.removeAttribute('hidden')
+
+    rows.forEach(function (currentValue, index) {
+        if (index < data.length) {
+            currentValue.removeAttribute('hidden');
             let childs = currentValue.children;
-            let keys = Object.keys(data[counter_row]);//Tomamos las claves del objeto (dict en python)
+            let keys = Object.keys(data[index]);
             
-            for (let i = 0; i < keys.length; i++) {
+            for (let i = 0; i < keys.length && i < childs.length; i++) {
                 let key = keys[i];
-                if (data[counter_row][key] === 'Pagar') {
+                if (data[index][key] === 'Pagar' && url) {
                     let enlace = document.createElement('A');
                     enlace.setAttribute('class', 'btn-pay');
-                    enlace.setAttribute('href', url + data[counter_row]['id'] + '/');
+                    enlace.setAttribute('href', url + data[index]['id'] + '/');
                     enlace.innerHTML = 'Pagar';
                     childs[i].innerHTML = '';
                     childs[i].appendChild(enlace);
                 } else {
-                    childs[i].innerHTML = data[counter_row][key];
+                    childs[i].innerHTML = data[index][key];
                 }
-            };
-
-            if (counter_row < data.length) {
-                counter_row++;
-            };
-        })
-    };
+            }
+        } else {
+            currentValue.setAttribute('hidden', 'true');
+        }
+    });
 }
 
 
 export function buttonsPaginator (button_list, button_index, total_pages) {
-    /*YA QUE ACTUALIZAMOS LOS DATOS DE LA TABLA ACTUALIZAMOS LOS BOTONES DEL PAGINADOR*/
-    // Guardamos en un array los botones que no sean los "«", "‹", "›", "»"
+    if (!button_list || button_list.length === 0) {
+        return;
+    }
+
     let array_buttons = Array.from(button_list);
     let list_pages = array_buttons.slice(2, button_list.length - 2);
-    //Limpiamos los botones del paginador quitando la clase de la pagina actual
-    for (let button=0; button<button_list.length; button++) {
+    
+    if (list_pages.length === 0) {
+        return;
+    }
+
+    for (let button = 0; button < button_list.length; button++) {
         button_list[button].classList.remove('link-page-current');
     }
-    // Actualizamos los botones con numero de pagina en el paginador
-    let button_value = parseInt(button_list[button_index].value); // Guardamos el value del boton seleccionado
-    let button_innerHTML = button_list[button_index].innerHTML; // Guardamos el innerHTML del boton seleccionado
-    let first_value_page = parseInt(list_pages[0].value);// guardamos el value del primer boton con pagina
-    let last_value_page = parseInt(list_pages.at(-1).value);// guardamos el value del ultimo boton con pagina
-    let last_page = parseInt(total_pages); // Guardamos la ultima pagina del paginador 
+
+    let button_value = parseInt(button_list[button_index].value);
+    let button_innerHTML = button_list[button_index].innerHTML;
+    let first_value_page = parseInt(list_pages[0].value);
+    let last_value_page = parseInt(list_pages.at(-1).value);
+    let last_page = parseInt(total_pages);
+
+    if (isNaN(button_value)) {
+        button_value = 1;
+    }
+    if (isNaN(last_page) || last_page < 1) {
+        last_page = 1;
+    }
+
     switch (button_innerHTML) {
-        case "«":
-        case "‹":
+        case "\u00AB":
+        case "\u2039":
             if (button_value < first_value_page) {
                 let new_innerHTML = button_value;
-                for (let button=0; button<list_pages.length; button++) {
-                    list_pages[button].value = new_innerHTML
+                for (let button = 0; button < list_pages.length; button++) {
+                    list_pages[button].value = new_innerHTML;
                     list_pages[button].innerHTML = new_innerHTML;
                     new_innerHTML = new_innerHTML + 1;
                 }
             }
             break;
-        case "›":
-        case "»":
+        case "\u203A":
+        case "\u00BB":
             if (button_value > total_pages) {
                 button_value = total_pages;
             }
             if (button_value > last_value_page) {
-                let new_innerHTML = button_value - list_pages.length;
-                for (let button=0; button<list_pages.length; button++) {
-                    new_innerHTML = new_innerHTML + 1;
-                    list_pages[button].value = new_innerHTML
+                let new_innerHTML = button_value - list_pages.length + 1;
+                for (let button = 0; button < list_pages.length; button++) {
+                    list_pages[button].value = new_innerHTML;
                     list_pages[button].innerHTML = new_innerHTML;
+                    new_innerHTML = new_innerHTML + 1;
                 }
             }
             break;
     }
-    // Resaltamos el boton con la pagina actual
-    for (let button=0; button<button_list.length; button++) {
+
+    for (let button = 0; button < button_list.length; button++) {
         if (button_value == button_list[button].innerHTML) {
             button_list[button].classList.add('link-page-current');
         }
     }
 
-    //Actualizamos los value de los cuatros botones de avanzar y retroceder en el paginador
-    let buttonFirst = button_list[0]; //Guardamos el primer boton del paginador (<<)
-    let buttonPrevious = button_list[1]; //Guardamos el boton de pagina anterior (<)
-    let buttonNext = button_list[button_list.length - 2];//Guardamos el boton de pagina siguiente (>)
-    let buttonLast = button_list[button_list.length - 1]; //Guardamos el ultimo boton del paginador (>>)
+    let buttonFirst = button_list[0];
+    let buttonPrevious = button_list[1];
+    let buttonNext = button_list[button_list.length - 2];
+    let buttonLast = button_list[button_list.length - 1];
+
     switch (button_value) {
         case 1:
             buttonFirst.setAttribute('value', '1');

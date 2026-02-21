@@ -121,6 +121,11 @@ class PanelUserView(LoginRequiredMixin, TemplateView):
             )
 
 
+class AdditionalPlansView(LoginRequiredMixin, TemplateView):
+    template_name = 'vps/additional-plans.html'
+    login_url = reverse_lazy('users_app:user_login')
+
+
 class CreateAccounMt5View(LoginRequiredMixin, FormView):
     form_class = CreateAccountMt5Form
     success_url = reverse_lazy('vps_app:panel_user')

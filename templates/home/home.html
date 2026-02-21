@@ -71,24 +71,39 @@
             <div class="plans-grid">
 
                 <div class="plan-card">
-                    <h4>PAQUETE INICIO</h4>
-                    <p class="plan-price">$87 / mensual</p>
-                    <p>Señales automatizadas generadas por bot de trading.</p>
+                    <div class="plan-card__image">
+                        <img src="{% static 'img/starter_package.jpg' %}" alt="Paquete Inicio">
+                    </div>
+                    <div class="plan-card__content">
+                        <h4>PAQUETE INICIO</h4>
+                        <p class="plan-price">$87 / mensual</p>
+                        <p>Señales automatizadas generadas por bot de trading.</p>
+                    </div>
                 </div>
 
                 <div class="plan-card">
-                    <h4>PAQUETE ELEVATE</h4>
-                    <p class="plan-price">$97 / mensual</p>
-                    <p>Señales enviadas por trader profesional (Kary Mcfred).</p>
+                    <div class="plan-card__image">
+                        <img src="{% static 'img/elevate_package.jpg' %}" alt="Paquete Elevate">
+                    </div>
+                    <div class="plan-card__content">
+                        <h4>PAQUETE ELEVATE</h4>
+                        <p class="plan-price">$97 / mensual</p>
+                        <p>Señales enviadas por trader profesional.</p>
+                    </div>
                 </div>
 
                 <div class="plan-card highlight">
-                    <h4>TRADING ESPEJO</h4>
-                    <p><strong>Inscripción:</strong> $97 (único pago)</p>
-                    <p><strong>Mantenimiento:</strong> $70 mensual</p>
-                    <p><strong>Ganancias:</strong> 50% utilidades mensuales</p>
-                    <p><strong>Requisito:</strong> cuenta mínima $3,000</p>
-                    <p>Conexión automática para copiar operaciones en tiempo real.</p>
+                    <div class="plan-card__image">
+                        <img src="{% static 'img/mirror_package.jpg' %}" alt="Trading Espejo">
+                    </div>
+                    <div class="plan-card__content">
+                        <h4>TRADING ESPEJO</h4>
+                        <p><strong>Inscripción:</strong> $97 (único pago)</p>
+                        <p><strong>Mantenimiento:</strong> $70 mensual</p>
+                        <p><strong>Ganancias:</strong> 50% utilidades mensuales</p>
+                        <p><strong>Requisito:</strong> cuenta mínima $3,000</p>
+                        <p>Conexión automática para copiar operaciones en tiempo real.</p>
+                    </div>
                 </div>
 
             </div>
@@ -100,12 +115,17 @@
 
             <div class="plans-grid">
 
-                <div class="plan-card">
-                    <h4>PAQUETE ANUAL</h4>
-                    <p class="plan-price">$797 / anual</p>
-                    <p>Servicio anual de señales para bolsa de valores.</p>
-                    <p><strong>No incluye copytrading.</strong></p>
-                    <p class="note">Pagos gestionados mediante Fortuna303.</p>
+                <div class="plan-card plan-card--wide">
+                    <div class="plan-card__image">
+                        <img src="{% static 'img/stock_package.jpg' %}" alt="Paquete Anual">
+                    </div>
+                    <div class="plan-card__content">
+                        <h4>PAQUETE ANUAL</h4>
+                        <p class="plan-price">$797 / anual</p>
+                        <p>Servicio anual de señales para bolsa de valores.</p>
+                        <p><strong>No incluye copytrading.</strong></p>
+                        <p class="note">Pagos gestionados mediante Fortuna303.</p>
+                    </div>
                 </div>
 
             </div>

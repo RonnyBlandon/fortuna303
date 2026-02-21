@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Planes Adicionales {% endblock title %}
+
+{% block css %} {% static 'css/additional-plans.css' %} {% endblock css %}
+
+{% block content %}
+{% include 'includes/header.html' %}
+
+<h1 class="title">Planes Adicionales</h1>
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>  
+    {% endfor %}
+</ul>
+{% endif %}
+
+<div class="box-general">
+    <div class="container">
+        <!-- Sección de Mis Planes -->
+        <section class="box-my-plans">
+            <h2 class="box-title">Mis Planes</h2>
+            
+            <div class="my-plans-container">
+                {% for forex in user.forex_plan_info %}
+                <div class="my-plan-card">
+                    <h4>Plan Forex - {{ forex.plan_name }}</h4>
+                    {% if forex.is_active %}
+                        <p class="plan-status active">Activo</p>
+                        <p class="plan-expiration">Vence: {{ forex.expiration|date:"Y-m-d" }}</p>
+                    {% elif forex.needs_renewal %}
+                        <p class="plan-status pending">Renovacion pendiente</p>
+                        <a class="btn-renew" href="{% url 'payments_app:payment_renewal' 'renewal-forex' forex.id %}">Renovar</a>
+                    {% else %}
+                        <p class="plan-status inactive">Inactivo</p>
+                    {% endif %}
+                </div>
+                {% endfor %}
+
+                {% if user.stock_plan_info %}
+                    {% with stock=user.stock_plan_info %}
+                    <div class="my-plan-card">
+                        <h4>Plan Bolsa de Valores - Paquete Anual</h4>
+                        {% if stock.is_active %}
+                            <p class="plan-status active">Activo</p>
+                            <p class="plan-expiration">Vence: {{ stock.expiration|date:"Y-m-d" }}</p>
+                        {% elif stock.needs_renewal %}
+                            <p class="plan-status pending">Renovacion pendiente</p>
+                            <a class="btn-renew" href="{% url 'payments_app:payment_renewal' 'renewal-stock' stock.id %}">Renovar</a>
+                        {% else %}
+                            <p class="plan-status inactive">Inactivo</p>
+                        {% endif %}
+                    </div>
+                    {% endwith %}
+                {% endif %}
+
+                {% if not user.forex_plan_info and not user.stock_plan_info %}
+                    <p class="no-plans">No tienes planes adicionales activos</p>
+                {% endif %}
+            </div>
+        </section>
+
+        <!-- Sección de Planes Adicionales -->
+        <section class="box-plans">
+            <h2 class="box-title">Planes Adicionales</h2>
+            
+            <div class="plans-container">
+                {% if not user.has_forex_inicio_active or not user.has_forex_elevate_active %}
+                <div class="plan-card">
+                    <h3>PLAN A - Forex</h3>
+                    {% if not user.has_forex_inicio_active %}
+                    <div class="plan-option">
+                        <h4>Paquete Inicio</h4>
+                        <p>Senales automatizadas generadas por bot de trading.</p>
+                        <p class="plan-price">$87 / mensual</p>
+                        <a class="btn-plan" href="{% url 'payments_app:payment_form' 'forex-plan' %}?plan=inicio">Adquirir</a>
+                    </div>
+                    {% endif %}
+                    {% if not user.has_forex_elevate_active %}
+                    <div class="plan-option">
+                        <h4>Paquete Elevate</h4>
+                        <p>Senales enviadas por trader profesional.</p>
+                        <p class="plan-price">$97 / mensual</p>
+                        <a class="btn-plan" href="{% url 'payments_app:payment_form' 'forex-plan' %}?plan=elevate">Adquirir</a>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+                
+                {% if not user.has_stock_active %}
+                <div class="plan-card">
+                    <h3>PLAN B - Bolsa de Valores</h3>
+                    <div class="plan-option">
+                        <h4>Paquete Anual</h4>
+                        <p>Servicio anual de senales para bolsa de valores.</p>
+                        <p class="plan-price">$797 / anual</p>
+                        <a class="btn-plan" href="{% url 'payments_app:payment_form' 'stock-plan' %}">Adquirir</a>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if user.has_forex_inicio_active and user.has_forex_elevate_active and user.has_stock_active %}
+                <div class="all-plans-acquired">
+                    <p>Ya tienes todos los planes disponibles</p>
+                </div>
+                {% endif %}
+            </div>
+        </section>
+    </div>
+</div>
+
+{% include 'includes/footer.html' %}
+{% endblock content %}

@@ -98,6 +98,7 @@
     margin: 0.625em auto 0.625em auto;
     border-radius: 0.625em;
     border-collapse: collapse;
+    width: max-content;
 }
 
 .accounts-table tr:hover, .accounts-table tr:active {
@@ -340,7 +341,6 @@ determinado */
         font-size: 1.2222em;
     }
 
-
     .box-mt5 {
         width: 45em;
         margin: 1.25em auto;
@@ -360,20 +360,24 @@ determinado */
 
 @media screen and (min-width: 1024px) {
     .box-user {
-        width: 22em;
+        width: 100%;
         font-size: 1.5em;
+        grid-area: user;
     }
 
-    /* Contenedor de sección con los datos de usuario y de agregar y visualizacion de cuentas mt5 */
     .container {
-        display: flex;
-        flex-direction: row;
-        align-self: auto;
-        align-items: center;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-areas:
+            "user mt5";
+        gap: 1.5em;
+        align-items: start;
+        padding: 0 2em;
     }
 
     .box-mt5 {
-        width: 50em;
+        width: 100%;
+        grid-area: mt5;
     }
 
     .open-modal-add .open-modal-add-2 {
@@ -409,18 +413,30 @@ determinado */
     }
 
     .box-mt5-width {
-        width: fit-content;
+        width: 100%;
     }
 
 }
 
 @media screen and (min-width: 1366px) {
+    .container {
+        gap: 2em;
+        padding: 0 3em;
+    }
+
     .box-mt5 {
         width: fit-content;
     }
 
     .operations-table {
         width: max-content;
+    }
+}
+
+@media screen and (min-width: 1600px) {
+    .container {
+        gap: 2.5em;
+        padding: 0 4em;
     }
 }
 

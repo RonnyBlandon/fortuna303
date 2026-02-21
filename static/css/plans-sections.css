@@ -66,10 +66,33 @@
     animation: colores-2 3s linear infinite;
     transition:.25s;
     text-align:center;
+    overflow:hidden;
 }
 
 .plan-card:hover{
     transform:scale(1.03);
+}
+
+
+/* imagen de tarjeta */
+.plan-card__image{
+    width: calc(100% + 36px);
+    height: 180px;
+    margin: -18px -18px 15px -18px;
+    overflow:hidden;
+    border-radius: 8px 8px 0 0;
+}
+
+.plan-card__image img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+/* contenido de tarjeta */
+.plan-card__content{
+    text-align:center;
 }
 
 
@@ -102,4 +125,42 @@
 .note{
     font-size:13px;
     opacity:.8;
+}
+
+
+/* tablet */
+@media (min-width:768px){
+    .plan-card__image{
+        height: 190px;
+    }
+}
+
+
+/* desktop */
+@media (min-width:1024px){
+    .plan-card__image{
+        height: 200px;
+    }
+    
+    .plan-card--wide{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+    
+    .plan-card--wide .plan-card__image{
+        width: 45%;
+        height: 220px;
+        margin: -18px 0 -18px -18px;
+        border-radius: 8px 0 0 8px;
+        flex-shrink: 0;
+    }
+    
+    .plan-card--wide .plan-card__content{
+        width: 55%;
+        text-align: left;
+        padding-left: 20px;
+    }
 }

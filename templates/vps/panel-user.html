@@ -45,7 +45,7 @@
             {% if user.subscriber %}
             <a class="unsubscribe" href="{% url 'vps_app:confirmation_unsubscribe' %}">Darse de Baja del servicio de Vps + Copytrading</a>
             {% else %}
-            <a class="link-fisrt-payment" href="{% url 'payments_app:first_payment' %}">Adquirir Copytrading + Vps</a>
+            <a class="link-fisrt-payment" href="{% url 'payments_app:payment_form' 'first-payment' %}">Adquirir Copytrading + Vps</a>
             {% endif %}
         </section>
 

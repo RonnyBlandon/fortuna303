@@ -1,18 +1,14 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %} Panel Usuario {% endblock title %}
+{% block title %} Pagos {% endblock title %}
 
 {% block css %} {% static 'css/payments.css' %} {% endblock css %}
 
 {% block content %}
 {% include 'includes/header.html' %}
 
-<!--Titulo de la pagina-->
-
 <h1 class="title">Pagos</h1>
-
-<!-- Mensajes de exito o de error -->
 
 {% if messages %}
 <ul class="messages">
@@ -22,13 +18,12 @@
 </ul>
 {% endif %}
 
-<!--Contenido del Panel de Usuario-->
 <div class="box-general-accordion">
 
     <!-- Sección de facturación de Servicio del trader de la cuenta madre para moviles -->
 
     <section class="box-accordion">
-        <h2 class="box-title">Gestión de Cuentas mt5 (semana)</h2>
+        <h2 class="box-title">Gestion de Cuentas mt5 (semana)</h2>
         <details class="primary-details">
             <summary><span>ID pago</span><span>Estado</span></summary>
         </details>
@@ -39,14 +34,14 @@
                 <summary>
                     <span>{{ payment.id }}</span>
                     {% if payment.status == "Pagar" %}
-                    <a class="btn-pay" href="{% url 'payments_app:trader_payment' payment.id %}">{{ payment.status }}</a>
+                    <a class="btn-pay" href="{% url 'payments_app:payment_renewal' 'renewal-trader' payment.id %}">{{ payment.status }}</a>
                     {% else %}
                     {{ payment.status }}
                     {% endif %}
                 </summary>
                 <ul>
                     <li><h4 class="title-celdas">Fecha:</h4><span>{{ payment.created_date|date:"Y-m-d" }}</span></li>
-                    <li><h4 class="title-celdas">Vecimiento</h4><span>{{ payment.expiration|date:"Y-m-d" }}</span></li>
+                    <li><h4 class="title-celdas">Vencimiento</h4><span>{{ payment.expiration|date:"Y-m-d" }}</span></li>
                     <li><h4 class="title-celdas">Id. Referencia</h4><span>{{ payment.id_management.id }}</span></li>
                     <li><h4 class="title-celdas">Total:</h4><span>{{ payment.total }}</span></li>
                 </ul>
@@ -55,14 +50,11 @@
         {% endfor %}
         {% endif %}
 
-        <!-- Bloque de paginación para la Tabla mobile de pagos de GESTION DE CUENTAS MT5 -->
         <div>
             {% if trader_payments.paginator.num_pages > 1 %}
             <nav id="paginator">
                 <button class="link-page4 link-page-first" value="1">&laquo;</button>
                 <button class="link-page4 link-page-previous" value="1">&lsaquo;</button>
-                <!--Limitamos la cantidad de botones en el paginador hasta 12 botones incluyendo los 
-                botones de retroceder y avanzar para que no se deforme en los dispositivos moviles-->
                 {% if trader_payments.paginator.num_pages >= 8 %}
                     {% for pagina in range %}
                     {% if pagina == trader_payments.number %}
@@ -92,7 +84,7 @@
     <section class="box-accordion-2">
         <h2 class="box-title">Vps + Copytrading (mes)</h2>
         {% if not user.subscriber %}
-        <a class="link-first-payment" href="{% url 'payments_app:first_payment' %}">Adquirir vps + sistema copytrading</a>
+        <a class="link-first-payment" href="{% url 'payments_app:payment_form' 'first-payment' %}">Adquirir vps + sistema copytrading</a>
         {% endif %}
         <details class="primary-details-2">
             <summary><span>ID pago</span><span>Estado</span></summary>
@@ -103,28 +95,25 @@
                 <summary>
                     <span>{{ payment.id }}</span>
                     {% if payment.status == "Pagar" %}
-                    <a class="btn-pay" href="{% url 'payments_app:vps_payment_renewal' payment.id %}">{{ payment.status }}</a>
+                    <a class="btn-pay" href="{% url 'payments_app:payment_renewal' 'renewal-vps' payment.id %}">{{ payment.status }}</a>
                     {% else %}
                     {{ payment.status }}
                     {% endif %}
                 </summary>
                 <ul>
                     <li><h4 class="title-celdas">Fecha</h4><span>{{ payment.created_date|date:"Y-m-d" }}</span></li>
-                    <li><h4 class="title-celdas">Vecimiento</h4><span>{{ payment.expiration|date:"Y-m-d" }}</span></li>
+                    <li><h4 class="title-celdas">Vencimiento</h4><span>{{ payment.expiration|date:"Y-m-d" }}</span></li>
                     <li><h4 class="title-celdas">Total</h4><span>{{ payment.total }}</span></li>
                 </ul>
             </details>
         </div>
         {% endfor %}
 
-        <!-- Bloque de paginación para la Tabla mobile de pagos de VPS + COPYTRADING  -->
         <div>
             {% if vps_payments.paginator.num_pages > 1 %}
             <nav id="paginator">
                 <button class="link-page3 link-page-first" value="1">&laquo;</button>
                 <button class="link-page3 link-page-previous" value="1">&lsaquo;</button>
-                <!--Limitamos la cantidad de botones en el paginador hasta 12 botones incluyendo los 
-                botones de retroceder y avanzar para que no se deforme en los dispositivos moviles-->
                 {% if vps_payments.paginator.num_pages >= 8 %}
                     {% for pagina in range %}
                     {% if pagina == vps_payments.number %}
@@ -149,11 +138,10 @@
         </div>
     </section>
 
-    <!-- HTML para mostrar en tablet y pc de escritorio -->
     <!-- Sección de tabla de facturas de servicio de gestión de cuentas -->
 
     <section class="box-invoices">
-        <h2 class="box-title">Gestión de Cuentas mt5 (Semana)</h2>
+        <h2 class="box-title">Gestion de Cuentas mt5 (Semana)</h2>
         <div>
             <table class="invoice-table">
                 <tr>
@@ -174,7 +162,7 @@
                     <td>{{ payment.total }}</td>
                     <td>
                         {% if payment.status == "Pagar" %}
-                        <a class="btn-pay" href="{% url 'payments_app:trader_payment' payment.id %}">{{ payment.status }}</a>
+                        <a class="btn-pay" href="{% url 'payments_app:payment_renewal' 'renewal-trader' payment.id %}">{{ payment.status }}</a>
                         {% else %}
                         {{ payment.status }}
                         {% endif %}
@@ -185,14 +173,11 @@
             </table>
         </div>
 
-        <!-- Bloque de paginación para la Tabla de pagos de GESTION DE CUENTA MT5  -->
         <div>
             {% if trader_payments.paginator.num_pages > 1 %}
             <nav id="paginator">
                 <button class="link-page2 link-page-first" value="1">&laquo;</button>
                 <button class="link-page2 link-page-previous" value="1">&lsaquo;</button>
-                <!--Limitamos la cantidad de botones en el paginador hasta 12 botones incluyendo los 
-                botones de retroceder y avanzar para que no se deforme en los dispositivos moviles-->
                 {% if trader_payments.paginator.num_pages >= 8 %}
                     {% for pagina in range %}
                     {% if pagina == trader_payments.number %}
@@ -209,9 +194,7 @@
                 <button class="link-page2" value="{{pagina}}">{{ pagina }}</button>
                     {% endif %}
                     {% endfor %}
-                
                 {% endif %}
-
                 <button class="link-page2 link-page-next" value="2">&rsaquo;</button>
                 <button class="link-page2 link-page-last" value="9">&raquo;</button>
             </nav>
@@ -224,14 +207,14 @@
     <section class="box-invoices">
         <h2 class="box-title">VPS + Copy-trading (Mes)</h2>
         {% if not user.subscriber %}
-        <a class="link-first-payment" href="{% url 'payments_app:first_payment' %}">Adquirir vps + sistema copytrading</a>
+        <a class="link-first-payment" href="{% url 'payments_app:payment_form' 'first-payment' %}">Adquirir vps + sistema copytrading</a>
         {% endif %}
         <div>
             <table class="invoice-table">
                 <tr class="table-header">
                     <th>ID</th>
                     <th>Fecha</th>
-                    <th>Vecimiento</th>
+                    <th>Vencimiento</th>
                     <th>Total</th>
                     <th>Estado</th>
                 </tr>
@@ -243,7 +226,7 @@
                     <td>{{ payment.total }}</td>
                     <td>
                         {% if payment.status == "Pagar" %}
-                        <a class="btn-pay" href="{% url 'payments_app:vps_payment_renewal' payment.id %}">{{ payment.status }}</a>
+                        <a class="btn-pay" href="{% url 'payments_app:payment_renewal' 'renewal-vps' payment.id %}">{{ payment.status }}</a>
                         {% else %}
                         {{ payment.status }}
                         {% endif %}
@@ -253,14 +236,11 @@
             </table>
         </div>
 
-        <!-- Bloque de paginación para la Tabla de pagos de VPS + COPYTRADING  -->
         <div>
             {% if vps_payments.paginator.num_pages > 1 %}
             <nav id="paginator">
                 <button class="link-page link-page-first" value="1">&laquo;</button>
                 <button class="link-page link-page-previous" value="1">&lsaquo;</button>
-                <!--Limitamos la cantidad de botones en el paginador hasta 12 botones incluyendo los 
-                botones de retroceder y avanzar para que no se deforme en los dispositivos moviles-->
                 {% if vps_payments.paginator.num_pages >= 8 %}
                 {% for pagina in range %}
                     {% if pagina == vps_payments.number %}
@@ -268,7 +248,7 @@
                     {% else %}
                 <button class="link-page" value='{{pagina}}'>{{ pagina }}</button>
                     {% endif %}
-                    {% endfor %}
+                {% endfor %}
                 {% else %}
                     {% for pagina in vps_payments.paginator.page_range %}
                     {% if pagina == vps_payments.number %}
@@ -280,6 +260,150 @@
                 {% endif %}
                 <button class="link-page link-page-next" value="2">&rsaquo;</button>
                 <button class="link-page link-page-last" value="9">&raquo;</button>
+            </nav>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- Sección de tabla de Planes Adicionales (Forex + Stock) para Moviles -->
+
+    <section class="box-accordion-3">
+        <h2 class="box-title">Planes Adicionales</h2>
+        <details class="primary-details-3">
+            <summary><span>ID pago</span><span>Plan</span><span>Estado</span></summary>
+        </details>
+        {% for payment in additional_payments %}
+        <div class="box-detail-3">
+            <details class="details-3">
+                <summary>
+                    <span>{{ payment.id }}</span>
+                    <span class="plan-type-mobile">{{ payment.plan_type }}</span>
+                    {% if payment.status == "Pagar" %}
+                        {% if payment.payment_type == "forex" %}
+                        <a class="btn-pay" href="{% url 'payments_app:payment_renewal' 'renewal-forex' payment.id %}">{{ payment.status }}</a>
+                        {% elif payment.payment_type == "stock" %}
+                        <a class="btn-pay" href="{% url 'payments_app:payment_renewal' 'renewal-stock' payment.id %}">{{ payment.status }}</a>
+                        {% else %}
+                        <span>{{ payment.status }}</span>
+                        {% endif %}
+                    {% else %}
+                    <span>{{ payment.status }}</span>
+                    {% endif %}
+                </summary>
+                <ul>
+                    <li><h4 class="title-celdas">Tipo:</h4><span>{{ payment.plan_type }}</span></li>
+                    <li><h4 class="title-celdas">Fecha:</h4><span>{{ payment.created_date|date:"Y-m-d" }}</span></li>
+                    <li><h4 class="title-celdas">Vencimiento:</h4><span>{{ payment.expiration|date:"Y-m-d" }}</span></li>
+                    <li><h4 class="title-celdas">Total:</h4><span>${{ payment.total }}</span></li>
+                </ul>
+            </details>
+        </div>
+        {% empty %}
+        <div class="no-payments-message">
+            <p>No tienes pagos de planes adicionales</p>
+            <a class="btn-view-plans" href="{% url 'vps_app:additional_plans' %}">Ver planes disponibles</a>
+        </div>
+        {% endfor %}
+
+        <div>
+            {% if additional_payments.paginator.num_pages > 1 %}
+            <nav id="paginator">
+                <button class="link-page5 link-page-first" value="1">&laquo;</button>
+                <button class="link-page5 link-page-previous" value="1">&lsaquo;</button>
+                {% if additional_payments.paginator.num_pages >= 8 %}
+                    {% for pagina in range %}
+                    {% if pagina == additional_payments.number %}
+                <button class="link-page5 link-page-current" value="{{pagina}}">{{ pagina }}</button>
+                    {% else %}
+                <button class="link-page5" value="{{pagina}}">{{ pagina }}</button>
+                    {% endif %}
+                    {% endfor %}
+                {% else %}
+                    {% for pagina in additional_payments.paginator.page_range %}
+                    {% if pagina == additional_payments.number %}
+                <button class="link-page5 link-page-current" value="{{pagina}}">{{ pagina }}</button>
+                    {% else %}
+                <button class="link-page5" value="{{pagina}}">{{ pagina }}</button>
+                    {% endif %}
+                    {% endfor %}
+                {% endif %}
+                <button class="link-page5 link-page-next" value="2">&rsaquo;</button>
+                <button class="link-page5 link-page-last" value="9">&raquo;</button>
+            </nav>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- Sección de tabla de Planes Adicionales (Forex + Stock) para Desktop -->
+
+    <section class="box-invoices">
+        <h2 class="box-title">Planes Adicionales</h2>
+        <div>
+            <table class="invoice-table">
+                <tr class="table-header">
+                    <th>ID</th>
+                    <th>Tipo de Plan</th>
+                    <th>Fecha</th>
+                    <th>Vencimiento</th>
+                    <th>Total</th>
+                    <th>Estado</th>
+                </tr>
+                {% for payment in additional_payments %}
+                <tr class="rows-additional-payment" data-payment-type="{{ payment.payment_type }}" data-payment-id="{{ payment.id }}">
+                    <td>{{ payment.id }}</td>
+                    <td>{{ payment.plan_type }}</td>
+                    <td>{{ payment.created_date|date:"Y-m-d" }}</td>
+                    <td>{{ payment.expiration|date:"Y-m-d" }}</td>
+                    <td>${{ payment.total }}</td>
+                    <td>
+                        {% if payment.status == "Pagar" %}
+                            {% if payment.payment_type == "forex" %}
+                            <a class="btn-pay" href="{% url 'payments_app:payment_renewal' 'renewal-forex' payment.id %}">{{ payment.status }}</a>
+                            {% elif payment.payment_type == "stock" %}
+                            <a class="btn-pay" href="{% url 'payments_app:payment_renewal' 'renewal-stock' payment.id %}">{{ payment.status }}</a>
+                            {% else %}
+                            {{ payment.status }}
+                            {% endif %}
+                        {% else %}
+                        {{ payment.status }}
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="no-payments-row">
+                        <p>No tienes pagos de planes adicionales</p>
+                        <a class="btn-view-plans" href="{% url 'vps_app:additional_plans' %}">Ver planes disponibles</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <div>
+            {% if additional_payments.paginator.num_pages > 1 %}
+            <nav id="paginator">
+                <button class="link-page6 link-page-first" value="1">&laquo;</button>
+                <button class="link-page6 link-page-previous" value="1">&lsaquo;</button>
+                {% if additional_payments.paginator.num_pages >= 8 %}
+                {% for pagina in range %}
+                    {% if pagina == additional_payments.number %}
+                <button class="link-page6 link-page-current" value="{{pagina}}">{{ pagina }}</button>
+                    {% else %}
+                <button class="link-page6" value='{{pagina}}'>{{ pagina }}</button>
+                    {% endif %}
+                {% endfor %}
+                {% else %}
+                    {% for pagina in additional_payments.paginator.page_range %}
+                    {% if pagina == additional_payments.number %}
+                <button class="link-page6 link-page-current" value="{{pagina}}">{{ pagina }}</button>
+                    {% else %}
+                <button class="link-page6" value='{{pagina}}'>{{ pagina }}</button>
+                    {% endif %}
+                    {% endfor %}
+                {% endif %}
+                <button class="link-page6 link-page-next" value="2">&rsaquo;</button>
+                <button class="link-page6 link-page-last" value="9">&raquo;</button>
             </nav>
             {% endif %}
         </div>

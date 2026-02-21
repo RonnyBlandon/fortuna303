@@ -1,8 +1,8 @@
 import psycopg2
 from datetime import datetime, date, timedelta
 from calendar import monthrange, isleap
+from dateutil.relativedelta import relativedelta
 from metaapi_cloud_sdk import MetaApi
-from metaapi_cloud_sdk.clients.metaApi.tradeException import TradeException
 from funtions_panel_user import get_secret, get_accounts_mt5_database
 from email.message import EmailMessage
 import smtplib
@@ -390,3 +390,166 @@ async def disable_mt5_without_paying_vps():
             message = f'<div style:margin: 0em auto; border: 0.15em solid #000; border-radius: 0.3em;"><a href="https://fortuna303.com" target="_blank"><img src="https://fortuna303.com/static/img/logo.png" alt="logo"></a><h1>Hola {user[0]} {user[1]}</h1><p style="font-size: 1.2em;">Su cuenta de metatrader 5 a sido desconectada por falta de pago en su mensualidad del <b>VPS + COPYTRADING</b>. Para reconectarla debe estar al día con todo los pagos, esto incluye los pagos de <b>GESTION DE CUENTAS DE MT5</b> y automáticamente se reconectará en unos minutos. Si su cuenta no se ha conectado al cabo de 15 minutos, mandar un mensaje en la página de contacto.</p><a style="padding:0.5em 1em;background:#00f; border: 0.2em solid #D4FF00;color: #fff;text-decoration: none;cursor: pointer;" href="https://fortuna303.com/payments/" target="_blank">Ir a la pagina de pago</a></div>'
             send_email(user[2], message=message, affair=affair)
         connection.close()
+
+
+def get_forex_subscribers_database():
+    try:
+        connection = psycopg2.connect(database=get_secret("DB_NAME"), user=get_secret("USER"), password=get_secret("PASSWORD"))
+        cursor = connection.cursor()
+    except Exception as err:
+        print("Error en la conexion de la base de datos: ", err)
+    
+    try:
+        cursor.execute(
+            "SELECT u.id, u.name, u.last_name, u.email, f.plan_type, f.expiration, f.status "
+            "FROM users_user u "
+            "INNER JOIN payments_forexplanpayment f ON u.id = f.id_user_id "
+            "WHERE f.id = (SELECT MAX(id) FROM payments_forexplanpayment WHERE id_user_id = u.id) "
+            "AND f.status = 'Pagado'"
+        )
+        subscribers = cursor.fetchall()
+        return {'subscribers': subscribers, 'conexion': connection}
+    except Exception as err:
+        print("Error en get_forex_subscribers_database() al consultar en la base de datos: ", err)
+    connection.commit()
+    connection.close()
+
+
+def get_stock_subscribers_database():
+    try:
+        connection = psycopg2.connect(database=get_secret("DB_NAME"), user=get_secret("USER"), password=get_secret("PASSWORD"))
+        cursor = connection.cursor()
+    except Exception as err:
+        print("Error en la conexion de la base de datos: ", err)
+    
+    try:
+        cursor.execute(
+            "SELECT u.id, u.name, u.last_name, u.email, s.expiration, s.status "
+            "FROM users_user u "
+            "INNER JOIN payments_stockplanpayment s ON u.id = s.id_user_id "
+            "WHERE s.id = (SELECT MAX(id) FROM payments_stockplanpayment WHERE id_user_id = u.id) "
+            "AND s.status = 'Pagado'"
+        )
+        subscribers = cursor.fetchall()
+        return {'subscribers': subscribers, 'conexion': connection}
+    except Exception as err:
+        print("Error en get_stock_subscribers_database() al consultar en la base de datos: ", err)
+    connection.commit()
+    connection.close()
+
+
+def get_forex_payment_database(id_user: int):
+    try:
+        connection = psycopg2.connect(database=get_secret("DB_NAME"), user=get_secret("USER"), password=get_secret("PASSWORD"))
+        cursor = connection.cursor()
+    except Exception as err:
+        print("Error en la conexion de la base de datos: ", err)
+    
+    try:
+        cursor.execute(
+            f"SELECT id, expiration, status, plan_type FROM payments_forexplanpayment WHERE id=(SELECT MAX(id) FROM payments_forexplanpayment WHERE id_user_id={id_user});"
+        )
+        payment = cursor.fetchone()
+        if payment:
+            return {'id': payment[0], 'expiration': payment[1], 'status': payment[2], 'plan_type': payment[3]}
+        return None
+    except Exception as err:
+        print("Error en get_forex_payment_database() al consultar en la base de datos: ", err)
+    connection.commit()
+    connection.close()
+
+
+def get_stock_payment_database(id_user: int):
+    try:
+        connection = psycopg2.connect(database=get_secret("DB_NAME"), user=get_secret("USER"), password=get_secret("PASSWORD"))
+        cursor = connection.cursor()
+    except Exception as err:
+        print("Error en la conexion de la base de datos: ", err)
+    
+    try:
+        cursor.execute(
+            f"SELECT id, expiration, status FROM payments_stockplanpayment WHERE id=(SELECT MAX(id) FROM payments_stockplanpayment WHERE id_user_id={id_user});"
+        )
+        payment = cursor.fetchone()
+        if payment:
+            return {'id': payment[0], 'expiration': payment[1], 'status': payment[2]}
+        return None
+    except Exception as err:
+        print("Error en get_stock_payment_database() al consultar en la base de datos: ", err)
+    connection.commit()
+    connection.close()
+
+
+FOREX_PRICES = {'inicio': 87, 'elevate': 97}
+STOCK_PRICE = 797
+
+
+async def add_forex_payment_database():
+    data = get_forex_subscribers_database()
+    if not data:
+        return
+    
+    subscribers = data['subscribers']
+    connection = data['conexion']
+    cursor = connection.cursor()
+
+    for subscriber in subscribers:
+        id_user = subscriber[0]
+        plan_type = subscriber[4]
+        last_expiration = subscriber[5]
+        last_status = subscriber[6]
+
+        if last_status != "Pagar":
+            today = date.today()
+            if today >= last_expiration:
+                expiration = expiration_monthly(last_expiration)
+                price = FOREX_PRICES.get(plan_type, 87)
+                plan_name = "Paquete Inicio" if plan_type == 'inicio' else "Paquete Elevate"
+
+                try:
+                    cursor.execute(
+                        f"INSERT INTO payments_forexplanpayment (created_date, expiration, total, status, transaction_id, id_user_id, payment_method, plan_type) VALUES('{last_expiration}', '{expiration}', {price}, 'Pagar', '', {id_user}, '', '{plan_type}');"
+                    )
+                except Exception as err:
+                    print("Error en add_forex_payment_database() al insertar en la base de datos: ", err)
+                connection.commit()
+
+                affair = f'PAGO DE FOREX PLAN - {plan_name}'
+                message = f'<div style:margin: 0em auto; border: 0.15em solid #000; border-radius: 0.3em;"><a href="https://fortuna303.com" target="_blank"><img src="/static/img/logo.png" alt="logo"></a><h1>Hola {subscriber[1]} {subscriber[2]}</h1><p style="font-size: 1.2em;">Se le informa que ya se puede hacer el pago de la mensualidad de <b>FOREX PLAN - {plan_name}</b>.</p><a style="padding:0.5em 1em;background:#00f; border: 0.2em solid #D4FF00;color: #fff;text-decoration: none;cursor: pointer;" href="https://fortuna303.com/payments/" target="_blank">Ir a la pagina de pago</a></div>'
+                send_email(subscriber[3], message=message, affair=affair)
+    
+    connection.close()
+
+
+async def add_stock_payment_database():
+    data = get_stock_subscribers_database()
+    if not data:
+        return
+    
+    subscribers = data['subscribers']
+    connection = data['conexion']
+    cursor = connection.cursor()
+
+    for subscriber in subscribers:
+        id_user = subscriber[0]
+        last_expiration = subscriber[4]
+        last_status = subscriber[5]
+
+        if last_status != "Pagar":
+            today = date.today()
+            if today >= last_expiration:
+                expiration = last_expiration + relativedelta(years=1)
+
+                try:
+                    cursor.execute(
+                        f"INSERT INTO payments_stockplanpayment (created_date, expiration, total, status, transaction_id, id_user_id, payment_method) VALUES('{last_expiration}', '{expiration}', {STOCK_PRICE}, 'Pagar', '', {id_user}, '');"
+                    )
+                except Exception as err:
+                    print("Error en add_stock_payment_database() al insertar en la base de datos: ", err)
+                connection.commit()
+
+                affair = 'PAGO DE STOCK PLAN - PAQUETE ANUAL'
+                message = f'<div style:margin: 0em auto; border: 0.15em solid #000; border-radius: 0.3em;"><a href="https://fortuna303.com" target="_blank"><img src="/static/img/logo.png" alt="logo"></a><h1>Hola {subscriber[1]} {subscriber[2]}</h1><p style="font-size: 1.2em;">Se le informa que ya se puede hacer el pago anual de <b>STOCK PLAN - PAQUETE ANUAL</b>.</p><a style="padding:0.5em 1em;background:#00f; border: 0.2em solid #D4FF00;color: #fff;text-decoration: none;cursor: pointer;" href="https://fortuna303.com/payments/" target="_blank">Ir a la pagina de pago</a></div>'
+                send_email(subscriber[3], message=message, affair=affair)
+    
+    connection.close()

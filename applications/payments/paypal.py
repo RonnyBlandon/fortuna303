@@ -1,13 +1,11 @@
 import requests
 from fortuna_303.settings.base import get_secret
 
-"""Funciones para usar la api de PAYPAL"""
-
 link_main_api = "https://api-m.paypal.com"
 redirect_page = "https://fortuna303.com/"
 
-def create_order_paypal(amount: float, description: str):
 
+def create_order_paypal(amount: float, description: str):
     url = link_main_api + '/v2/checkout/orders'
     auth_user = (get_secret('PAYPAL_CLIENT_ID'), get_secret('PAYPAL_CLIENT_SECRET'))
     headers = {'Content-Type': 'application/json'}
@@ -37,11 +35,10 @@ def create_order_paypal(amount: float, description: str):
             if link['rel'] == 'approve':
                 return link['href']
     else:
-        print('Lo sentimos, hubo un fallo en la conexión. La razón:', resp.content)
+        print('Lo sentimos, hubo un fallo en la conexion. La razon:', resp.content)
 
 
-def create_renewal_order_paypal(case: str, payment_id: int, amount: float, description: str):
-
+def create_renewal_order_paypal(amount: float, description: str, custom_id: str):
     url = link_main_api + '/v2/checkout/orders'
     auth_user = (get_secret('PAYPAL_CLIENT_ID'), get_secret('PAYPAL_CLIENT_SECRET'))
     headers = {'Content-Type': 'application/json'}
@@ -51,7 +48,7 @@ def create_renewal_order_paypal(case: str, payment_id: int, amount: float, descr
             {
                 'amount': {'currency_code': 'USD', 'value': str(amount)},
                 'description': description,
-                'custom_id': "{'%s': %s}" % (case, payment_id)
+                'custom_id': custom_id
             }
         ],
         'application_context': {
@@ -71,12 +68,11 @@ def create_renewal_order_paypal(case: str, payment_id: int, amount: float, descr
             if link['rel'] == 'approve':
                 return link['href']
     else:
-        print('Lo sentimos, hubo un fallo en la conexión. La razón:', resp.content)
+        print('Lo sentimos, hubo un fallo en la conexion. La razon:', resp.content)
 
 
-# Despues de que el usuario pague se debe capturar el pago para que se refleje en la cuenta paypal
 def capture_order_paypal(id_order):
-    url = link_main_api + '/v2/checkout/orders/'+id_order+'/capture'
+    url = link_main_api + '/v2/checkout/orders/' + id_order + '/capture'
     auth_user = (get_secret('PAYPAL_CLIENT_ID'), get_secret('PAYPAL_CLIENT_SECRET'))
     headers = {'Content-Type': 'application/json'}
 
@@ -84,11 +80,7 @@ def capture_order_paypal(id_order):
 
     if resp.status_code == 201:
         data = resp.json()
-        details = data['purchase_units'][0]['payments']['captures'][0] # sacamos los detalles de pago
-
-        data = {'id': details['id'], 'amount': details['amount']['value'], 'custom_id': details['custom_id']}
-
-        return data
+        details = data['purchase_units'][0]['payments']['captures'][0]
+        return {'id': details['id'], 'amount': details['amount']['value'], 'custom_id': details['custom_id']}
     else:
-        #print('Lo sentimos, hubo un fallo en la conexión. La razón:', resp.content)
         return None
